@@ -23,13 +23,19 @@ public class SrsCardResponse {
     private String meaningVi;
     private String meaningEn;
     private Integer hskLevel;
+    private String levelCode;
     private String partOfSpeech;
     private String exampleSentence;
     private String examplePinyin;
+    private String exampleTranslation;
+    private String exampleAudioUrl;
     private String audioUrl;
     private Integer repetition;
     private Integer intervalDays;
     private BigDecimal easeFactor;
     private LocalDate dueDate;
     private LocalDateTime lastReviewed;
+
+    /** Measure words (量词) used with this noun; empty when none. */
+    private java.util.List<com.yibi.backend.dto.vocabulary.MeasureWordResponse> measureWords;
 }

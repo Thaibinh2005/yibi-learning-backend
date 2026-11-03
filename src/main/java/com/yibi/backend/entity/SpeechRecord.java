@@ -34,9 +34,9 @@ public class SpeechRecord {
     private User user;
 
     /** Optional: which vocabulary word was being practiced */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vocabulary_id")
-    private Vocabulary vocabulary;
+    /** Optional V6 source-specific vocabulary row (hsk_vocabulary_records.raw_record_id). */
+    @Column(name = "hsk_vocabulary_record_id")
+    private Long hskVocabularyRecordId;
 
     /** The correct Chinese text the user was supposed to pronounce */
     @Column(name = "target_text", nullable = false, length = 500)

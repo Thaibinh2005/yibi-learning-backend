@@ -4,18 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * Lesson entity — maps to `lessons` table.
  *
- * Uses a polymorphic reference (contentRefId) instead of
- * foreign keys to keep the design flexible:
- *   VOCABULARY → vocabulary.id
- *   GRAMMAR    → grammar_points.id
- *   READING    → reading_passages.id
- *   LISTENING  → future audio content
+ * contentRefId points to an exact raw source row in the V6 HSK dataset.
+ * lessonPayload retains the complete imported lesson material.
  */
 @Entity
 @Table(name = "lessons")
@@ -45,9 +44,14 @@ public class Lesson {
     @Column(name = "content_type", nullable = false, length = 20)
     private LessonContentType contentType;
 
-    /** Polymorphic reference to the content entity's ID */
+    /** Optional exact V6 source record ID selected for this lesson. */
     @Column(name = "content_ref_id")
     private Long contentRefId;
+
+    /** Complete versioned ETL JSON (source + all lesson sections). */
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "lesson_payload", columnDefinition = "jsonb")
+    private Map<String, Object> lessonPayload;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

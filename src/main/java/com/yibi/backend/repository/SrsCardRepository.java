@@ -22,9 +22,9 @@ public interface SrsCardRepository extends JpaRepository<SrsCard, Long> {
     @Query("SELECT c FROM SrsCard c WHERE c.user.id = :userId AND c.dueDate <= :today")
     List<SrsCard> findDueCards(@Param("userId") UUID userId, @Param("today") LocalDate today);
 
-    Optional<SrsCard> findByUserIdAndVocabularyId(UUID userId, Long vocabularyId);
+    boolean existsByUserIdAndHskVocabularyRecordId(UUID userId, Long vocabularyId);
 
-    boolean existsByUserIdAndVocabularyId(UUID userId, Long vocabularyId);
+    Optional<SrsCard> findByUserIdAndHskVocabularyRecordId(UUID userId, Long vocabularyId);
 
     /** Count of cards due today (for dashboard stats) */
     @Query("SELECT COUNT(c) FROM SrsCard c WHERE c.user.id = :userId AND c.dueDate <= :today")
