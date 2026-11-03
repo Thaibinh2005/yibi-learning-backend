@@ -9,9 +9,9 @@ spring:
 
   # ── PostgreSQL DataSource ────────────────────────────────
   datasource:
-    url: jdbc:postgresql://localhost:5432/yibi_db
-    username: yibi_user
-    password: yibi_secret
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/yibi_db}
+    username: ${DB_USERNAME:yibi_user}
+    password: ${DB_PASSWORD:yibi_secret}
     driver-class-name: org.postgresql.Driver
     hikari:
       pool-name: YibiHikariPool
@@ -50,7 +50,7 @@ spring:
     redis:
       host: localhost
       port: 6379
-      password: yibi_redis_secret
+      password: ${REDIS_PASSWORD:yibi_redis_secret}
       timeout: 2000ms
       lettuce:
         pool:
@@ -67,6 +67,12 @@ spring:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
 
+# Gemini is called only by the backend. Keep keys in environment variables.
+app:
+  gemini:
+    model: ${GEMINI_MODEL:gemini-3.8-flash}
+    fallback-models: ${GEMINI_FALLBACK_MODELS:gemini-3.6-flash,gemini-3.5-flash-lite}
+
 # ── Server ──────────────────────────────────────────────────
 server:
   port: 8080
@@ -79,15 +85,15 @@ server:
 # ── JWT Configuration ────────────────────────────────────────
 #    Secret must be ≥ 256 bits (32 chars) for HS256
 jwt:
-  secret: yibi_jwt_super_secret_key_must_be_at_least_32_chars_long!!
+  secret: ${JWT_SECRET:yibi-secure-jwt-secret-key-at-least-32-chars-2026-development}
   access-token-expiration: 900000       # 15 minutes (ms)
   refresh-token-expiration: 604800000   # 7 days (ms)
 
 # ── MinIO (Self-hosted S3-compatible Storage) ────────────────
 minio:
   endpoint: http://localhost:9000
-  access-key: yibi_minio_admin
-  secret-key: yibi_minio_secret123
+  access-key: ${MINIO_ROOT_USER:yibi_minio_admin}
+  secret-key: ${MINIO_ROOT_PASSWORD:yibi_minio_secret123}
   bucket-name: yibi-audio
   region: us-east-1
 

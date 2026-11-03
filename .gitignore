@@ -1,0 +1,32 @@
+# ── Secrets / local environment ─────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Build output (Maven) ────────────────────────────────────
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Generated Maven classpath dump
+cp.txt
+
+# ── Logs ────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── IDE / editor ────────────────────────────────────────────
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+.apt_generated/
+bin/
+
+# ── OS ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

@@ -4,12 +4,15 @@ import com.yibi.backend.dto.course.LessonRequest;
 import com.yibi.backend.dto.course.LessonResponse;
 import com.yibi.backend.entity.Course;
 import com.yibi.backend.entity.Lesson;
+import com.yibi.backend.entity.LessonContentType;
+import com.yibi.backend.exception.BadRequestException;
 import com.yibi.backend.exception.ResourceNotFoundException;
 import com.yibi.backend.repository.CourseRepository;
 import com.yibi.backend.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -22,6 +25,7 @@ public class LessonService {
 
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
+    private final JdbcTemplate jdbc;
 
     @Transactional(readOnly = true)
     public List<LessonResponse> getLessonsByCourseId(Long courseId) {
@@ -45,6 +49,7 @@ public class LessonService {
     public LessonResponse createLesson(LessonRequest request) {
         Course course = courseRepository.findById(request.getCourseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", request.getCourseId()));
+        validateContentReference(request.getContentType(), request.getContentRefId());
 
         Lesson lesson = Lesson.builder()
                 .course(course)
@@ -66,6 +71,7 @@ public class LessonService {
     public LessonResponse updateLesson(Long id, LessonRequest request) {
         Lesson lesson = lessonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
+        validateContentReference(request.getContentType(), request.getContentRefId());
 
         if (request.getCourseId() != null && !lesson.getCourse().getId().equals(request.getCourseId())) {
             Course newCourse = courseRepository.findById(request.getCourseId())
@@ -109,8 +115,24 @@ public class LessonService {
                 .lessonOrder(lesson.getLessonOrder())
                 .contentType(lesson.getContentType())
                 .contentRefId(lesson.getContentRefId())
+                .lessonPayload(lesson.getLessonPayload())
                 .createdAt(lesson.getCreatedAt())
                 .updatedAt(lesson.getUpdatedAt())
                 .build();
+    }
+
+    private void validateContentReference(LessonContentType type, Long rawRecordId) {
+        if (rawRecordId == null) return;
+        String table = switch (type) {
+            case VOCABULARY -> "hsk_vocabulary_records";
+            case GRAMMAR -> "hsk_grammar_records";
+            case READING, LISTENING -> throw new BadRequestException(
+                    "Nội dung đọc/nghe cần nằm trong lesson_payload; contentRefId chỉ nhận từ vựng/ngữ pháp HSK V6.");
+        };
+        Integer found = jdbc.queryForObject(
+                "SELECT COUNT(*) FROM " + table + " WHERE raw_record_id = ?", Integer.class, rawRecordId);
+        if (found == null || found == 0) {
+            throw new BadRequestException("contentRefId không trỏ đến bản ghi V6 phù hợp với loại nội dung.");
+        }
     }
 }

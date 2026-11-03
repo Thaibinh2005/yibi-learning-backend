@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "srs_cards",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "vocabulary_id"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "hsk_vocabulary_record_id"})
 )
 @Getter
 @Setter
@@ -45,9 +45,9 @@ public class SrsCard {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // Load vocabulary eagerly (needed for flashcard display)
-    @JoinColumn(name = "vocabulary_id", nullable = false)
-    private Vocabulary vocabulary;
+    /** V6 source-specific vocabulary row (hsk_vocabulary_records.raw_record_id). */
+    @Column(name = "hsk_vocabulary_record_id", nullable = false)
+    private Long hskVocabularyRecordId;
 
     /** SM-2: Ease Factor — starts at 2.5, minimum 1.3 */
     @Column(name = "ease_factor", nullable = false, precision = 4, scale = 2)

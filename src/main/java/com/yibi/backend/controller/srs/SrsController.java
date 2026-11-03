@@ -2,8 +2,10 @@ package com.yibi.backend.controller.srs;
 
 import com.yibi.backend.dto.common.ApiResponse;
 import com.yibi.backend.dto.srs.SrsCardResponse;
+import com.yibi.backend.dto.srs.SrsRateRequest;
 import com.yibi.backend.dto.srs.SrsReviewRequest;
 import com.yibi.backend.dto.srs.SrsStatsResponse;
+import com.yibi.backend.dto.srs.SrsAddLessonResponse;
 import com.yibi.backend.security.SecurityUtils;
 import com.yibi.backend.service.SrsService;
 import jakarta.validation.Valid;
@@ -43,10 +45,25 @@ public class SrsController {
         return ResponseEntity.ok(ApiResponse.success("Card added to your SRS deck", card));
     }
 
+    @PostMapping("/add-lesson/{lessonId}")
+    public ResponseEntity<ApiResponse<SrsAddLessonResponse>> addLessonVocabulary(@PathVariable Long lessonId) {
+        UUID userId = securityUtils.getCurrentUserId();
+        SrsAddLessonResponse result = srsService.addLessonVocabulary(userId, lessonId);
+        return ResponseEntity.ok(ApiResponse.success("Lesson vocabulary added to your SRS deck", result));
+    }
+
     @PostMapping("/review")
     public ResponseEntity<ApiResponse<SrsCardResponse>> reviewCard(@Valid @RequestBody SrsReviewRequest request) {
         UUID userId = securityUtils.getCurrentUserId();
         SrsCardResponse card = srsService.reviewCard(userId, request);
         return ResponseEntity.ok(ApiResponse.success("Review recorded", card));
+    }
+
+    /** Four-button rating from topic flashcards; adds the word to the deck if needed. */
+    @PostMapping("/rate")
+    public ResponseEntity<ApiResponse<SrsCardResponse>> rateVocabulary(@Valid @RequestBody SrsRateRequest request) {
+        UUID userId = securityUtils.getCurrentUserId();
+        SrsCardResponse card = srsService.rateVocabulary(userId, request);
+        return ResponseEntity.ok(ApiResponse.success("Rating recorded", card));
     }
 }

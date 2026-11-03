@@ -4,6 +4,7 @@ import com.yibi.backend.dto.common.ApiResponse;
 import com.yibi.backend.dto.course.LessonRequest;
 import com.yibi.backend.dto.course.LessonResponse;
 import com.yibi.backend.service.LessonService;
+import com.yibi.backend.service.AiLessonContentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 public class LessonController {
 
     private final LessonService lessonService;
+    private final AiLessonContentService aiLessonContentService;
 
     @GetMapping("/course/{courseId}")
     public ResponseEntity<ApiResponse<List<LessonResponse>>> getLessonsByCourse(@PathVariable Long courseId) {
@@ -30,6 +32,14 @@ public class LessonController {
     public ResponseEntity<ApiResponse<LessonResponse>> getLessonById(@PathVariable Long id) {
         LessonResponse lesson = lessonService.getLessonById(id);
         return ResponseEntity.ok(ApiResponse.success(lesson));
+    }
+
+    @PostMapping("/{id}/ai-content")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> generateAiLessonContent(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(
+                "AI lesson content is ready",
+                aiLessonContentService.generateForLesson(id)));
     }
 
     @PostMapping
