@@ -1,8 +1,11 @@
 package com.yibi.backend.controller.admin;
 
+import com.yibi.backend.dto.admin.AiQuestionGenerationRequest;
+import com.yibi.backend.dto.admin.AiQuestionGenerationResult;
 import com.yibi.backend.dto.admin.GeneratorRunResult;
 import com.yibi.backend.dto.admin.QuestionGeneratorParams;
 import com.yibi.backend.dto.common.ApiResponse;
+import com.yibi.backend.service.AiQuestionGeneratorService;
 import com.yibi.backend.service.QuestionGeneratorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +43,15 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionGeneratorController {
 
     private final QuestionGeneratorService questionGeneratorService;
+    private final AiQuestionGeneratorService aiQuestionGeneratorService;
+
+    /** Asks Gemini for a batch of questions at one level; the usable ones are saved as DRAFT for review. */
+    @PostMapping("/ai")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<AiQuestionGenerationResult>> generateWithAi(
+            @Valid @RequestBody AiQuestionGenerationRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(aiQuestionGeneratorService.generate(request)));
+    }
 
     /**
      * Generate (and optionally import) questions for a given HSK level and type.

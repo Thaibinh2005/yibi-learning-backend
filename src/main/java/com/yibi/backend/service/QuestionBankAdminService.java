@@ -11,6 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -19,6 +22,27 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class QuestionBankAdminService {
+
+    private static final Set<String> QUESTION_TYPES = Set.of(
+            "VOCAB_MEANING", "MEANING_HANZI", "PHONETICS_SELECT", "CLOZE", "GRAMMAR_SELECT",
+            "SENTENCE_ORDER", "ERROR_CORRECTION", "LISTEN_WORD", "LISTEN_SENTENCE",
+            "LISTEN_DIALOGUE", "READING_COMPREHENSION", "TRANSLATION", "KEYWORD_SENTENCE", "READ_ALOUD");
+    private static final Set<String> SKILLS = Set.of(
+            "vocabulary", "phonetics", "characters", "grammar", "listening",
+            "reading", "writing", "translation", "speaking");
+    private static final List<String> LEVELS = List.of("1", "2", "3", "4", "5", "6", "7-9");
+    private static final List<String> COVERAGE_SKILLS = List.of(
+            "listening", "reading", "vocabulary", "grammar", "characters", "writing", "speaking");
+    private static final int TARGET_PER_CELL = 8;
+    private static final int SPEAKING_TARGET_PER_CELL = 4;
+    /** Types answered by reading text aloud, so they carry no choices. */
+    private static final Set<String> NO_CHOICE_TYPES = Set.of("READ_ALOUD");
+    private static final Map<String, Set<String>> TRANSITIONS = Map.of(
+            "DRAFT", Set.of("REVIEWED", "PUBLISHED", "REJECTED"),
+            "REVIEWED", Set.of("DRAFT", "PUBLISHED", "REJECTED"),
+            "PUBLISHED", Set.of("RETIRED"),
+            "RETIRED", Set.of("PUBLISHED"),
+            "REJECTED", Set.of("DRAFT"));
 
     private final JdbcTemplate jdbcTemplate;
     private final ObjectMapper objectMapper;
@@ -189,15 +213,194 @@ public class QuestionBankAdminService {
                 .build();
     }
 
+    @Transactional(readOnly = true)
+    public PoolCoverageResponse getPoolCoverage() {
+        Map<String, Integer> counts = new HashMap<>();
+        jdbcTemplate.query("""
+                SELECT level_code, skill_key, count(*) AS cnt
+                FROM question_bank_items
+                WHERE status = 'PUBLISHED' AND standard_code = 'NEW_HSK' AND version_code = '2025'
+                  AND level_code IS NOT NULL
+                GROUP BY level_code, skill_key
+                """, rs -> {
+            counts.put(rs.getString("level_code") + "|" + rs.getString("skill_key"), rs.getInt("cnt"));
+        });
+
+        List<PoolCoverageResponse.Cell> cells = new ArrayList<>();
+        int totalMissing = 0;
+        for (String level : LEVELS) {
+            for (String skill : COVERAGE_SKILLS) {
+                int target = "speaking".equals(skill) ? SPEAKING_TARGET_PER_CELL : TARGET_PER_CELL;
+                int published = counts.getOrDefault(level + "|" + skill, 0);
+                int missing = Math.max(0, target - published);
+                totalMissing += missing;
+                cells.add(PoolCoverageResponse.Cell.builder()
+                        .levelCode(level).skillKey(skill)
+                        .published(published).target(target).missing(missing)
+                        .build());
+            }
+        }
+        return PoolCoverageResponse.builder().ready(totalMissing == 0).totalMissing(totalMissing).cells(cells).build();
+    }
+
+    @Transactional
+    public QuestionBankItemAdminDto createQuestion(QuestionCreateRequest request) {
+        String type = request.getQuestionType().trim().toUpperCase();
+        String skill = request.getSkillKey().trim().toLowerCase();
+        String level = request.getLevelCode().trim();
+        if (!QUESTION_TYPES.contains(type)) throw new BadRequestException("Unknown question type: " + type);
+        if (!SKILLS.contains(skill)) throw new BadRequestException("Unknown skill: " + skill);
+        if (!LEVELS.contains(level)) throw new BadRequestException("Unknown level: " + level);
+
+        List<QuestionUpdateRequest.ChoiceUpdateRequest> choices =
+                request.getChoices() != null ? request.getChoices() : List.of();
+        String answerText = NO_CHOICE_TYPES.contains(type)
+                ? request.getAnswerText()
+                : choices.stream().filter(QuestionUpdateRequest.ChoiceUpdateRequest::isCorrect)
+                        .map(QuestionUpdateRequest.ChoiceUpdateRequest::getText).findFirst().orElse(null);
+        requireValidContent(type, request.getPrompt(), answerText,
+                choices.stream().map(QuestionUpdateRequest.ChoiceUpdateRequest::getText).toList(),
+                (int) choices.stream().filter(QuestionUpdateRequest.ChoiceUpdateRequest::isCorrect).count());
+
+        String hash = sha256(type + "|" + level + "|" + request.getPrompt().trim() + "|" + answerText.trim());
+        Integer duplicates = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM question_bank_items WHERE content_hash = ?", Integer.class, hash);
+        if (duplicates != null && duplicates > 0) {
+            throw new BadRequestException("A question with the same content already exists");
+        }
+
+        int difficulty = request.getDifficulty() != null ? Math.max(1, Math.min(request.getDifficulty(), 5)) : 1;
+        String origin = "AI_GENERATED".equalsIgnoreCase(request.getOrigin()) ? "AI_GENERATED" : "HUMAN";
+        String topic = request.getTopicKey() != null && !request.getTopicKey().isBlank() ? request.getTopicKey().trim() : "general";
+        String answerDataJson;
+        try {
+            answerDataJson = objectMapper.writeValueAsString(Map.of("correctAnswer", answerText));
+        } catch (JsonProcessingException e) {
+            throw new BadRequestException("Could not serialize the answer");
+        }
+
+        Long id = jdbcTemplate.queryForObject("""
+                INSERT INTO question_bank_items
+                  (question_code, question_type, skill_key, level_code, topic_key, prompt, prompt_pinyin,
+                   prompt_audio_url, answer_text, answer_data, explanation, difficulty, origin, status, content_hash)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?::jsonb, ?, ?, ?, 'DRAFT', ?) RETURNING id
+                """, Long.class,
+                "ADMIN-" + UUID.randomUUID(), type, skill, level, topic, request.getPrompt().trim(),
+                request.getPromptPinyin(), request.getPromptAudioUrl(), answerText, answerDataJson,
+                request.getExplanation(), difficulty, origin, hash);
+
+        int order = 1;
+        for (QuestionUpdateRequest.ChoiceUpdateRequest c : choices) {
+            jdbcTemplate.update("""
+                    INSERT INTO question_bank_choices(question_id, choice_key, choice_order, choice_text, is_correct)
+                    VALUES (?, ?, ?, ?, ?)
+                    """, id, c.getKey(), order++, c.getText(), c.isCorrect());
+        }
+        ensureCalibration(id, level, difficulty);
+        log.info("Admin created question id={} type={} level={} skill={}", id, type, level, skill);
+        return getQuestionById(id);
+    }
+
     @Transactional
     public void publishQuestion(Long id) {
-        int updated = jdbcTemplate.update("""
-                UPDATE question_bank_items
-                SET status = 'PUBLISHED', updated_at = NOW()
-                WHERE id = ?
-                """, id);
-        if (updated == 0) {
-            throw new ResourceNotFoundException("QuestionBankItem", "id", id);
+        changeStatus(id, "PUBLISHED");
+    }
+
+    @Transactional
+    public void rejectQuestion(Long id) {
+        changeStatus(id, "REJECTED");
+    }
+
+    /** Takes a published question out of the pool without deleting it. */
+    @Transactional
+    public void deactivateQuestion(Long id) {
+        changeStatus(id, "RETIRED");
+    }
+
+    @Transactional
+    public void activateQuestion(Long id) {
+        if (!"RETIRED".equals(getQuestionById(id).getStatus())) {
+            throw new BadRequestException("Only a deactivated question can be activated; publish it instead");
+        }
+        changeStatus(id, "PUBLISHED");
+    }
+
+    private void changeStatus(Long id, String target) {
+        QuestionBankItemAdminDto existing = getQuestionById(id);
+        if (target.equals(existing.getStatus())) {
+            return;
+        }
+        requireTransition(existing.getStatus(), target);
+        if ("PUBLISHED".equals(target)) {
+            validateForPublish(existing);
+        }
+        jdbcTemplate.update("UPDATE question_bank_items SET status = ?, updated_at = NOW() WHERE id = ?", target, id);
+        log.info("Admin moved question id={} from {} to {}", id, existing.getStatus(), target);
+    }
+
+    private static void requireTransition(String from, String to) {
+        if (!TRANSITIONS.containsKey(to)) {
+            throw new BadRequestException("Unknown status: " + to);
+        }
+        if (!TRANSITIONS.getOrDefault(from, Set.of()).contains(to)) {
+            throw new BadRequestException("A " + from + " question cannot become " + to);
+        }
+    }
+
+    private void validateForPublish(QuestionBankItemAdminDto item) {
+        if (item.getLevelCode() == null || !LEVELS.contains(item.getLevelCode())) {
+            throw new BadRequestException("A published question needs a level");
+        }
+        List<QuestionBankChoiceAdminDto> choices = item.getChoices() != null ? item.getChoices() : List.of();
+        requireValidContent(item.getQuestionType(), item.getPrompt(), item.getAnswerText(),
+                choices.stream().map(QuestionBankChoiceAdminDto::getText).toList(),
+                (int) choices.stream().filter(QuestionBankChoiceAdminDto::isCorrect).count());
+        ensureCalibration(item.getId(), item.getLevelCode(), item.getDifficulty());
+    }
+
+    private static void requireValidContent(String type, String prompt, String answerText,
+                                            List<String> choiceTexts, int correctCount) {
+        if (prompt == null || prompt.isBlank()) {
+            throw new BadRequestException("Prompt cannot be blank");
+        }
+        if (answerText == null || answerText.isBlank()) {
+            throw new BadRequestException(NO_CHOICE_TYPES.contains(type)
+                    ? "A read-aloud question needs the text to read" : "Exactly one choice must be marked as correct");
+        }
+        if (NO_CHOICE_TYPES.contains(type)) {
+            return;
+        }
+        if (choiceTexts.size() < 2) {
+            throw new BadRequestException("A question needs at least two choices");
+        }
+        if (correctCount != 1) {
+            throw new BadRequestException("Exactly one choice must be marked as correct");
+        }
+        Set<String> distinct = new HashSet<>();
+        for (String text : choiceTexts) {
+            if (text == null || text.isBlank()) {
+                throw new BadRequestException("Choice text cannot be blank");
+            }
+            if (!distinct.add(text.trim())) {
+                throw new BadRequestException("Choices must be different from each other");
+            }
+        }
+    }
+
+    /** Starting IRT estimate: the level (7-9 counts as 8) shifted a quarter step per difficulty point from 3. */
+    private void ensureCalibration(Long questionId, String levelCode, Integer difficulty) {
+        double level = "7-9".equals(levelCode) ? 8 : Double.parseDouble(levelCode);
+        double b = level + ((difficulty != null ? difficulty : 3) - 3) * 0.25;
+        jdbcTemplate.update(
+                "INSERT INTO question_calibration (question_id, irt_b) VALUES (?, ?) ON CONFLICT (question_id) DO NOTHING",
+                questionId, b);
+    }
+
+    private static String sha256(String text) {
+        try {
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8)));
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
         }
     }
 
@@ -230,6 +433,9 @@ public class QuestionBankAdminService {
                 : existing.getStatus();
 
         int diff = request.getDifficulty() != null ? Math.max(1, Math.min(request.getDifficulty(), 5)) : existing.getDifficulty();
+        if (!targetStatus.equals(existing.getStatus())) {
+            requireTransition(existing.getStatus(), targetStatus);
+        }
 
         jdbcTemplate.update("""
                 UPDATE question_bank_items
@@ -266,8 +472,12 @@ public class QuestionBankAdminService {
                     id, c.getKey(), order++, c.getText(), c.isCorrect());
         }
 
+        QuestionBankItemAdminDto updated = getQuestionById(id);
+        if ("PUBLISHED".equals(targetStatus)) {
+            validateForPublish(updated);
+        }
         log.info("Admin updated question id={}: prompt='{}', status='{}'", id, request.getPrompt(), targetStatus);
-        return getQuestionById(id);
+        return updated;
     }
 
     @Transactional
