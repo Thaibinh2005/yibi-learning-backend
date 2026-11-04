@@ -125,7 +125,7 @@ public class QuestionBankService {
         jdbcTemplate.update("""
                 INSERT INTO practice_session_questions(session_id, question_id, display_order, selection_reason)
                 SELECT ?, id, row_number() OVER (ORDER BY id), 'LESSON_CONTENT'
-                FROM question_bank_items WHERE lesson_id=? AND status='PUBLISHED'
+                FROM question_bank_items WHERE lesson_id=? AND status='PUBLISHED' AND question_type <> 'READ_ALOUD'
                 ON CONFLICT (session_id, question_id) DO NOTHING
                 """, sessionId, lessonId);
         return sessionId;
@@ -156,7 +156,7 @@ public class QuestionBankService {
                     ON m.user_id=? AND m.standard_code=q.standard_code AND m.version_code=q.version_code
                    AND m.level_code=q.level_code AND m.skill_key=q.skill_key AND m.topic_key=q.topic_key
                   WHERE q.status='PUBLISHED' AND q.standard_code='NEW_HSK' AND q.version_code='2025'
-                    AND q.level_code=?
+                    AND q.level_code=? AND q.question_type <> 'READ_ALOUD'
                 ), ranked AS (
                   SELECT candidates.*,
                          row_number() OVER (PARTITION BY skill_key ORDER BY priority,
@@ -281,7 +281,7 @@ public class QuestionBankService {
         return response;
     }
 
-    private Map<String, Object> updateMastery(java.util.UUID userId, String level, String skill, String topic, boolean correct) {
+    public Map<String, Object> updateMastery(java.util.UUID userId, String level, String skill, String topic, boolean correct) {
         Map<String, Object> previous = jdbcTemplate.query("""
                 SELECT attempts_count, correct_count, correct_streak, incorrect_streak
                 FROM learner_skill_mastery

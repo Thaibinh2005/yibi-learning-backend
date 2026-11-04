@@ -1,8 +1,10 @@
 package com.yibi.backend.controller.admin;
 
+import com.yibi.backend.dto.admin.PoolCoverageResponse;
 import com.yibi.backend.dto.admin.QuestionBankItemAdminDto;
 import com.yibi.backend.dto.admin.QuestionBankPageResponse;
 import com.yibi.backend.dto.admin.QuestionBankStatsResponse;
+import com.yibi.backend.dto.admin.QuestionCreateRequest;
 import com.yibi.backend.dto.admin.QuestionUpdateRequest;
 import com.yibi.backend.dto.common.ApiResponse;
 import com.yibi.backend.service.QuestionBankAdminService;
@@ -47,6 +49,36 @@ public class QuestionBankAdminController {
     public ResponseEntity<ApiResponse<QuestionBankStatsResponse>> getStats() {
         QuestionBankStatsResponse stats = questionBankAdminService.getStats();
         return ResponseEntity.ok(ApiResponse.success(stats));
+    }
+
+    @GetMapping("/pool-coverage")
+    public ResponseEntity<ApiResponse<PoolCoverageResponse>> getPoolCoverage() {
+        return ResponseEntity.ok(ApiResponse.success(questionBankAdminService.getPoolCoverage()));
+    }
+
+    @PostMapping("/items")
+    public ResponseEntity<ApiResponse<QuestionBankItemAdminDto>> createQuestion(
+            @Valid @RequestBody QuestionCreateRequest request) {
+        QuestionBankItemAdminDto created = questionBankAdminService.createQuestion(request);
+        return ResponseEntity.ok(ApiResponse.success("Question created successfully", created));
+    }
+
+    @PostMapping("/items/{id}/reject")
+    public ResponseEntity<ApiResponse<String>> rejectQuestion(@PathVariable Long id) {
+        questionBankAdminService.rejectQuestion(id);
+        return ResponseEntity.ok(ApiResponse.success("Question rejected"));
+    }
+
+    @PostMapping("/items/{id}/activate")
+    public ResponseEntity<ApiResponse<String>> activateQuestion(@PathVariable Long id) {
+        questionBankAdminService.activateQuestion(id);
+        return ResponseEntity.ok(ApiResponse.success("Question activated"));
+    }
+
+    @PostMapping("/items/{id}/deactivate")
+    public ResponseEntity<ApiResponse<String>> deactivateQuestion(@PathVariable Long id) {
+        questionBankAdminService.deactivateQuestion(id);
+        return ResponseEntity.ok(ApiResponse.success("Question deactivated"));
     }
 
     @PostMapping("/items/{id}/publish")

@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface PlacementAssessmentRepository extends JpaRepository<PlacementAssessment, Long> {
     Optional<PlacementAssessment> findByIdAndUserId(Long id, UUID userId);
     Optional<PlacementAssessment> findFirstByUserIdAndFinishedAtIsNotNullOrderByFinishedAtDesc(UUID userId);
+    Optional<PlacementAssessment> findFirstByUserIdAndModeAndStatusOrderByStartedAtDesc(UUID userId, String mode, String status);
 }

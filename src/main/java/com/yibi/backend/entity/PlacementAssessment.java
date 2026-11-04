@@ -49,4 +49,31 @@ public class PlacementAssessment {
 
     @Column(name = "finished_at")
     private LocalDateTime finishedAt;
+
+    /** IN_PROGRESS, FINISHED or ABANDONED. */
+    @Column(name = "status", nullable = false, length = 16)
+    @Builder.Default
+    private String status = "IN_PROGRESS";
+
+    /** ADAPTIVE for the CAT test; LEGACY marks rows from the old fixed HSK 1 test. */
+    @Column(name = "mode", nullable = false, length = 16)
+    @Builder.Default
+    private String mode = "ADAPTIVE";
+
+    @Column(name = "theta", precision = 6, scale = 3)
+    private BigDecimal theta;
+
+    @Column(name = "std_error", precision = 6, scale = 3)
+    private BigDecimal stdError;
+
+    @JdbcTypeCode(SqlTypes.SMALLINT)
+
+    @Column(name = "estimated_level")
+    private Integer estimatedLevel;
+
+    @Column(name = "confidence", length = 8)
+    private String confidence;
+
+    @Column(name = "algorithm_version", length = 24)
+    private String algorithmVersion;
 }
