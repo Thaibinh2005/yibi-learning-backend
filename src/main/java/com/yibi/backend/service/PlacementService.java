@@ -52,6 +52,7 @@ public class PlacementService {
     private final PlacementResultRepository resultRepository;
     private final QuestionBankAdminService questionBankAdminService;
     private final SpeechScoringClient speechClient;
+    private final PlacementOutcomeService outcomeService;
     private final PlatformTransactionManager transactionManager;
 
     @Value("${app.speech.pass-accuracy:0.7}")
@@ -284,14 +285,17 @@ public class PlacementService {
             m.put("level", CatEngine.levelOf(s.theta()));
             skillScores.add(m);
         }
-        resultRepository.save(PlacementResult.builder()
+        PlacementResult stored = PlacementResult.builder()
                 .assessmentId(attempt.getId()).user(user)
                 .estimatedLevel(result.level()).confidence(result.confidence().name())
                 .theta(scaled(result.theta())).stdError(scaled(result.standardError()))
                 .questionCount(responses.size())
                 .skillScores(skillScores).strengths(result.strengths()).weaknesses(result.weaknesses())
                 .weakTopics(result.weakTopics()).recommendedLevel(result.level())
-                .build());
+                .build();
+        outcomeService.apply(user, attempt, stored,
+                skillAttemptRepository.findByAssessmentIdOrderByDisplayOrderAsc(attempt.getId()));
+        resultRepository.save(stored);
 
         user.setHskLevel(result.level());
         user.setOnboardingCompletedAt(LocalDateTime.now());

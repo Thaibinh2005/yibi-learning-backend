@@ -21,13 +21,19 @@ public class PersonalizedLearningService {
             new SkillDefinition("vocabulary", "Từ vựng"),
             new SkillDefinition("phonetics", "Pinyin và phát âm"),
             new SkillDefinition("characters", "Nhận diện chữ Hán"),
-            new SkillDefinition("grammar", "Ngữ pháp")
+            new SkillDefinition("grammar", "Ngữ pháp"),
+            new SkillDefinition("listening", "Nghe hiểu"),
+            new SkillDefinition("reading", "Đọc hiểu"),
+            new SkillDefinition("writing", "Viết câu"),
+            new SkillDefinition("speaking", "Phát âm khi đọc")
     );
 
     private final CourseRepository courseRepository;
     private final LessonRepository lessonRepository;
     private final PlacementAssessmentRepository assessmentRepository;
     private final SkillAttemptRepository skillAttemptRepository;
+    private final UserRepository userRepository;
+    private final PlacementResultRepository placementResultRepository;
 
     @Transactional(readOnly = true)
     public LearningPathOverviewResponse getOverview(UUID userId) {
@@ -35,14 +41,16 @@ public class PersonalizedLearningService {
         Optional<PlacementAssessment> latest = assessmentRepository
                 .findFirstByUserIdAndFinishedAtIsNotNullOrderByFinishedAtDesc(userId);
         List<SkillStatResponse> stats = buildSkillStats(attempts);
+        int level = userRepository.findById(userId).map(User::getHskLevel).orElse(1);
         return LearningPathOverviewResponse.builder()
                 .assessmentCompleted(latest.isPresent())
-                .availableHskLevel(1)
+                .availableHskLevel(level)
                 .latestScorePercent(latest.map(PlacementAssessment::getScorePercent).orElse(null))
-                .levelSummary(latest.map(a -> levelSummary(a.getScorePercent()))
-                        .orElse("Hãy làm bài đánh giá để bắt đầu xây dựng lộ trình HSK 1."))
+                .levelSummary(latest.map(a -> placementResultRepository.findById(a.getId())
+                                .map(this::adaptiveSummary).orElseGet(() -> levelSummary(a.getScorePercent())))
+                        .orElse("Hãy làm bài đánh giá để xác định trình độ và xây dựng lộ trình học."))
                 .skills(stats)
-                .recommendedLessons(recommendLessons(stats, attempts))
+                .recommendedLessons(recommendLessons(stats, attempts, level))
                 .build();
     }
 
@@ -76,7 +84,7 @@ public class PersonalizedLearningService {
     }
 
     private List<RecommendedLessonResponse> recommendLessons(List<SkillStatResponse> stats,
-                                                               List<SkillAttempt> attempts) {
+                                                               List<SkillAttempt> attempts, int level) {
         Map<String, Integer> weights = stats.stream()
                 .filter(stat -> !"INSUFFICIENT".equals(stat.getPriority()))
                 .collect(Collectors.toMap(SkillStatResponse::getSkillKey, stat -> switch (stat.getPriority()) {
@@ -90,7 +98,7 @@ public class PersonalizedLearningService {
                 .collect(Collectors.groupingBy(attempt -> attempt.getLesson().getId(),
                         Collectors.groupingBy(SkillAttempt::getSkillKey, Collectors.counting())));
         List<LessonScore> scores = new ArrayList<>();
-        for (Course course : courseRepository.findByHskLevelOrderByHskLevelAsc(1)) {
+        for (Course course : courseRepository.findByHskLevelOrderByHskLevelAsc(level)) {
             for (Lesson lesson : lessonRepository.findByCourseIdOrderByLessonOrderAsc(course.getId())) {
                 if (lesson.getLessonPayload() == null) continue;
                 Map<String, Object> sections = asMap(lesson.getLessonPayload().get("sections"));
@@ -121,6 +129,20 @@ public class PersonalizedLearningService {
                 .title(item.lesson.getTitle())
                 .reason("Ôn lại phần " + item.matchedSkills + " dựa trên các câu bạn cần củng cố.")
                 .build()).toList();
+    }
+
+    private String adaptiveSummary(PlacementResult result) {
+        String confidence = switch (result.getConfidence()) {
+            case "HIGH" -> "cao";
+            case "MEDIUM" -> "trung bình";
+            default -> "thấp";
+        };
+        String text = "Trình độ ước lượng của bạn là HSK " + result.getEstimatedLevel() + " (độ tin cậy " + confidence + ").";
+        if (!result.getWeaknesses().isEmpty()) {
+            text += " Nên củng cố trước: " + result.getWeaknesses().stream().map(this::skillLabel)
+                    .collect(Collectors.joining(", ")) + ".";
+        }
+        return text;
     }
 
     private String levelSummary(BigDecimal score) {

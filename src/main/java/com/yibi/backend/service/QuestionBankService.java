@@ -281,7 +281,7 @@ public class QuestionBankService {
         return response;
     }
 
-    private Map<String, Object> updateMastery(java.util.UUID userId, String level, String skill, String topic, boolean correct) {
+    public Map<String, Object> updateMastery(java.util.UUID userId, String level, String skill, String topic, boolean correct) {
         Map<String, Object> previous = jdbcTemplate.query("""
                 SELECT attempts_count, correct_count, correct_streak, incorrect_streak
                 FROM learner_skill_mastery
