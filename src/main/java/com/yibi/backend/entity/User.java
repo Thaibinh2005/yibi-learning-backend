@@ -2,6 +2,8 @@ package com.yibi.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -62,6 +64,19 @@ public class User {
      */
     @Column(name = "hsk_level")
     private Integer hskLevel;
+
+    /** Null until the first-sign-in survey is done; accounts that predate the survey are set by migration. */
+    @Column(name = "onboarding_completed_at")
+    private LocalDateTime onboardingCompletedAt;
+
+    /** The level the learner chose in the survey, 0 (none) to 9. */
+    @JdbcTypeCode(SqlTypes.SMALLINT)
+    @Column(name = "self_reported_level")
+    private Integer selfReportedLevel;
+
+    /** BASIC (start from HSK 1) or PLACEMENT (take the test). */
+    @Column(name = "start_mode", length = 16)
+    private String startMode;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

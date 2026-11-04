@@ -2,7 +2,10 @@ package com.yibi.backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -49,4 +52,19 @@ public class SkillAttempt {
     @Column(name = "answered_at", nullable = false)
     @Builder.Default
     private LocalDateTime answeredAt = LocalDateTime.now();
+
+    /** The question bank is read through JdbcTemplate, so these two stay plain ids. */
+    @Column(name = "question_id")
+    private Long questionId;
+
+    @Column(name = "selected_choice_id")
+    private Long selectedChoiceId;
+
+    @JdbcTypeCode(SqlTypes.SMALLINT)
+
+    @Column(name = "display_order")
+    private Integer displayOrder;
+
+    @Column(name = "theta_before", precision = 6, scale = 3)
+    private BigDecimal thetaBefore;
 }
