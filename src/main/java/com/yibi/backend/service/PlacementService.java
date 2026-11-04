@@ -174,6 +174,15 @@ public class PlacementService {
         return advance(attempt, attempt.getUser());
     }
 
+    /** Drops an unfinished attempt so the learner can start again; its answers stay for the record. */
+    @Transactional
+    public void abandon(UUID userId, Long attemptId) {
+        PlacementAssessment attempt = openAttempt(userId, attemptId);
+        attempt.setStatus("ABANDONED");
+        attempt.setFinishedAt(LocalDateTime.now());
+        assessmentRepository.save(attempt);
+    }
+
     @Transactional(readOnly = true)
     public PlacementResultResponse getResult(UUID userId, Long attemptId) {
         PlacementResult result = resultRepository.findByAssessmentIdAndUserId(attemptId, userId)
