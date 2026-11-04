@@ -17,6 +17,8 @@ public class PlacementStatusResponse {
     private Integer hskLevel;
     /** The unfinished attempt to resume, if any. */
     private Long inProgressAttemptId;
+    /** How many questions the unfinished attempt has answered so far. */
+    private Integer inProgressAnswered;
     /** The latest finished attempt, whose result can be shown. */
     private Long latestAttemptId;
     /** Whether the question bank has enough published questions for a full-length test. */
