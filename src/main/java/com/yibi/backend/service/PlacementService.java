@@ -64,14 +64,15 @@ public class PlacementService {
     @Transactional(readOnly = true)
     public PlacementStatusResponse getStatus(UUID userId) {
         User user = findUser(userId);
+        Optional<PlacementAssessment> inProgress = assessmentRepository
+                .findFirstByUserIdAndModeAndStatusOrderByStartedAtDesc(userId, "ADAPTIVE", "IN_PROGRESS");
         return PlacementStatusResponse.builder()
                 .onboardingCompleted(user.getOnboardingCompletedAt() != null)
                 .startMode(user.getStartMode())
                 .selfReportedLevel(user.getSelfReportedLevel())
                 .hskLevel(user.getHskLevel())
-                .inProgressAttemptId(assessmentRepository
-                        .findFirstByUserIdAndModeAndStatusOrderByStartedAtDesc(userId, "ADAPTIVE", "IN_PROGRESS")
-                        .map(PlacementAssessment::getId).orElse(null))
+                .inProgressAttemptId(inProgress.map(PlacementAssessment::getId).orElse(null))
+                .inProgressAnswered(inProgress.map(PlacementAssessment::getTotalQuestions).orElse(null))
                 .latestAttemptId(assessmentRepository
                         .findFirstByUserIdAndModeAndStatusOrderByStartedAtDesc(userId, "ADAPTIVE", "FINISHED")
                         .map(PlacementAssessment::getId).orElse(null))
