@@ -53,6 +53,12 @@ public class PlacementController {
         return ResponseEntity.ok(ApiResponse.success(placementService.skipSpeaking(currentUser(), attemptId, questionId)));
     }
 
+    @PostMapping("/{attemptId}/abandon")
+    public ResponseEntity<ApiResponse<String>> abandon(@PathVariable Long attemptId) {
+        placementService.abandon(currentUser(), attemptId);
+        return ResponseEntity.ok(ApiResponse.success("Attempt abandoned"));
+    }
+
     @GetMapping("/{attemptId}/result")
     public ResponseEntity<ApiResponse<PlacementResultResponse>> getResult(@PathVariable Long attemptId) {
         return ResponseEntity.ok(ApiResponse.success(placementService.getResult(currentUser(), attemptId)));
