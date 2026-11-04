@@ -45,6 +45,9 @@ public class PlacementService {
             "listening", "Nghe hiểu", "reading", "Đọc hiểu", "vocabulary", "Từ vựng", "grammar", "Ngữ pháp",
             "characters", "Chữ Hán", "writing", "Viết câu", "speaking", "Phát âm");
 
+    private static final List<String> SKILL_ORDER =
+            List.of("vocabulary", "characters", "grammar", "listening", "reading", "writing", "speaking");
+
     private final JdbcTemplate jdbc;
     private final UserRepository userRepository;
     private final PlacementAssessmentRepository assessmentRepository;
@@ -183,13 +186,40 @@ public class PlacementService {
                     .theta(((Number) m.get("theta")).doubleValue()).level(((Number) m.get("level")).intValue())
                     .build());
         }
+        List<PlacementResultResponse.MissedWord> missed = missedWords(attemptId);
         return PlacementResultResponse.builder()
                 .attemptId(attemptId).level(result.getEstimatedLevel()).confidence(result.getConfidence())
                 .theta(result.getTheta().doubleValue()).standardError(result.getStdError().doubleValue())
                 .questionCount(result.getQuestionCount())
                 .recommendedLevel(result.getRecommendedLevel() != null ? result.getRecommendedLevel() : result.getEstimatedLevel())
                 .skillScores(scores).strengths(result.getStrengths()).weaknesses(result.getWeaknesses())
-                .weakTopics(result.getWeakTopics()).build();
+                .weakTopics(result.getWeakTopics())
+                .recommendedCourseId(result.getRecommendedCourseId())
+                .recommendedCourseTitle(courseTitle(result.getRecommendedCourseId()))
+                .missedWords(missed)
+                .reviewCardsAdded((int) missed.stream().filter(PlacementResultResponse.MissedWord::isInDeck).count())
+                .build();
+    }
+
+    private String courseTitle(Long courseId) {
+        if (courseId == null) return null;
+        List<String> titles = jdbc.queryForList("SELECT title FROM courses WHERE id = ?", String.class, courseId);
+        return titles.isEmpty() ? null : titles.get(0);
+    }
+
+    private List<PlacementResultResponse.MissedWord> missedWords(Long attemptId) {
+        return jdbc.query("""
+                SELECT DISTINCT vr.simplified, rd.pinyin,
+                       EXISTS (SELECT 1 FROM srs_cards c
+                               WHERE c.user_id = a.user_id AND c.hsk_vocabulary_record_id = vr.raw_record_id) AS in_deck
+                FROM skill_attempts a
+                JOIN question_bank_sources s ON s.question_id = a.question_id
+                JOIN hsk_vocabulary_records vr ON vr.raw_record_id = s.raw_record_id
+                JOIN hsk_vocabulary_readings rd ON rd.raw_record_id = vr.raw_record_id AND rd.reading_order = 1
+                WHERE a.assessment_id = ? AND a.is_correct = FALSE
+                ORDER BY vr.simplified
+                """, (rs, i) -> new PlacementResultResponse.MissedWord(rs.getString("simplified"),
+                        rs.getString("pinyin"), rs.getBoolean("in_deck")), attemptId);
     }
 
     // ── flow ────────────────────────────────────────────────────────────────
@@ -305,6 +335,7 @@ public class PlacementService {
         return PlacementStepResponse.builder()
                 .attemptId(attempt.getId()).finished(true).answered(responses.size())
                 .minimumQuestions(CatConfig.defaults().minQuestions()).maximumQuestions(CatConfig.defaults().maxQuestions())
+                .skillProgress(skillProgress(attempt.getId()))
                 .build();
     }
 
@@ -316,7 +347,20 @@ public class PlacementService {
                 .attemptId(attempt.getId()).finished(finished)
                 .question(questionId != null ? loadQuestion(questionId, answered + 1) : null)
                 .answered(answered).minimumQuestions(config.minQuestions()).maximumQuestions(config.maxQuestions())
+                .skillProgress(skillProgress(attempt.getId()))
                 .build();
+    }
+
+    private List<PlacementStepResponse.SkillProgress> skillProgress(Long attemptId) {
+        Map<String, Integer> counts = new HashMap<>();
+        for (SkillAttempt a : skillAttemptRepository.findByAssessmentIdOrderByDisplayOrderAsc(attemptId)) {
+            counts.merge(a.getSkillKey(), 1, Integer::sum);
+        }
+        List<PlacementStepResponse.SkillProgress> progress = new ArrayList<>();
+        for (String skill : SKILL_ORDER) {
+            progress.add(new PlacementStepResponse.SkillProgress(skill, SKILL_LABELS.getOrDefault(skill, skill), counts.getOrDefault(skill, 0)));
+        }
+        return progress;
     }
 
     private PlacementQuestionDto loadQuestion(Long id, int order) {

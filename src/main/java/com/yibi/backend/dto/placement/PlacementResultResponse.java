@@ -27,6 +27,20 @@ public class PlacementResultResponse {
     private List<String> strengths;
     private List<String> weaknesses;
     private List<String> weakTopics;
+    private Long recommendedCourseId;
+    private String recommendedCourseTitle;
+    /** How many of the missed words are now in the learner's review deck. */
+    private int reviewCardsAdded;
+    /** Syllabus words behind the questions the learner got wrong. */
+    private List<MissedWord> missedWords;
+
+    @Data
+    @AllArgsConstructor
+    public static class MissedWord {
+        private String word;
+        private String pinyin;
+        private boolean inDeck;
+    }
 
     @Data
     @Builder
