@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface SkillAttemptRepository extends JpaRepository<SkillAttempt, Long> {
     List<SkillAttempt> findByUserIdOrderByAnsweredAtAsc(UUID userId);
+    List<SkillAttempt> findByAssessmentIdOrderByDisplayOrderAsc(Long assessmentId);
 }
