@@ -141,7 +141,9 @@ public class AiQuestionGeneratorService {
             index++;
             try {
                 ((com.fasterxml.jackson.databind.node.ObjectNode) q).put("__level", level);
-                created.add(adminService.createQuestion(toCreateRequest(q, level, skill, type, difficulty, request.getTopicKey())).getId());
+                Long id = adminService.createQuestion(toCreateRequest(q, level, skill, type, difficulty, request.getTopicKey())).getId();
+                linkToSyllabusWord(id, q.path("target_word").asText("").trim(), level);
+                created.add(id);
             } catch (BadRequestException ex) {
                 log.warn("AI question #{} rejected ({}): {}", index, ex.getMessage(), abbreviate(q.toString()));
                 rejected.add("#" + index + ": " + ex.getMessage());
@@ -259,6 +261,21 @@ public class AiQuestionGeneratorService {
         java.util.Arrays.sort(want);
         java.util.Arrays.sort(have);
         if (!java.util.Arrays.equals(want, have)) throw new BadRequestException("the correct sentence does not use the fragments exactly once");
+    }
+
+    /** Records which syllabus word a question tests, so a missed question can put that word in the review deck. */
+    private void linkToSyllabusWord(Long questionId, String word, String level) {
+        if (word.isBlank()) return;
+        List<Long> records = jdbcTemplate.queryForList("""
+                SELECT raw_record_id FROM hsk_vocabulary_records
+                WHERE simplified = ? AND CASE level_code WHEN '7-9' THEN 8 ELSE level_code::int END <= ?
+                ORDER BY CASE level_code WHEN '7-9' THEN 8 ELSE level_code::int END DESC LIMIT 1
+                """, Long.class, word, levelNumber(level));
+        if (records.isEmpty()) return;
+        jdbcTemplate.update("""
+                INSERT INTO question_bank_sources (question_id, raw_record_id, attribution_note)
+                VALUES (?, ?, 'target word of the generated question') ON CONFLICT DO NOTHING
+                """, questionId, records.get(0));
     }
 
     private List<String> sampleWords(String level) {
