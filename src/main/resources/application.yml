@@ -67,11 +67,21 @@ spring:
       fail-on-unknown-properties: false
     default-property-inclusion: non_null
 
+  # A short recording of one sentence; the speaking question uploads it.
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+
 # Gemini is called only by the backend. Keep keys in environment variables.
 app:
   gemini:
     model: ${GEMINI_MODEL:gemini-3.8-flash}
     fallback-models: ${GEMINI_FALLBACK_MODELS:gemini-3.6-flash,gemini-3.5-flash-lite}
+  # yibi-speech-service scores how well a learner read a sentence aloud.
+  speech:
+    base-url: ${SPEECH_SERVICE_URL:http://localhost:8001}
+    pass-accuracy: ${SPEECH_PASS_ACCURACY:0.7}
 
 # ── Server ──────────────────────────────────────────────────
 server:
