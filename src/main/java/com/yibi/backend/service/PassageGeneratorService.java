@@ -132,6 +132,28 @@ public class PassageGeneratorService {
         return new Result(created, skipped, false);
     }
 
+    /** Stores the bundled passages (data/hsk_passages_2025.json) that are not in the database yet, so no Gemini key is needed. */
+    public int importBundled() {
+        JsonNode doc;
+        try (var in = new org.springframework.core.io.ClassPathResource("data/hsk_passages_2025.json").getInputStream()) {
+            doc = objectMapper.readTree(in);
+        } catch (IOException e) {
+            throw new IllegalStateException("Cannot read data/hsk_passages_2025.json", e);
+        }
+        int imported = 0;
+        for (JsonNode p : doc.path("passages")) {
+            int level = p.path("level").asInt();
+            List<Map<String, Object>> courses = jdbc.queryForList("SELECT id, title FROM courses WHERE hsk_level = ?", level);
+            if (courses.isEmpty()) continue;
+            long courseId = ((Number) courses.get(0).get("id")).longValue();
+            String key = p.path("key").asText();
+            if (exists(courseId, key)) continue;
+            save(courseId, (String) courses.get(0).get("title"), level, p.path("n").asInt(), key, p);
+            imported++;
+        }
+        return imported;
+    }
+
     private boolean exists(long courseId, String key) {
         return Boolean.TRUE.equals(jdbc.queryForObject("""
                 SELECT EXISTS (SELECT 1 FROM lessons WHERE course_id = ? AND content_type = 'READING'

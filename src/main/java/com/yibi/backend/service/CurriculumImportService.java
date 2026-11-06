@@ -41,6 +41,7 @@ public class CurriculumImportService {
 
     private final JdbcTemplate jdbc;
     private final ObjectMapper objectMapper;
+    private final PassageGeneratorService passageGenerator;
     private final Map<Integer, JsonNode> examplesBySeq = new java.util.HashMap<>();
     private final Map<Long, Map<String, Object>> examplesByRawId = new java.util.HashMap<>();
 
@@ -60,9 +61,11 @@ public class CurriculumImportService {
             jdbc.update("UPDATE courses SET total_lessons = (SELECT COUNT(*) FROM lessons WHERE course_id = ?) WHERE id = ?",
                     courseId, courseId);
         }
+        int passages = passageGenerator.importBundled();
         loadExamples();
         if (meanings > 0 || !examplesBySeq.isEmpty()) refreshVocabularyPayloads();
-        log.info("Curriculum: {} grammar rows, {} meanings, {} courses and {} lessons created.", grammarRows, meanings, courses, lessons);
+        log.info("Curriculum: {} grammar rows, {} meanings, {} courses, {} lessons created, {} passages imported.",
+                grammarRows, meanings, courses, lessons, passages);
         return new Result(grammarRows, meanings, courses, lessons);
     }
 
