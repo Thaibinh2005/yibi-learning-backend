@@ -1,5 +1,6 @@
 package com.yibi.backend.admin;
 
+import com.yibi.backend.service.CurriculumImportService;
 import com.yibi.backend.service.SyllabusImportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class SyllabusImportRunner implements ApplicationRunner {
     private static final String TRIGGER_FLAG = "import-syllabus";
 
     private final SyllabusImportService syllabusImportService;
+    private final CurriculumImportService curriculumImportService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -31,6 +33,9 @@ public class SyllabusImportRunner implements ApplicationRunner {
         SyllabusImportService.ImportResult result = syllabusImportService.importSyllabus();
         log.info("Syllabus import finished: skipped={}, vocabulary={}, characters={}",
                 result.skipped(), result.vocabulary(), result.characters());
+        CurriculumImportService.Result curriculum = curriculumImportService.run();
+        log.info("Curriculum import finished: grammar rows={}, meanings={}, courses created={}, lessons created={}",
+                curriculum.grammarRows(), curriculum.meanings(), curriculum.courses(), curriculum.lessons());
         System.exit(0);
     }
 }

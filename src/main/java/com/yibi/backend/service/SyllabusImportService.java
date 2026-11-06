@@ -28,7 +28,7 @@ import java.util.Map;
 public class SyllabusImportService {
 
     private static final String RESOURCE = "data/hsk_syllabus_2025.json";
-    private static final String DATASET_KEY = "hsk-syllabus-2025-11";
+    static final String DATASET_KEY = "hsk-syllabus-2025-11";
     private static final int HANZI_ROW_OFFSET = 100_000;
 
     private final JdbcTemplate jdbc;
@@ -143,7 +143,7 @@ public class SyllabusImportService {
         }
     }
 
-    private static String sha256(byte[] bytes) {
+    static String sha256(byte[] bytes) {
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
         } catch (java.security.NoSuchAlgorithmException e) {

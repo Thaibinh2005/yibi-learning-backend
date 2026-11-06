@@ -1,0 +1,89 @@
+# ============================================================
+#  Yibi Platform — Local Development Infrastructure
+#  Services: PostgreSQL 16 | Redis 7 | MinIO (S3-compatible)
+#  Usage: docker compose up -d
+# ============================================================
+
+services:
+
+  # ─── PostgreSQL 16 ───────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: yibi-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-yibi_db}
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in the ignored .env file}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the ignored .env file}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - yibi-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ─── Redis 7 ─────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: yibi-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?Set REDIS_PASSWORD in the ignored .env file}
+    command: ["sh", "-c", "exec redis-server --requirepass \"$$REDIS_PASSWORD\" --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - yibi-network
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # ─── MinIO (S3-compatible object storage) ────────────────
+  minio:
+    image: elestio/minio:latest
+    container_name: yibi-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Set MINIO_ROOT_USER in the ignored .env file}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Set MINIO_ROOT_PASSWORD in the ignored .env file}
+    ports:
+      - "9000:9000"   # S3 API endpoint
+      - "9091:9001"   # Web Console → http://localhost:9091
+    volumes:
+      - minio_data:/data
+    networks:
+      - yibi-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+# ─── Named Volumes ────────────────────────────────────────
+volumes:
+  postgres_data:
+    name: yibi_postgres_data
+  redis_data:
+    name: yibi_redis_data
+  minio_data:
+    name: yibi_minio_data
+
+# ─── Network ──────────────────────────────────────────────
+networks:
+  yibi-network:
+    name: yibi-network
+    driver: bridge

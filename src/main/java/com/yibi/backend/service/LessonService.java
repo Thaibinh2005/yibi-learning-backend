@@ -126,6 +126,7 @@ public class LessonService {
         String table = switch (type) {
             case VOCABULARY -> "hsk_vocabulary_records";
             case GRAMMAR -> "hsk_grammar_records";
+            case HANZI -> "hsk_hanzi_records";
             case READING, LISTENING -> throw new BadRequestException(
                     "Nội dung đọc/nghe cần nằm trong lesson_payload; contentRefId chỉ nhận từ vựng/ngữ pháp HSK V6.");
         };
