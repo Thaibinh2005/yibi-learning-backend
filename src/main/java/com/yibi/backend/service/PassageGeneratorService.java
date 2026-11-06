@@ -79,7 +79,9 @@ public class PassageGeneratorService {
         int skipped = 0;
         int failedInARow = 0;
         int quotaWaits = 0;
-        for (Map<String, Object> course : jdbc.queryForList("SELECT id, hsk_level, title FROM courses ORDER BY hsk_level")) {
+        for (Map<String, Object> course : jdbc.queryForList(
+                "SELECT id, hsk_level, title FROM courses WHERE title LIKE ? ORDER BY hsk_level",
+                CurriculumImportService.COURSE_TITLE_PREFIX + "%")) {
             long courseId = ((Number) course.get("id")).longValue();
             int level = ((Number) course.get("hsk_level")).intValue();
             String courseTitle = (String) course.get("title");
@@ -143,7 +145,9 @@ public class PassageGeneratorService {
         int imported = 0;
         for (JsonNode p : doc.path("passages")) {
             int level = p.path("level").asInt();
-            List<Map<String, Object>> courses = jdbc.queryForList("SELECT id, title FROM courses WHERE hsk_level = ?", level);
+            // Only the curriculum course of that level; other courses may share the same hsk_level.
+            List<Map<String, Object>> courses = jdbc.queryForList("SELECT id, title FROM courses WHERE hsk_level = ? AND title = ?",
+                    level, CurriculumImportService.COURSE_TITLE_PREFIX + (level == 7 ? "7–9" : String.valueOf(level)));
             if (courses.isEmpty()) continue;
             long courseId = ((Number) courses.get(0).get("id")).longValue();
             String key = p.path("key").asText();

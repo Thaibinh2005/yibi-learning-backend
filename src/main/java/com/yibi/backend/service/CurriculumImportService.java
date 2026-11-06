@@ -20,8 +20,9 @@ import java.util.Map;
 
 /**
  * Imports the syllabus grammar points and builds one course per HSK 3.0 level from the
- * vocabulary, grammar and hanzi rows already in the hsk_* tables. Safe to re-run: a course
- * or a lesson type that already exists is left alone.
+ * vocabulary, grammar and hanzi rows imported from the bundled syllabus datasets. Safe to re-run:
+ * a course or a lesson type that already exists is left alone. Rows from other source files in the
+ * same hsk_* tables, and lessons outside these courses, are never used or changed.
  */
 @Slf4j
 @Service
@@ -38,6 +39,15 @@ public class CurriculumImportService {
     private static final int HANZI_PER_LESSON = 20;
 
     private static final String EXAMPLES_RESOURCE = "data/hsk_examples_2025.json";
+
+    static final String COURSE_TITLE_PREFIX = "Giáo trình HSK 3.0 – Cấp ";
+
+    /** Limits a query on an hsk_* record table (alias x) to one source dataset; bind the dataset key. */
+    private static final String IN_DATASET = """
+            JOIN hsk_raw_records raw ON raw.id = x.raw_record_id
+            JOIN hsk_source_files file ON file.id = raw.source_file_id
+            JOIN hsk_source_datasets dataset ON dataset.id = file.dataset_id AND dataset.dataset_key = ?
+            """;
 
     private final JdbcTemplate jdbc;
     private final ObjectMapper objectMapper;
@@ -62,11 +72,33 @@ public class CurriculumImportService {
                     courseId, courseId);
         }
         int passages = passageGenerator.importBundled();
+        reuseExistingWordAudio();
         loadExamples();
         if (meanings > 0 || !examplesBySeq.isEmpty()) refreshVocabularyPayloads();
         log.info("Curriculum: {} grammar rows, {} meanings, {} courses, {} lessons created, {} passages imported.",
                 grammarRows, meanings, courses, lessons, passages);
         return new Result(grammarRows, meanings, courses, lessons);
+    }
+
+    /**
+     * Syllabus rows have no audio of their own. Point them at the audio an earlier source record of the
+     * same word already has, so word lists do not lose pronunciation. Only syllabus rows are changed.
+     */
+    private void reuseExistingWordAudio() {
+        int updated = jdbc.update("""
+                UPDATE hsk_vocabulary_records target
+                SET audio_url = known.audio_url
+                FROM (SELECT DISTINCT ON (simplified) simplified, audio_url FROM hsk_vocabulary_records
+                      WHERE audio_url IS NOT NULL ORDER BY simplified, raw_record_id) known
+                WHERE target.simplified = known.simplified
+                  AND target.audio_url IS NULL
+                  AND target.raw_record_id IN (
+                      SELECT raw.id FROM hsk_raw_records raw
+                      JOIN hsk_source_files file ON file.id = raw.source_file_id
+                      JOIN hsk_source_datasets dataset ON dataset.id = file.dataset_id
+                      WHERE dataset.dataset_key = ?)
+                """, SyllabusImportService.DATASET_KEY);
+        log.info("Curriculum: {} syllabus words now reuse existing audio.", updated);
     }
 
     /** Stores Vietnamese (or English fallback) meanings as unreviewed senses; words that already have senses are skipped. */
@@ -111,7 +143,10 @@ public class CurriculumImportService {
 
     /** Rewrites the vocabulary section of existing vocabulary lessons so they pick up the new meanings. */
     private void refreshVocabularyPayloads() {
-        for (Long lessonId : jdbc.queryForList("SELECT id FROM lessons WHERE content_type = 'VOCABULARY'", Long.class)) {
+        for (Long lessonId : jdbc.queryForList("""
+                SELECT l.id FROM lessons l JOIN courses c ON c.id = l.course_id
+                WHERE l.content_type = 'VOCABULARY' AND c.title LIKE ?
+                """, Long.class, COURSE_TITLE_PREFIX + "%")) {
             List<Map<String, Object>> items = jdbc.query(VOCABULARY_SELECT + """
                     JOIN lesson_content_items i ON i.raw_record_id = v.raw_record_id AND i.lesson_id = ?
                     ORDER BY i.item_order
@@ -154,6 +189,13 @@ public class CurriculumImportService {
                 WHERE s.raw_record_id = v.raw_record_id AND s.language_code = 'en' AND s.sense_order <= 3) AS meaning_en
             FROM hsk_vocabulary_records v
             JOIN hsk_vocabulary_readings r ON r.raw_record_id = v.raw_record_id AND r.reading_order = 1
+            """;
+
+    private static final String SYLLABUS_VOCABULARY_SELECT = VOCABULARY_SELECT + """
+            JOIN hsk_raw_records raw ON raw.id = v.raw_record_id
+            JOIN hsk_source_files file ON file.id = raw.source_file_id
+            JOIN hsk_source_datasets dataset ON dataset.id = file.dataset_id AND dataset.dataset_key = ?
+            WHERE v.level_code = ? ORDER BY v.raw_record_id
             """;
 
     private Map<String, Object> vocabularyItem(java.sql.ResultSet rs) throws java.sql.SQLException {
@@ -231,26 +273,29 @@ public class CurriculumImportService {
         int order = jdbc.queryForObject("SELECT COALESCE(MAX(lesson_order), 0) FROM lessons WHERE course_id = ?", Integer.class, courseId);
 
         if (!hasLessons(courseId, "VOCABULARY")) {
-            List<Map<String, Object>> items = jdbc.query(VOCABULARY_SELECT + "WHERE v.level_code = ? ORDER BY v.raw_record_id",
-                    (rs, i) -> vocabularyItem(rs), level);
+            List<Map<String, Object>> items = jdbc.query(SYLLABUS_VOCABULARY_SELECT,
+                    (rs, i) -> vocabularyItem(rs), SyllabusImportService.DATASET_KEY, level);
             created += addLessons(courseId, level, order, "VOCABULARY", "vocabulary", "Từ vựng", items, WORDS_PER_LESSON);
             order += lessonCount(items.size(), WORDS_PER_LESSON);
         }
         if (!hasLessons(courseId, "GRAMMAR")) {
             List<Map<String, Object>> items = jdbc.query("""
-                    SELECT raw_record_id, category, category_name, subcategory, grammar_content
-                    FROM hsk_grammar_records WHERE level_code = ? ORDER BY raw_record_id
+                    SELECT x.raw_record_id, x.category, x.category_name, x.subcategory, x.grammar_content
+                    FROM hsk_grammar_records x
+                    """ + IN_DATASET + """
+                    WHERE x.level_code = ? ORDER BY x.raw_record_id
                     """, (rs, i) -> item(rs.getLong(1), "category", rs.getString(2), "category_name", rs.getString(3),
-                    "subcategory", rs.getString(4), "content", rs.getString(5)), level);
+                    "subcategory", rs.getString(4), "content", rs.getString(5)), GRAMMAR_DATASET_KEY, level);
             created += addLessons(courseId, level, order, "GRAMMAR", "grammar", "Ngữ pháp", items, GRAMMAR_PER_LESSON);
             order += lessonCount(items.size(), GRAMMAR_PER_LESSON);
         }
         if (!hasLessons(courseId, "HANZI")) {
             // The writing list shared by levels 1-2 has no single level; it goes to level 2.
             List<Map<String, Object>> items = jdbc.query("""
-                    SELECT raw_record_id, hanzi FROM hsk_hanzi_records
-                    WHERE level_code = ? OR (? = '2' AND level_code IS NULL) ORDER BY raw_record_id
-                    """, (rs, i) -> item(rs.getLong(1), "hanzi", rs.getString(2)), level, level);
+                    SELECT x.raw_record_id, x.hanzi FROM hsk_hanzi_records x
+                    """ + IN_DATASET + """
+                    WHERE x.level_code = ? OR (? = '2' AND x.level_code IS NULL) ORDER BY x.raw_record_id
+                    """, (rs, i) -> item(rs.getLong(1), "hanzi", rs.getString(2)), SyllabusImportService.DATASET_KEY, level, level);
             created += addLessons(courseId, level, order, "HANZI", "characters", "Chữ Hán", items, HANZI_PER_LESSON);
         }
         return created;
@@ -320,7 +365,7 @@ public class CurriculumImportService {
     }
 
     private static String courseTitle(String level) {
-        return "Giáo trình HSK 3.0 – Cấp " + levelLabel(level);
+        return COURSE_TITLE_PREFIX + levelLabel(level);
     }
 
     private String toJson(Object value) {
