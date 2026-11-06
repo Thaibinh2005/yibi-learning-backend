@@ -10,4 +10,7 @@ public class RecommendedLessonResponse {
     Integer lessonNumber;
     String title;
     String reason;
+    /** Course level (7 = the HSK 7-9 band), used to link straight to the lesson. */
+    private Integer hskLevel;
+    private String contentType;
 }

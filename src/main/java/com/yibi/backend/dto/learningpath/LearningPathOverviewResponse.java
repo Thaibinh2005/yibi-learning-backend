@@ -15,4 +15,5 @@ public class LearningPathOverviewResponse {
     String levelSummary;
     List<SkillStatResponse> skills;
     List<RecommendedLessonResponse> recommendedLessons;
+    private LearningGoalResponse goal;
 }

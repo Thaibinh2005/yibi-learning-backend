@@ -56,6 +56,7 @@ public class PlacementService {
     private final QuestionBankAdminService questionBankAdminService;
     private final SpeechScoringClient speechClient;
     private final PlacementOutcomeService outcomeService;
+    private final LearningGoalService learningGoalService;
     private final PlatformTransactionManager transactionManager;
 
     @Value("${app.speech.pass-accuracy:0.7}")
@@ -91,6 +92,9 @@ public class PlacementService {
             user.setOnboardingCompletedAt(LocalDateTime.now());
         }
         userRepository.save(user);
+        if (request.getGoal() != null) {
+            learningGoalService.save(user, request.getGoal());
+        }
     }
 
     /** Starts a test, or returns the unfinished one so a refresh does not lose progress. */

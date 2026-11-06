@@ -46,12 +46,13 @@ public class PlacementOutcomeService {
                 attempt.getId(), result.getEstimatedLevel(), cards, result.getRecommendedCourseId());
     }
 
-    /** One path per learner: the level just measured, and a next goal at least one level above it. */
+    /** One path per learner: the level just measured, and a next goal one band above it unless the learner set their own. */
     private void updateLearningPath(User user, int level) {
         LearningPath path = learningPathRepository.findByUserId(user.getId())
                 .orElseGet(() -> LearningPath.builder().user(user).build());
         path.setCurrentHskLevel(level);
-        path.setTargetHskLevel(Math.max(path.getTargetHskLevel() != null ? path.getTargetHskLevel() : 0, Math.min(9, level + 1)));
+        // A goal the learner chose stays unless they already passed it; a new path aims one band higher.
+        path.setTargetHskLevel(path.getId() == null ? Math.min(7, level + 1) : Math.max(path.getTargetHskLevel(), level));
         path.setGeneratedAt(LocalDateTime.now());
         learningPathRepository.save(path);
     }
