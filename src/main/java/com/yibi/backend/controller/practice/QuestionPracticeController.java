@@ -19,6 +19,7 @@ import java.util.Map;
 public class QuestionPracticeController {
 
     private final QuestionBankService questionBankService;
+    private final com.yibi.backend.service.PracticeSpeakingService speakingService;
     private final SecurityUtils securityUtils;
 
     @PostMapping("/lessons/{lessonId}/sessions")
@@ -31,7 +32,7 @@ public class QuestionPracticeController {
     public ResponseEntity<ApiResponse<Map<String, Object>>> startAdaptiveSession(
             @Valid @RequestBody AdaptiveSessionRequest request) {
         return ResponseEntity.ok(ApiResponse.success(questionBankService.startAdaptiveSession(
-                securityUtils.getCurrentUserId(), request.getLevelCode(), request.getLimit())));
+                securityUtils.getCurrentUserId(), request.getLevelCode(), request.getLimit(), speakingService.isAvailable())));
     }
 
     @GetMapping("/mastery-summary")
@@ -47,5 +48,15 @@ public class QuestionPracticeController {
         return ResponseEntity.ok(ApiResponse.success(questionBankService.submitAnswer(
                 sessionId, securityUtils.getCurrentUserId(), request.getQuestionCode(),
                 request.getAnswer(), request.getResponseTimeMs())));
+    }
+
+    @PostMapping(value = "/sessions/{sessionId}/speaking", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Map<String, Object>>> answerSpeaking(
+            @PathVariable Long sessionId,
+            @RequestParam String questionCode,
+            @RequestParam org.springframework.web.multipart.MultipartFile audio,
+            @RequestParam(required = false) Integer responseTimeMs) {
+        return ResponseEntity.ok(ApiResponse.success(speakingService.answer(
+                sessionId, securityUtils.getCurrentUserId(), questionCode, audio, responseTimeMs)));
     }
 }

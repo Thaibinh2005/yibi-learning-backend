@@ -25,17 +25,43 @@ class DailyPlannerTest {
         return all;
     }
 
-    private static Input input(int minutes, String goal, int dueCards, int dueTopics, List<SkillNeed> needs) {
-        return new Input(minutes, goal, "1", dueCards, dueTopics, needs, lessons());
+    private static Input input(int minutes, int dueCards, int dueTopics, List<SkillNeed> needs) {
+        return new Input(minutes, "1", dueCards, dueTopics, needs, lessons(), true);
     }
 
     private static List<String> types(Plan plan) {
         return plan.items().stream().map(Item::type).toList();
     }
 
+    private static List<Item> lessonItems(Plan plan) {
+        return plan.items().stream().filter(i -> i.type().equals(DailyPlanner.LESSON)).toList();
+    }
+
+    @Test
+    void reviewsAndPracticeAlwaysLeaveRoomForTheNextLesson() {
+        DailyPlanner.Plan plan = DailyPlanner.build(new DailyPlanner.Input(20, "1", 10, 0,
+                List.of(new DailyPlanner.SkillNeed("grammar", "Ngữ pháp", "GRAMMAR", true)),
+                List.of(new DailyPlanner.LessonCandidate(1, "Ngữ pháp", "GRAMMAR", 1)), true, 8));
+        assertTrue(plan.items().stream().anyMatch(i -> DailyPlanner.LESSON.equals(i.type())), plan.items().toString());
+        assertTrue(plan.minutesPlanned() <= 20);
+    }
+
+    @Test
+    void openMistakesAreAReviewBeforePracticeAndStayInsideTheReviewBudget() {
+        DailyPlanner.Plan plan = DailyPlanner.build(new DailyPlanner.Input(30, "1", 0, 0, List.of(), List.of(), true, 25));
+        DailyPlanner.Item item = plan.items().get(0);
+        assertEquals(DailyPlanner.REVIEW_MISTAKES, item.type());
+        assertEquals("/learning-path/mistakes", item.link());
+        assertTrue(item.title().contains(String.valueOf(DailyPlanner.MISTAKES_PER_REVIEW)));
+        assertTrue(item.minutes() <= 15);
+
+        DailyPlanner.Plan full = DailyPlanner.build(new DailyPlanner.Input(10, "1", 100, 0, List.of(), List.of(), true, 25));
+        assertTrue(full.items().stream().noneMatch(i -> DailyPlanner.REVIEW_MISTAKES.equals(i.type())), "cards used the whole review budget");
+    }
+
     @Test
     void reviewsComeBeforePracticeAndLessons() {
-        Plan plan = DailyPlanner.build(input(60, "HSK", 10, 2, List.of(new SkillNeed("grammar", "Ngữ pháp", "GRAMMAR", true))));
+        Plan plan = DailyPlanner.build(input(60, 10, 2, List.of(new SkillNeed("grammar", "Ngữ pháp", "GRAMMAR", true))));
         assertEquals(DailyPlanner.REVIEW_CARDS, plan.items().get(0).type());
         assertEquals(DailyPlanner.PRACTICE, plan.items().get(1).type());
         assertEquals(DailyPlanner.LESSON, plan.items().get(2).type());
@@ -45,7 +71,7 @@ class DailyPlannerTest {
     void plannedTimeStaysWithinTheBudgetForEveryCommonDay() {
         for (int minutes : List.of(10, 15, 20, 30, 45, 60, 120, 240)) {
             for (int due : List.of(0, 5, 200)) {
-                Plan plan = DailyPlanner.build(input(minutes, "HSK", due, due, List.of(new SkillNeed("reading", "Đọc", "READING", true))));
+                Plan plan = DailyPlanner.build(input(minutes, due, due, List.of(new SkillNeed("reading", "Đọc", "READING", true))));
                 assertTrue(plan.minutesPlanned() <= minutes, minutes + " min, due " + due + ": " + plan.minutesPlanned());
                 assertFalse(plan.items().isEmpty());
             }
@@ -54,7 +80,7 @@ class DailyPlannerTest {
 
     @Test
     void aLargeBacklogCannotTakeMoreThanHalfTheDayOfCards() {
-        Plan plan = DailyPlanner.build(input(30, "HSK", 500, 0, List.of()));
+        Plan plan = DailyPlanner.build(input(30, 500, 0, List.of()));
         Item cards = plan.items().get(0);
         assertEquals(15, cards.minutes());
         assertTrue(cards.detail().contains("470"));
@@ -62,73 +88,75 @@ class DailyPlannerTest {
     }
 
     @Test
-    void weakSkillLessonsComeFirstThenTheGoalOrder() {
-        Plan plan = DailyPlanner.build(input(60, "HSK", 0, 0, List.of(new SkillNeed("reading", "Đọc", "READING", true))));
-        List<Item> lessonItems = plan.items().stream().filter(i -> i.type().equals(DailyPlanner.LESSON)).toList();
-        assertTrue(lessonItems.get(0).title().startsWith("READING"));
-        assertTrue(lessonItems.get(0).detail().contains("yếu"));
-        assertTrue(lessonItems.get(1).title().startsWith("VOCABULARY"));
+    void lessonsFollowThePathOrderGiven() {
+        Plan plan = DailyPlanner.build(input(60, 0, 0, List.of()));
+        List<Item> items = lessonItems(plan);
+        assertEquals("VOCABULARY 0", items.get(0).title());
+        assertEquals("VOCABULARY 1", items.get(1).title());
     }
 
     @Test
-    void goalChangesWhichLessonsComeFirst() {
-        assertTrue(firstLesson(input(30, "HSK", 0, 0, List.of())).startsWith("VOCABULARY"));
-        assertTrue(firstLesson(input(30, "HSKK", 0, 0, List.of())).startsWith("LISTENING"));
-        assertTrue(firstLesson(input(30, "COMMUNICATION", 0, 0, List.of())).startsWith("LISTENING"));
+    void lessonsWithWrongAnswersComeFirstAndSayWhy() {
+        List<LessonCandidate> all = new ArrayList<>(lessons());
+        all.add(new LessonCandidate(100, "Bài sai ít", "HANZI", 1, 1));
+        all.add(new LessonCandidate(101, "Bài sai nhiều", "HANZI", 1, 3));
+        Plan plan = DailyPlanner.build(new Input(30, "1", 0, 0, List.of(), all, true));
+        assertEquals("Bài sai nhiều", plan.items().get(0).title());
+        assertTrue(plan.items().get(0).detail().contains("sai 3 câu"));
+        assertEquals("Bài sai ít", plan.items().get(1).title());
     }
 
     @Test
-    void whenSeveralSkillsAreWeakTheGoalDecidesTheOrder() {
-        List<SkillNeed> allWeak = List.of(new SkillNeed("vocabulary", "Từ vựng", "VOCABULARY", true),
-                new SkillNeed("listening", "Nghe", "LISTENING", true));
-        assertTrue(firstLesson(input(30, "HSK", 0, 0, allWeak)).startsWith("VOCABULARY"));
-        assertTrue(firstLesson(input(30, "HSKK", 0, 0, allWeak)).startsWith("LISTENING"));
+    void lessonForAWeakSkillSaysSo() {
+        Plan plan = DailyPlanner.build(new Input(60, "1", 0, 0, List.of(new SkillNeed("reading", "Đọc", "READING", true)),
+                List.of(new LessonCandidate(1, "Bài đọc", "READING", 1), new LessonCandidate(2, "Từ vựng", "VOCABULARY", 1)), true));
+        List<Item> items = lessonItems(plan);
+        assertTrue(items.get(0).detail().contains("yếu"));
+        assertFalse(items.get(1).detail().contains("yếu"));
     }
 
     @Test
-    void urgentSkillBeatsTheGoalPreference() {
-        List<SkillNeed> needs = List.of(new SkillNeed("grammar", "Ngữ pháp", "GRAMMAR", true),
-                new SkillNeed("listening", "Nghe", "LISTENING", false));
-        assertTrue(firstLesson(input(30, "HSKK", 0, 0, needs)).startsWith("GRAMMAR"));
-    }
-
-    private static String firstLesson(Input in) {
-        return DailyPlanner.build(in).items().stream().filter(i -> i.type().equals(DailyPlanner.LESSON))
-                .findFirst().orElseThrow().title();
+    void learnerWithNoAnswersYetGetsAShortFirstPractice() {
+        Plan plan = DailyPlanner.build(new Input(20, "1", 0, 0, List.of(), lessons(), false));
+        Item first = plan.items().get(0);
+        assertEquals(DailyPlanner.PRACTICE, first.type());
+        assertEquals(5, first.minutes());
+        assertTrue(first.title().contains("Làm quen"));
+        assertEquals("/learning-path/practice?level=1&limit=5", first.link());
     }
 
     @Test
-    void newLearnerWithNoDataGetsLessonsOnly() {
-        Plan plan = DailyPlanner.build(input(20, "HSK", 0, 0, List.of()));
+    void learnerWithStrongResultsGetsLessonsOnly() {
+        Plan plan = DailyPlanner.build(input(20, 0, 0, List.of()));
         assertTrue(plan.items().stream().allMatch(i -> i.type().equals(DailyPlanner.LESSON)));
     }
 
     @Test
     void practiceRespectsTheApiSessionSize() {
-        Plan tiny = DailyPlanner.build(input(5, "HSK", 10, 3, List.of()));
+        Plan tiny = DailyPlanner.build(input(5, 10, 3, List.of()));
         assertFalse(types(tiny).contains(DailyPlanner.PRACTICE), "under 5 minutes left: no 5-question session");
-        Plan huge = DailyPlanner.build(input(240, "HSK", 0, 100, List.of()));
+        Plan huge = DailyPlanner.build(input(240, 0, 100, List.of()));
         assertEquals(30, huge.items().get(0).minutes());
-        assertTrue(huge.items().get(0).link().contains("limit=30"));
+        assertEquals("/learning-path/practice?level=1&limit=30", huge.items().get(0).link());
     }
 
     @Test
-    void lessonLinkOpensThatExactLessonAtItsLevel() {
-        Plan plan = DailyPlanner.build(new Input(20, "HSK", "7-9", 0, 0, List.of(),
-                List.of(new LessonCandidate(958, "Bài nghe", "LISTENING", 7))));
-        assertEquals("/courses?hskLevel=7&lessonId=958", plan.items().get(0).link());
+    void lessonLinkOpensThatExactNodeOfThePath() {
+        Plan plan = DailyPlanner.build(new Input(20, "7-9", 0, 0, List.of(),
+                List.of(new LessonCandidate(958, "Bài nghe", "LISTENING", 7)), true));
+        assertEquals("/learning-path/lesson/958", plan.items().get(0).link());
     }
 
     @Test
     void shortDayStillGetsOneLessonEvenIfItRunsOver() {
-        Plan plan = DailyPlanner.build(input(5, "HSK", 0, 0, List.of()));
+        Plan plan = DailyPlanner.build(input(5, 0, 0, List.of()));
         assertEquals(1, plan.items().size());
         assertEquals(DailyPlanner.LESSON, plan.items().get(0).type());
     }
 
     @Test
     void nothingLeftGivesAnEmptyPlanNotAnError() {
-        Plan plan = DailyPlanner.build(new Input(20, "HSK", "1", 0, 0, List.of(), List.of()));
+        Plan plan = DailyPlanner.build(new Input(20, "1", 0, 0, List.of(), List.of(), true));
         assertTrue(plan.items().isEmpty());
         assertEquals(0, plan.minutesPlanned());
     }
@@ -136,11 +164,11 @@ class DailyPlannerTest {
     @Test
     void paceComparesTheEstimateWithTheTargetDate() {
         LocalDate today = LocalDate.of(2026, 11, 6);
-        // 10 vocabulary lessons = 120 minutes; 20 min/day gives 14 minutes of new learning, so 9 days.
-        Map<String, Integer> left = Map.of("VOCABULARY", 10);
+        // 20 vocabulary nodes = 120 minutes; 20 min/day gives 14 minutes of new learning, so 9 days.
+        Map<String, Integer> left = Map.of("VOCABULARY", 20);
 
         var noDate = DailyPlanner.pace(left, 20, null, today);
-        assertEquals(10, noDate.remainingLessons());
+        assertEquals(20, noDate.remainingLessons());
         assertEquals(9, noDate.estimatedDays());
         assertEquals(LocalDate.of(2026, 11, 15), noDate.estimatedFinishDate());
         assertNull(noDate.onTrack());

@@ -25,13 +25,15 @@ public class DailyPlanResponse {
     private Boolean onTrack;
     /** Minutes per day needed to finish by the target date; null when there is no usable date. */
     private Integer requiredDailyMinutes;
+    /** Questions the learner got wrong and has not yet answered correctly twice in a row. */
+    private int openMistakes;
 
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Item {
-        /** REVIEW_CARDS, PRACTICE or LESSON */
+        /** REVIEW_CARDS, REVIEW_MISTAKES, PRACTICE or LESSON */
         private String type;
         private String title;
         private String detail;

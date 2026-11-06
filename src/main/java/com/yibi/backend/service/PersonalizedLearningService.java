@@ -5,6 +5,7 @@ import com.yibi.backend.entity.*;
 import com.yibi.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import com.yibi.backend.service.plan.DailyPlanner;
+import com.yibi.backend.service.plan.Roadmap;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ public class PersonalizedLearningService {
 
     /** Accuracy reflects the latest answers per skill, so improvement shows up without a new test. */
     static final int RECENT_ATTEMPTS_WINDOW = 30;
-    private static final int RECOMMENDED_LESSONS = 3;
+    private static final int PLAN_CANDIDATES = 12;
     private static final int MAX_COURSE_LEVEL = 7;
 
     /** The kind of lesson that trains each skill; passages live in READING/LISTENING lessons. */
@@ -45,7 +46,7 @@ public class PersonalizedLearningService {
             "writing", "GRAMMAR",
             "reading", "READING",
             "listening", "LISTENING",
-            "speaking", "LISTENING");
+            "speaking", "DIALOGUE");
 
     private final PlacementAssessmentRepository assessmentRepository;
     private final SkillAttemptRepository skillAttemptRepository;
@@ -59,9 +60,8 @@ public class PersonalizedLearningService {
     public LearningPathOverviewResponse getOverview(UUID userId) {
         Optional<PlacementAssessment> latest = assessmentRepository
                 .findFirstByUserIdAndFinishedAtIsNotNullOrderByFinishedAtDesc(userId);
-        List<Attempt> attempts = loadAttempts(userId);
-        List<SkillStatResponse> stats = buildSkillStats(attempts, LocalDateTime.now());
-        int level = currentLevel(userId);
+        List<SkillStatResponse> stats = buildSkillStats(loadAttempts(userId), LocalDateTime.now());
+        int level = pathLevel(userId);
         return LearningPathOverviewResponse.builder()
                 .assessmentCompleted(latest.isPresent())
                 .availableHskLevel(level)
@@ -70,7 +70,6 @@ public class PersonalizedLearningService {
                                 .map(this::adaptiveSummary).orElseGet(() -> levelSummary(a.getScorePercent())))
                         .orElse("Hãy làm bài đánh giá để xác định trình độ và xây dựng lộ trình học."))
                 .skills(stats)
-                .recommendedLessons(recommendLessons(stats, attempts, openLessons(userId, Math.min(level, MAX_COURSE_LEVEL))))
                 .goal(learningGoalService.get(userId))
                 .build();
     }
@@ -79,7 +78,7 @@ public class PersonalizedLearningService {
     @Transactional(readOnly = true)
     public DailyPlanResponse getTodayPlan(UUID userId) {
         LearningGoalResponse goal = learningGoalService.get(userId);
-        int level = Math.min(currentLevel(userId), MAX_COURSE_LEVEL);
+        int level = pathLevel(userId);
         int target = Math.max(level, Math.min(goal.getTargetLevel(), MAX_COURSE_LEVEL));
         String levelCode = level == MAX_COURSE_LEVEL ? "7-9" : String.valueOf(level);
 
@@ -88,23 +87,30 @@ public class PersonalizedLearningService {
                 SELECT count(*) FROM learner_skill_mastery
                 WHERE user_id = ? AND level_code = ? AND next_review_at <= NOW()
                 """, Integer.class, userId, levelCode);
-        List<DailyPlanner.SkillNeed> needs = buildSkillStats(loadAttempts(userId), LocalDateTime.now()).stream()
-                .filter(stat -> "HIGH".equals(stat.getPriority()) || "MEDIUM".equals(stat.getPriority()))
-                .sorted(Comparator.comparing(stat -> !"HIGH".equals(stat.getPriority())))
-                .map(stat -> new DailyPlanner.SkillNeed(stat.getSkillKey(), stat.getLabel(),
-                        LESSON_TYPE_OF_SKILL.get(stat.getSkillKey()), "HIGH".equals(stat.getPriority())))
+        List<Attempt> attempts = loadAttempts(userId);
+        List<DailyPlanner.SkillNeed> needs = skillNeeds(attempts);
+        List<Roadmap.Node> open = layOutLevel(userId, level, level, goal.getGoalType(), attempts, needs).stream()
+                .flatMap(unit -> unit.nodes().stream()).filter(node -> !Roadmap.DONE.equals(node.status())).toList();
+        // Far enough along the path to fill any day, plus nodes with wrong answers wherever they are.
+        List<DailyPlanner.LessonCandidate> candidates = java.util.stream.IntStream.range(0, open.size())
+                .filter(i -> i < PLAN_CANDIDATES || open.get(i).wrongAnswers() > 0)
+                .mapToObj(open::get)
+                .map(node -> new DailyPlanner.LessonCandidate(node.id(), node.title(), node.type(),
+                        level, node.wrongAnswers()))
                 .toList();
 
-        DailyPlanner.Plan plan = DailyPlanner.build(new DailyPlanner.Input(goal.getDailyMinutes(), goal.getGoalType(),
-                levelCode, dueCards, dueTopics == null ? 0 : dueTopics, needs, nextLessons(userId, level, target)));
+        Integer openCount = jdbc.queryForObject("SELECT count(*) FROM path_mistakes WHERE user_id = ? AND resolved_at IS NULL", Integer.class, userId);
+        int openMistakes = openCount == null ? 0 : openCount;
+        DailyPlanner.Plan plan = DailyPlanner.build(new DailyPlanner.Input(goal.getDailyMinutes(), levelCode, dueCards,
+                dueTopics == null ? 0 : dueTopics, needs, candidates, !attempts.isEmpty(), openMistakes));
 
         Map<String, Integer> remaining = new HashMap<>();
         jdbc.query("""
-                SELECT l.content_type, count(*) FROM lessons l JOIN courses c ON c.id = l.course_id
-                WHERE c.hsk_level BETWEEN ? AND ?
-                  AND NOT EXISTS (SELECT 1 FROM user_progress p
-                                  WHERE p.user_id = ? AND p.lesson_id = l.id AND p.status = 'COMPLETED')
-                GROUP BY l.content_type
+                SELECT n.node_type, count(*) FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
+                WHERE u.hsk_level BETWEEN ? AND ?
+                  AND NOT EXISTS (SELECT 1 FROM user_path_progress p
+                                  WHERE p.user_id = ? AND p.node_id = n.id AND p.completed_at IS NOT NULL)
+                GROUP BY n.node_type
                 """, rs -> { remaining.put(rs.getString(1), rs.getInt(2)); }, level, target, userId);
         DailyPlanner.Pace pace = DailyPlanner.pace(remaining, goal.getDailyMinutes(), goal.getTargetDate(), LocalDate.now());
 
@@ -121,28 +127,61 @@ public class PersonalizedLearningService {
                 .estimatedFinishDate(pace.estimatedFinishDate())
                 .onTrack(pace.onTrack())
                 .requiredDailyMinutes(pace.requiredDailyMinutes())
+                .openMistakes(openMistakes)
                 .build();
     }
 
-    private int currentLevel(UUID userId) {
-        return userRepository.findById(userId).map(User::getHskLevel).orElse(1);
+    /** One level of the path with what the learner may open, and a summary of every level. */
+    @Transactional(readOnly = true)
+    public Roadmap.Result getRoadmap(UUID userId, Integer requestedLevel) {
+        LearningGoalResponse goal = learningGoalService.get(userId);
+        int learner = pathLevel(userId);
+        int shown = requestedLevel == null ? learner : Math.max(1, Math.min(requestedLevel, MAX_COURSE_LEVEL));
+        List<Attempt> attempts = loadAttempts(userId);
+        return new Roadmap.Result(learner, shown, levelSummaries(userId, learner),
+                layOutLevel(userId, shown, learner, goal.getGoalType(), attempts, skillNeeds(attempts)));
+    }
+
+    /** The learner's place on the path; the combined HSK 7-9 band is level 7. */
+    public int pathLevel(UUID userId) {
+        Integer level = userRepository.findById(userId).map(User::getHskLevel).orElse(1);
+        return Math.max(1, Math.min(level == null ? 1 : level, MAX_COURSE_LEVEL));
+    }
+
+    private List<Roadmap.LevelSummary> levelSummaries(UUID userId, int learner) {
+        return jdbc.query("""
+                SELECT u.hsk_level, count(*), count(p.completed_at)
+                FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
+                LEFT JOIN user_path_progress p ON p.node_id = n.id AND p.user_id = ?
+                GROUP BY u.hsk_level ORDER BY u.hsk_level
+                """, (rs, i) -> {
+            int level = rs.getInt(1);
+            int total = rs.getInt(2);
+            int completed = rs.getInt(3);
+            return new Roadmap.LevelSummary(level, Roadmap.levelLabel(level),
+                    Roadmap.levelStatus(level, learner, completed, total), completed, total);
+        }, userId);
     }
 
     /** Placement answers and practice answers together, so every session refines the picture. */
     private List<Attempt> loadAttempts(UUID userId) {
         List<Attempt> attempts = new ArrayList<>();
         for (SkillAttempt a : skillAttemptRepository.findByUserIdOrderByAnsweredAtAsc(userId)) {
-            attempts.add(new Attempt(a.getSkillKey(), Boolean.TRUE.equals(a.getCorrect()), a.getAnsweredAt(),
-                    a.getLesson() == null ? null : a.getLesson().getId()));
+            attempts.add(new Attempt(a.getSkillKey(), Boolean.TRUE.equals(a.getCorrect()), a.getAnsweredAt(), null));
         }
         jdbc.query("""
-                SELECT q.skill_key, a.is_correct, a.attempted_at, q.lesson_id
+                SELECT q.skill_key, a.is_correct, a.attempted_at
                 FROM question_attempts a JOIN question_bank_items q ON q.id = a.question_id
                 WHERE a.user_id = ?
                 """, rs -> {
-            long lessonId = rs.getLong(4);
-            Long lesson = rs.wasNull() ? null : lessonId;
-            attempts.add(new Attempt(rs.getString(1), rs.getBoolean(2), rs.getTimestamp(3).toLocalDateTime(), lesson));
+            attempts.add(new Attempt(rs.getString(1), rs.getBoolean(2), rs.getTimestamp(3).toLocalDateTime(), null));
+        }, userId);
+        jdbc.query("""
+                SELECT skill_key, is_correct, answered_at, node_id FROM path_answers WHERE user_id = ?
+                """, rs -> {
+            long nodeId = rs.getLong(4);
+            Long node = rs.wasNull() ? null : nodeId;
+            attempts.add(new Attempt(rs.getString(1), rs.getBoolean(2), rs.getTimestamp(3).toLocalDateTime(), node));
         }, userId);
         attempts.sort(Comparator.comparing(Attempt::answeredAt));
         return attempts;
@@ -176,79 +215,39 @@ public class PersonalizedLearningService {
         }).toList();
     }
 
-    private List<LessonRow> openLessons(UUID userId, int level) {
-        return jdbc.query("""
-                SELECT l.id, COALESCE((l.lesson_payload ->> 'lesson_number')::int, l.lesson_order), l.title, l.content_type, c.hsk_level
-                FROM lessons l JOIN courses c ON c.id = l.course_id
-                WHERE c.hsk_level = ?
-                  AND NOT EXISTS (SELECT 1 FROM user_progress p
-                                  WHERE p.user_id = ? AND p.lesson_id = l.id AND p.status = 'COMPLETED')
-                ORDER BY l.lesson_order
-                """, (rs, i) -> new LessonRow(rs.getLong(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5)),
-                level, userId);
+    private List<Roadmap.Unit> layOutLevel(UUID userId, int level, int learner, String goalType,
+                                           List<Attempt> attempts, List<DailyPlanner.SkillNeed> needs) {
+        Map<Long, List<Roadmap.NodeRef>> nodes = new HashMap<>();
+        jdbc.query("""
+                SELECT n.unit_id, n.id, n.title, n.node_type FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
+                WHERE u.hsk_level = ? ORDER BY n.unit_id, n.node_order
+                """, rs -> {
+            nodes.computeIfAbsent(rs.getLong(1), key -> new ArrayList<>())
+                    .add(new Roadmap.NodeRef(rs.getLong(2), rs.getString(3), rs.getString(4)));
+        }, level);
+        List<Roadmap.UnitRef> units = jdbc.query("""
+                SELECT id, unit_order, title_vi, title_zh, icon FROM path_units WHERE hsk_level = ? ORDER BY unit_order
+                """, (rs, i) -> new Roadmap.UnitRef(rs.getLong(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                nodes.getOrDefault(rs.getLong(1), List.of())), level);
+        Set<Long> completed = new HashSet<>();
+        Map<Long, Integer> scores = new HashMap<>();
+        jdbc.query("SELECT node_id, best_score, completed_at FROM user_path_progress WHERE user_id = ?", rs -> {
+            scores.put(rs.getLong(1), rs.getInt(2));
+            if (rs.getTimestamp(3) != null) completed.add(rs.getLong(1));
+        }, userId);
+        Map<Long, Integer> wrong = attempts.stream()
+                .filter(attempt -> !attempt.correct() && attempt.nodeId() != null)
+                .collect(Collectors.toMap(Attempt::nodeId, attempt -> 1, Integer::sum));
+        return Roadmap.layOut(units, level, learner, completed, scores, wrong, goalType,
+                needs.stream().filter(DailyPlanner.SkillNeed::urgent).map(DailyPlanner.SkillNeed::lessonType).toList(), userId.hashCode());
     }
 
-    /** The first few unfinished lessons of each type, from the current level up to the target level. */
-    private List<DailyPlanner.LessonCandidate> nextLessons(UUID userId, int level, int target) {
-        return jdbc.query("""
-                SELECT id, title, content_type, hsk_level FROM (
-                  SELECT l.id, l.title, l.content_type, c.hsk_level, l.lesson_order,
-                         row_number() OVER (PARTITION BY l.content_type ORDER BY c.hsk_level, l.lesson_order) AS rn
-                  FROM lessons l JOIN courses c ON c.id = l.course_id
-                  WHERE c.hsk_level BETWEEN ? AND ?
-                    AND NOT EXISTS (SELECT 1 FROM user_progress p
-                                    WHERE p.user_id = ? AND p.lesson_id = l.id AND p.status = 'COMPLETED')
-                ) ranked WHERE rn <= 4 ORDER BY hsk_level, lesson_order
-                """, (rs, i) -> new DailyPlanner.LessonCandidate(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getInt(4)),
-                level, target, userId);
-    }
-
-    /**
-     * Picks lessons for the weakest skills. Lessons with wrong answers come first, finished lessons never
-     * appear, and each lesson type appears once so reading and listening are not crowded out.
-     */
-    static List<RecommendedLessonResponse> recommendLessons(List<SkillStatResponse> stats, List<Attempt> attempts,
-                                                            List<LessonRow> lessons) {
-        Map<String, Integer> weights = stats.stream()
-                .filter(stat -> !"INSUFFICIENT".equals(stat.getPriority()))
-                .collect(Collectors.toMap(SkillStatResponse::getSkillKey, stat -> switch (stat.getPriority()) {
-                    case "HIGH" -> 3;
-                    case "MEDIUM" -> 2;
-                    default -> 1;
-                }));
-        if (weights.isEmpty()) return List.of();
-        Map<Long, Map<String, Long>> wrongByLessonAndSkill = attempts.stream()
-                .filter(attempt -> !attempt.correct() && attempt.lessonId() != null)
-                .collect(Collectors.groupingBy(Attempt::lessonId,
-                        Collectors.groupingBy(Attempt::skillKey, Collectors.counting())));
-        List<LessonScore> scores = new ArrayList<>();
-        for (LessonRow lesson : lessons) {
-            int score = 0;
-            List<String> matched = new ArrayList<>();
-            for (SkillDefinition skill : SKILLS) {
-                Integer weight = weights.get(skill.key);
-                if (weight == null || !lesson.contentType().equals(LESSON_TYPE_OF_SKILL.get(skill.key))) continue;
-                long wrongCount = wrongByLessonAndSkill.getOrDefault(lesson.id(), Map.of()).getOrDefault(skill.key, 0L);
-                // Actual wrong answers in this lesson take precedence over a skill-only match.
-                score += (int) (weight + Math.min(wrongCount, 10) * 4);
-                matched.add(skill.label);
-            }
-            if (score > 0) scores.add(new LessonScore(lesson, score, String.join(", ", matched)));
-        }
-        scores.sort(Comparator.comparingInt(LessonScore::score).reversed()
-                .thenComparingInt(item -> item.lesson.number()));
-        Set<String> seenTypes = new HashSet<>();
-        return scores.stream()
-                .filter(item -> seenTypes.add(item.lesson.contentType()))
-                .limit(RECOMMENDED_LESSONS)
-                .map(item -> RecommendedLessonResponse.builder()
-                        .lessonId(item.lesson.id())
-                        .lessonNumber(item.lesson.number())
-                        .title(item.lesson.title())
-                        .reason("Củng cố " + item.matchedSkills + " dựa trên kết quả gần đây của bạn.")
-                        .hskLevel(item.lesson.hskLevel())
-                        .contentType(item.lesson.contentType())
-                        .build())
+    private static List<DailyPlanner.SkillNeed> skillNeeds(List<Attempt> attempts) {
+        return buildSkillStats(attempts, LocalDateTime.now()).stream()
+                .filter(stat -> "HIGH".equals(stat.getPriority()) || "MEDIUM".equals(stat.getPriority()))
+                .sorted(Comparator.comparing(stat -> !"HIGH".equals(stat.getPriority())))
+                .map(stat -> new DailyPlanner.SkillNeed(stat.getSkillKey(), stat.getLabel(),
+                        LESSON_TYPE_OF_SKILL.get(stat.getSkillKey()), "HIGH".equals(stat.getPriority())))
                 .toList();
     }
 
@@ -279,8 +278,7 @@ public class PersonalizedLearningService {
         return SKILLS.stream().filter(skill -> skill.key.equals(key)).map(SkillDefinition::label).findFirst().orElse(key);
     }
 
-    record Attempt(String skillKey, boolean correct, LocalDateTime answeredAt, Long lessonId) { }
-    record LessonRow(long id, int number, String title, String contentType, int hskLevel) { }
+    /** @param nodeId the path node it was answered in, if any */
+    record Attempt(String skillKey, boolean correct, LocalDateTime answeredAt, Long nodeId) { }
     private record SkillDefinition(String key, String label) { }
-    private record LessonScore(LessonRow lesson, int score, String matchedSkills) { }
 }

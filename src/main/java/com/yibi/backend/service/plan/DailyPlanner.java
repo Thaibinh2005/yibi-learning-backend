@@ -3,25 +3,28 @@ package com.yibi.backend.service.plan;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Turns a learner's state into today's work. It has no database access so every rule can be tested directly.
  *
- * <p>Order: flashcards due, then adaptive practice for reviews and weak skills, then new lessons in the
- * remaining time. Reviews may use at most half the time, so a large backlog cannot stop new learning.
+ * <p>Order: flashcards due, questions the learner got wrong, then adaptive practice for reviews and weak skills, then lessons in the remaining
+ * time: those the learner got wrong first, then new ones. Reviews may use at most half the time, so a large
+ * backlog cannot stop new learning.
  */
 public final class DailyPlanner {
 
     public static final String REVIEW_CARDS = "REVIEW_CARDS";
+    public static final String REVIEW_MISTAKES = "REVIEW_MISTAKES";
     public static final String PRACTICE = "PRACTICE";
     public static final String LESSON = "LESSON";
 
     private static final double MINUTES_PER_CARD = 0.5;
+    private static final double MINUTES_PER_MISTAKE = 0.5;
+    /** The length of one mistakes review. */
+    public static final int MISTAKES_PER_REVIEW = 10;
     private static final double REVIEW_SHARE = 0.5;
     private static final double PRACTICE_SHARE = 0.3;
     /** The practice API runs sessions of 5 to 30 questions, at about a minute each. */
@@ -34,22 +37,28 @@ public final class DailyPlanner {
     private static final int DEFAULT_LESSON_MINUTES = 10;
 
     private static final Map<String, Integer> LESSON_MINUTES = Map.of(
-            "VOCABULARY", 12, "GRAMMAR", 10, "HANZI", 8, "READING", 8, "LISTENING", 8);
-
-    private static final Map<String, List<String>> LESSON_ORDER_BY_GOAL = Map.of(
-            "HSK", List.of("VOCABULARY", "GRAMMAR", "READING", "LISTENING", "HANZI"),
-            "HSKK", List.of("LISTENING", "VOCABULARY", "READING", "GRAMMAR", "HANZI"),
-            "COMMUNICATION", List.of("LISTENING", "VOCABULARY", "GRAMMAR", "READING", "HANZI"));
+            "VOCABULARY", 6, "GRAMMAR", 8, "HANZI", 5, "READING", 8, "LISTENING", 8, "DIALOGUE", 6, "CHECKPOINT", 6);
 
     private DailyPlanner() { }
 
     /** A skill to reinforce; urgent ones (high priority) get their lessons before the others. */
     public record SkillNeed(String key, String label, String lessonType, boolean urgent) { }
 
-    public record LessonCandidate(long id, String title, String contentType, int hskLevel) { }
+    /** An unfinished lesson; wrongAnswers counts the learner's wrong answers to questions from it. */
+    public record LessonCandidate(long id, String title, String contentType, int hskLevel, int wrongAnswers) {
+        public LessonCandidate(long id, String title, String contentType, int hskLevel) {
+            this(id, title, contentType, hskLevel, 0);
+        }
+    }
 
-    public record Input(int minutes, String goalType, String levelCode, int dueCards, int dueTopics,
-                        List<SkillNeed> needs, List<LessonCandidate> lessons) { }
+    /** @param hasAnswers false until the learner has answered anything, which gets them a short first practice */
+    public record Input(int minutes, String levelCode, int dueCards, int dueTopics,
+                        List<SkillNeed> needs, List<LessonCandidate> lessons, boolean hasAnswers, int openMistakes) {
+        public Input(int minutes, String levelCode, int dueCards, int dueTopics,
+                     List<SkillNeed> needs, List<LessonCandidate> lessons, boolean hasAnswers) {
+            this(minutes, levelCode, dueCards, dueTopics, needs, lessons, hasAnswers, 0);
+        }
+    }
 
     public record Item(String type, String title, String detail, int minutes, String link, Long lessonId) { }
 
@@ -73,14 +82,30 @@ public final class DailyPlanner {
             remaining -= minutes;
         }
 
-        int questions = practiceQuestions(in, remaining, reviewBudget - (in.minutes() - remaining));
-        if (questions > 0) {
+        int mistakes = Math.min(Math.min(in.openMistakes(), MISTAKES_PER_REVIEW),
+                (int) ((reviewBudget - (in.minutes() - remaining)) / MINUTES_PER_MISTAKE));
+        if (mistakes > 0) {
+            int minutes = (int) Math.ceil(mistakes * MINUTES_PER_MISTAKE);
+            items.add(new Item(REVIEW_MISTAKES, "Ôn " + mistakes + " câu từng sai",
+                    "Đúng 2 lần liên tiếp thì câu đó mới được coi là đã thuộc.", minutes, "/learning-path/mistakes", null));
+            remaining -= minutes;
+        }
+
+        // Practice leaves room for the next lesson, so reviews alone never fill a day.
+        List<LessonCandidate> ordered = orderLessons(in);
+        int forPractice = remaining - (ordered.isEmpty() ? 0 : lessonMinutes(ordered.get(0).contentType()));
+        int questions = practiceQuestions(in, forPractice, reviewBudget - (in.minutes() - remaining));
+        if (!in.hasAnswers() && forPractice >= MIN_PRACTICE_QUESTIONS) {
+            items.add(new Item(PRACTICE, "Làm quen: luyện " + MIN_PRACTICE_QUESTIONS + " câu",
+                    "Vài câu đầu giúp hệ thống biết kỹ năng nào bạn cần củng cố.", MIN_PRACTICE_QUESTIONS,
+                    practiceLink(in, MIN_PRACTICE_QUESTIONS), null));
+            remaining -= MIN_PRACTICE_QUESTIONS;
+        } else if (questions > 0) {
             items.add(new Item(PRACTICE, "Luyện " + questions + " câu thích ứng", practiceDetail(in), questions,
-                    "/practice/adaptive?level=" + in.levelCode() + "&limit=" + questions, null));
+                    practiceLink(in, questions), null));
             remaining -= questions;
         }
 
-        List<LessonCandidate> ordered = orderLessons(in);
         int chosen = 0;
         for (LessonCandidate lesson : ordered) {
             int minutes = lessonMinutes(lesson.contentType());
@@ -97,6 +122,10 @@ public final class DailyPlanner {
         }
         int planned = items.stream().mapToInt(Item::minutes).sum();
         return new Plan(in.minutes(), planned, items);
+    }
+
+    private static String practiceLink(Input in, int questions) {
+        return "/learning-path/practice?level=" + in.levelCode() + "&limit=" + questions;
     }
 
     private static int practiceQuestions(Input in, int remaining, int reviewBudgetLeft) {
@@ -118,41 +147,25 @@ public final class DailyPlanner {
         return "Ưu tiên " + String.join("; ", reasons) + ".";
     }
 
-    /** One lesson per type in turn, types for weak skills first, in the order that suits the goal. */
+    /** Lessons the learner got wrong first, most mistakes first, then the path order given by the roadmap. */
     private static List<LessonCandidate> orderLessons(Input in) {
-        List<String> goalOrder = LESSON_ORDER_BY_GOAL.getOrDefault(in.goalType(), LESSON_ORDER_BY_GOAL.get("HSK"));
-        Set<String> typeOrder = new LinkedHashSet<>();
-        // Urgent skills first, then other weak skills; within each group the goal decides, then the rest follow.
-        for (boolean urgent : List.of(true, false)) {
-            for (String type : goalOrder) {
-                boolean needed = in.needs().stream().anyMatch(need -> need.urgent() == urgent && type.equals(need.lessonType()));
-                if (needed) typeOrder.add(type);
-            }
-        }
-        typeOrder.addAll(goalOrder);
-
-        Map<String, List<LessonCandidate>> byType = new LinkedHashMap<>();
-        for (String type : typeOrder) byType.put(type, new ArrayList<>());
-        for (LessonCandidate lesson : in.lessons()) {
-            byType.computeIfAbsent(lesson.contentType(), key -> new ArrayList<>()).add(lesson);
-        }
-        List<LessonCandidate> ordered = new ArrayList<>();
-        for (int round = 0; ordered.size() < in.lessons().size(); round++) {
-            for (List<LessonCandidate> lessons : byType.values()) {
-                if (round < lessons.size()) ordered.add(lessons.get(round));
-            }
-        }
+        List<LessonCandidate> ordered = new ArrayList<>(in.lessons().stream()
+                .filter(lesson -> lesson.wrongAnswers() > 0)
+                .sorted(Comparator.comparingInt(LessonCandidate::wrongAnswers).reversed())
+                .toList());
+        in.lessons().stream().filter(lesson -> lesson.wrongAnswers() == 0).forEach(ordered::add);
         return ordered;
     }
 
     private static Item lessonItem(LessonCandidate lesson, int minutes, Input in) {
         boolean weak = in.needs().stream().anyMatch(need -> lesson.contentType().equals(need.lessonType()));
-        String detail = weak ? "Bài này giúp củng cố kỹ năng đang yếu." : "Bài tiếp theo trong lộ trình của bạn.";
+        String detail = lesson.wrongAnswers() > 0 ? "Bạn đã sai " + lesson.wrongAnswers() + " câu ở bài này, nên xem lại."
+                : weak ? "Bài này giúp củng cố kỹ năng đang yếu." : "Bài tiếp theo trong lộ trình của bạn.";
         return new Item(LESSON, lesson.title(), detail, minutes,
-                "/courses?hskLevel=" + lesson.hskLevel() + "&lessonId=" + lesson.id(), lesson.id());
+                "/learning-path/lesson/" + lesson.id(), lesson.id());
     }
 
-    private static int lessonMinutes(String contentType) {
+    public static int lessonMinutes(String contentType) {
         return LESSON_MINUTES.getOrDefault(contentType, DEFAULT_LESSON_MINUTES);
     }
 

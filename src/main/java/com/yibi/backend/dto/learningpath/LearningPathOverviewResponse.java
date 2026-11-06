@@ -14,6 +14,5 @@ public class LearningPathOverviewResponse {
     BigDecimal latestScorePercent;
     String levelSummary;
     List<SkillStatResponse> skills;
-    List<RecommendedLessonResponse> recommendedLessons;
-    private LearningGoalResponse goal;
+    LearningGoalResponse goal;
 }

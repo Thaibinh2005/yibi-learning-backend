@@ -5,6 +5,7 @@ import com.yibi.backend.dto.learningpath.*;
 import com.yibi.backend.security.SecurityUtils;
 import com.yibi.backend.service.LearningGoalService;
 import com.yibi.backend.service.PersonalizedLearningService;
+import com.yibi.backend.service.plan.Roadmap;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,12 @@ public class PersonalizedLearningController {
     @GetMapping("/today")
     public ResponseEntity<ApiResponse<DailyPlanResponse>> getTodayPlan() {
         return ResponseEntity.ok(ApiResponse.success(learningService.getTodayPlan(securityUtils.getCurrentUserId())));
+    }
+
+    /** One level of the path, by default the learner's own, with what is open and what is locked. */
+    @GetMapping("/roadmap")
+    public ResponseEntity<ApiResponse<Roadmap.Result>> getRoadmap(@RequestParam(required = false) Integer level) {
+        return ResponseEntity.ok(ApiResponse.success(learningService.getRoadmap(securityUtils.getCurrentUserId(), level)));
     }
 
     @PutMapping("/goal")
