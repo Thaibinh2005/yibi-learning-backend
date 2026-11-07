@@ -5,6 +5,7 @@ import com.yibi.backend.security.JwtAuthEntryPoint;
 import com.yibi.backend.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -68,6 +69,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // Guests may browse read-only content: the course library, topics and vocabulary.
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/courses", "/api/courses/*",
+                                "/api/lessons/course/*",
+                                "/api/topics", "/api/topics/**",
+                                "/api/vocabularies", "/api/vocabularies/**").permitAll()
 
                         // Admin-only: base-level block (per-method @PreAuthorize adds fine-grained control)
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
