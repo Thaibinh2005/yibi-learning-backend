@@ -36,7 +36,11 @@ WORDS_PER_UNIT = 20
 MIN_UNIT_WORDS = 6
 CLASSIFY_BATCH = 250
 HAN = re.compile(r"[一-鿿]")
+LATIN_WORD = re.compile(r"[A-Za-zÀ-ỿ]{2,}")
+OPTION_LETTER = re.compile(r"^[A-D][.、．]\s*")
+QUOTED_OR_BRACKETED = re.compile(r"\([^)]*\)|（[^）]*）|'[^']*'|\"[^\"]*\"|“[^”]*”|‘[^’]*’")
 MAX_OFF_LEVEL_SHARE = 0.05
+LIMITED_MODEL_REST_SECONDS = 600
 
 
 class Theme(BaseModel):
@@ -133,10 +137,13 @@ def load_level(conn, level: int) -> dict:
 class Gemini:
     def __init__(self) -> None:
         self.pool = GeminiClientPool()
+        self.limited_until: dict[str, float] = {}
 
     def ask(self, prompt: str, schema):
         last = None
         for model in MODELS:
+            if time.time() < self.limited_until.get(model, 0):
+                continue
             for attempt in range(6):
                 try:
                     response = self.pool.client.models.generate_content(
@@ -155,10 +162,13 @@ class Gemini:
                         if self.pool.rotate():
                             continue
                         self.pool._index, self.pool._client = 0, None
-                        print(f"  all keys limited on {model}, waiting", flush=True)
-                        time.sleep(30)
-                        continue
+                        # Waiting on every call costs more than the fallback does, so look again only after a while.
+                        self.limited_until[model] = time.time() + LIMITED_MODEL_REST_SECONDS
+                        print(f"  all keys limited on {model}, resting it", flush=True)
+                        break
                     print(f"  retry {model}: {str(exc)[:100]}", flush=True)
+                    # A dropped connection stays broken in the client's pool, so the next try needs a fresh one.
+                    self.pool._client = None
                     time.sleep(6 * (attempt + 1) if "503" in str(exc) else 2)
         raise RuntimeError(f"Gemini failed: {last}")
 
@@ -233,12 +243,20 @@ Từ:
     return units
 
 
+def mixed_option(option: str) -> bool:
+    """Chinese and Latin in one option, other than a term quoted or glossed in brackets."""
+    bare = QUOTED_OR_BRACKETED.sub("", option)
+    return bool(HAN.search(bare) and LATIN_WORD.search(bare))
+
+
 def valid_questions(questions: list[Question]) -> list[dict]:
     good = []
     for q in questions:
-        options = list(dict.fromkeys(o.strip() for o in q.options))
-        if len(options) == 4 and q.answer.strip() in options:
-            good.append({"question": q.question, "options": options, "answer": q.answer.strip(), "explanation": q.explanation})
+        # Options get shuffled, so a printed letter would stop matching its place.
+        options = list(dict.fromkeys(OPTION_LETTER.sub("", o.strip()) for o in q.options))
+        answer = OPTION_LETTER.sub("", q.answer.strip())
+        if len(options) == 4 and answer in options and not any(mixed_option(o) for o in options):
+            good.append({"question": q.question, "options": options, "answer": answer, "explanation": q.explanation})
     return good
 
 
@@ -267,6 +285,11 @@ Từ của đơn vị: {words}
         )
         text = "".join(line.zh for line in result.dialogue.lines)
         share = off_level_share(text, allowed)
+        # The model sometimes leaks English or Vietnamese into a Chinese line, and that line would be read aloud.
+        mixed = [zh for zh in [line.zh for line in result.dialogue.lines] + [g.example_zh for g in result.grammar] if LATIN_WORD.search(zh)]
+        if mixed:
+            note = "LƯU Ý: lần trước có dòng tiếng Trung lẫn chữ Latin. Trường zh chỉ được chứa chữ Hán và dấu câu."
+            continue
         if share <= MAX_OFF_LEVEL_SHARE and len(result.dialogue.lines) >= 4:
             questions = valid_questions(result.dialogue.questions)
             if questions:

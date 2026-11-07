@@ -88,4 +88,8 @@ public class User {
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
+
+    /** The stable id of the linked Google account; null if the learner has not signed in with Google. */
+    @Column(name = "google_sub")
+    private String googleSub;
 }

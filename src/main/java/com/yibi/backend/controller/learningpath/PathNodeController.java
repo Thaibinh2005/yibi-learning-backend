@@ -81,12 +81,6 @@ public class PathNodeController {
         return ResponseEntity.ok(ApiResponse.success(pathService.startLevelTest(securityUtils.getCurrentUserId(), level)));
     }
 
-    @PostMapping("/levels/{level}/test/check")
-    public ResponseEntity<ApiResponse<PathLearningService.Checked>> checkLevelTest(@PathVariable int level, @RequestBody CheckRequest request) {
-        return ResponseEntity.ok(ApiResponse.success(pathService.checkLevelTest(securityUtils.getCurrentUserId(), level,
-                request.seed(), request.questionId(), request.answer())));
-    }
-
     @PostMapping("/levels/{level}/test/submit")
     public ResponseEntity<ApiResponse<PathLearningService.Outcome>> submitLevelTest(@PathVariable int level, @RequestBody SubmitRequest request) {
         return ResponseEntity.ok(ApiResponse.success(pathService.submitLevelTest(securityUtils.getCurrentUserId(), level,

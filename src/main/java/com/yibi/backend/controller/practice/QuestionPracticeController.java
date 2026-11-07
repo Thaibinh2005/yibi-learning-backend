@@ -21,9 +21,11 @@ public class QuestionPracticeController {
     private final QuestionBankService questionBankService;
     private final com.yibi.backend.service.PracticeSpeakingService speakingService;
     private final SecurityUtils securityUtils;
+    private final com.yibi.backend.service.LessonAccessService lessonAccess;
 
     @PostMapping("/lessons/{lessonId}/sessions")
     public ResponseEntity<ApiResponse<Map<String, Long>>> startLessonSession(@PathVariable Long lessonId) {
+        lessonAccess.requireLesson(lessonId);
         Long sessionId = questionBankService.startLessonSession(lessonId, securityUtils.getCurrentUserId());
         return ResponseEntity.ok(ApiResponse.success(Map.of("sessionId", sessionId)));
     }
@@ -31,6 +33,7 @@ public class QuestionPracticeController {
     @PostMapping("/adaptive-sessions")
     public ResponseEntity<ApiResponse<Map<String, Object>>> startAdaptiveSession(
             @Valid @RequestBody AdaptiveSessionRequest request) {
+        lessonAccess.requireLevelCode(request.getLevelCode());
         return ResponseEntity.ok(ApiResponse.success(questionBankService.startAdaptiveSession(
                 securityUtils.getCurrentUserId(), request.getLevelCode(), request.getLimit(), speakingService.isAvailable())));
     }

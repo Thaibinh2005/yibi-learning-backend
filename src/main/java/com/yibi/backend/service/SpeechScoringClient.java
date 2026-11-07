@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.ResourceAccessException;
+import com.github.houbb.opencc4j.util.ZhConverterUtil;
+import com.yibi.backend.service.plan.SpeechAlignment;
 import org.springframework.web.client.RestTemplate;
 
 /** Calls yibi-speech-service, which transcribes a recording and returns how close it is to the target sentence. */
@@ -39,8 +42,15 @@ public class SpeechScoringClient {
         }
     }
 
+    /** @param accuracy from 0 to 1 against the target text; @param transcript what the recognizer heard */
+    public record Heard(double accuracy, String transcript) { }
+
     /** Accuracy from 0 to 1 of the recording against the sentence the learner was asked to read. */
     public double score(byte[] audio, String filename, String targetText) {
+        return assess(audio, filename, targetText).accuracy();
+    }
+
+    public Heard assess(byte[] audio, String filename, String targetText) {
         MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
         form.add("audio", new ByteArrayResource(audio) {
             @Override
@@ -51,18 +61,30 @@ public class SpeechScoringClient {
         form.add("target_text", targetText);
         org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        try {
-            JsonNode body = scoring.postForObject(baseUrl + "/score-speech",
-                    new org.springframework.http.HttpEntity<>(form, headers), JsonNode.class);
-            if (body == null || !body.has("accuracy")) {
-                throw new AppException("Dịch vụ chấm phát âm trả về dữ liệu không hợp lệ.", HttpStatus.BAD_GATEWAY);
+        // The service closes idle connections after a few seconds, so a reused one can fail before anything is sent.
+        for (int attempt = 1; ; attempt++) {
+            try {
+                JsonNode body = scoring.postForObject(baseUrl + "/score-speech",
+                        new org.springframework.http.HttpEntity<>(form, headers), JsonNode.class);
+                if (body == null || !body.has("transcript")) {
+                    throw new AppException("Dịch vụ chấm phát âm trả về dữ liệu không hợp lệ.", HttpStatus.BAD_GATEWAY);
+                }
+                // Whisper sometimes writes traditional characters; the sentence is simplified, so compare like with like.
+                String transcript = ZhConverterUtil.toSimple(body.path("transcript").asText(""));
+                return new Heard(SpeechAlignment.align(targetText, transcript).accuracy(), transcript);
+            } catch (ResourceAccessException ex) {
+                if (attempt < 2) continue;
+                log.warn("Speech service failed: {}", ex.getMessage());
+                throw unavailable();
+            } catch (RestClientException ex) {
+                log.warn("Speech service failed: {}", ex.getMessage());
+                throw unavailable();
             }
-            return body.get("accuracy").asDouble();
-        } catch (RestClientException ex) {
-            log.warn("Speech service failed: {}", ex.getMessage());
-            throw new AppException("Dịch vụ chấm phát âm chưa sẵn sàng. Hãy bỏ qua câu này hoặc thử lại.",
-                    HttpStatus.SERVICE_UNAVAILABLE);
         }
+    }
+
+    private static AppException unavailable() {
+        return new AppException("Dịch vụ chấm phát âm chưa sẵn sàng. Hãy bỏ qua câu này hoặc thử lại.", HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     private static SimpleClientHttpRequestFactory factory(int connectMs, int readMs) {

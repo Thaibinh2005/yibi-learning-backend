@@ -14,6 +14,10 @@ import java.util.Set;
  */
 public final class PathQuiz {
 
+    public static final String MEANING_TO_HANZI = "MEANING_TO_HANZI";
+    public static final String HANZI_TO_MEANING = "HANZI_TO_MEANING";
+    public static final String HANZI_TO_PINYIN = "HANZI_TO_PINYIN";
+
     private static final int OPTIONS = 4;
     private static final int MAX_MEANING_LENGTH = 60;
     /** Dictionary cross-references such as "dùng trong 傢伙[jia1 huo5]": unreadable, and they give the answer away. */
@@ -42,6 +46,16 @@ public final class PathQuiz {
             if (question != null) questions.add(withId(question, questions.size()));
         }
         return questions;
+    }
+
+    /** One question on a word. A word without a usable meaning is asked by pronunciation; null if that fails too. */
+    public static Question ask(Word word, List<Word> pool, String kind, Random random) {
+        Question question = switch (kind) {
+            case MEANING_TO_HANZI -> meaningToHanzi(word, pool, random);
+            case HANZI_TO_MEANING -> hanziToMeaning(word, pool, random);
+            default -> null;
+        };
+        return question != null ? question : hanziToPinyin(word, pool, random);
     }
 
     /** "Which character is in this word?" for each character, with the word as the clue. */
@@ -101,7 +115,7 @@ public final class PathQuiz {
         if (shorten(word.meaning()).isBlank()) return null;
         List<String> options = options(word.hanzi(), pool.stream().map(Word::hanzi).toList(), "", random);
         if (options == null) return null;
-        return new Question("", "MEANING_TO_HANZI", "vocabulary", "Từ nào có nghĩa là “" + shorten(word.meaning()) + "”?",
+        return new Question("", MEANING_TO_HANZI, "vocabulary", "Từ nào có nghĩa là “" + shorten(word.meaning()) + "”?",
                 null, null, options, word.hanzi(), word.hanzi() + " (" + word.pinyin() + "): " + word.meaning());
     }
 
@@ -112,7 +126,7 @@ public final class PathQuiz {
         String answer = shorten(word.meaning());
         List<String> options = options(answer, meanings, "", random);
         if (options == null) return null;
-        return new Question("", "HANZI_TO_MEANING", "vocabulary", word.hanzi() + " có nghĩa là gì?", word.pinyin(),
+        return new Question("", HANZI_TO_MEANING, "vocabulary", word.hanzi() + " có nghĩa là gì?", word.pinyin(),
                 word.hanzi(), options, answer, word.hanzi() + " (" + word.pinyin() + "): " + word.meaning());
     }
 
@@ -120,7 +134,7 @@ public final class PathQuiz {
         if (word.pinyin().isBlank()) return null;
         List<String> options = options(word.pinyin(), pool.stream().map(Word::pinyin).toList(), "", random);
         if (options == null) return null;
-        return new Question("", "HANZI_TO_PINYIN", "phonetics", word.hanzi() + " đọc là gì?", null, null, options,
+        return new Question("", HANZI_TO_PINYIN, "phonetics", word.hanzi() + " đọc là gì?", null, null, options,
                 word.pinyin(), word.hanzi() + " đọc là " + word.pinyin() + ".");
     }
 
@@ -141,7 +155,7 @@ public final class PathQuiz {
         return result;
     }
 
-    private static Question withId(Question q, int index) {
+    public static Question withId(Question q, int index) {
         return new Question("q" + index, q.type(), q.skill(), q.prompt(), q.pinyin(), q.audioText(), q.options(), q.answer(), q.explanation());
     }
 

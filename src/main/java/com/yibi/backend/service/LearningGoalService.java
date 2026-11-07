@@ -58,6 +58,10 @@ public class LearningGoalService {
         if (request.getTargetDate() != null && request.getTargetDate().isBefore(LocalDate.now())) {
             throw new BadRequestException("Ngày mục tiêu phải từ hôm nay trở đi.");
         }
+        int scale = com.yibi.backend.service.plan.ScoreGoal.scale(request.getGoalType(), request.getTargetLevel());
+        if (scale > 0 && request.getTargetScore() != null && request.getTargetScore() > scale) {
+            throw new BadRequestException("Điểm mục tiêu của bài thi này tối đa là " + scale + ".");
+        }
         LearningPath path = learningPathRepository.findByUserId(user.getId())
                 .orElseGet(() -> LearningPath.builder().user(user).build());
         int current = currentLevel(user);
@@ -65,7 +69,7 @@ public class LearningGoalService {
         // The target can never sit below the level already reached (chk_path_hsk).
         path.setTargetHskLevel(Math.max(request.getTargetLevel(), current));
         path.setGoalType(request.getGoalType());
-        path.setTargetScore(request.getTargetScore());
+        path.setTargetScore(scale == 0 ? null : request.getTargetScore());
         path.setTargetDate(request.getTargetDate());
         path.setDailyMinutes(request.getDailyMinutes());
         path.setGeneratedAt(LocalDateTime.now());

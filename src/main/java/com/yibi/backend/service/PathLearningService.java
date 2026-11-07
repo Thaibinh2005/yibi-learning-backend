@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yibi.backend.exception.BadRequestException;
 import com.yibi.backend.exception.ResourceNotFoundException;
 import com.yibi.backend.repository.SrsCardRepository;
+import com.yibi.backend.service.plan.LessonPlan;
 import com.yibi.backend.service.plan.PathQuiz;
 import com.yibi.backend.service.plan.Roadmap;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PathLearningService {
 
+    /** Only a unit test has a score to reach; any other node is passed by finishing it. */
     public static final int PASS_PERCENT = 80;
+    private static final String CHECKPOINT = "CHECKPOINT";
+    private static final String LESSON = "LESSON";
     private static final int NODE_QUESTIONS = 8;
     private static final int CHECKPOINT_QUESTIONS = 10;
     private static final int LEVEL_TEST_QUESTIONS = 25;
@@ -47,7 +51,8 @@ public class PathLearningService {
     public record QuizQuestion(String id, String type, String prompt, String pinyin, String audioText, List<String> options,
                                boolean fromMistakes) { }
 
-    public record Quiz(long seed, int passPercent, List<QuizQuestion> questions) { }
+    /** @param steps the order of a woven lesson; null for a node that only asks its questions */
+    public record Quiz(long seed, int passPercent, List<QuizQuestion> questions, List<LessonPlan.Step> steps) { }
 
     public record Checked(boolean correct, String correctAnswer, String explanation) { }
 
@@ -61,7 +66,8 @@ public class PathLearningService {
 
     private record Recorded(int correct, int mistakesAdded, int mistakesResolved) { }
 
-    public record Spoken(double accuracy, boolean passed) { }
+    /** @param marks one per character of the line: right, wrong, or not spoken (punctuation) */
+    public record Spoken(double accuracy, boolean passed, List<Map<String, String>> marks, String heard) { }
 
     private record NodeRow(long id, String title, String type, int level, long unitId, String unitTitle, Map<String, Object> content) { }
 
@@ -79,21 +85,26 @@ public class PathLearningService {
     public Quiz startQuiz(UUID userId, long nodeId) {
         NodeRow node = load(nodeId);
         requireOpen(userId, node);
-        long seed = newSeed();
+        boolean lesson = LESSON.equals(node.type());
+        long seed = lesson ? LessonPlan.seed(learningService.goalType(userId), learningService.urgentSkills(userId), (int) newSeed()) : newSeed();
         List<PathQuiz.Question> questions = questionsOf(node, seed);
         List<String> keys = questions.stream().map(q -> PathMistakeService.keyOf(q.prompt(), q.answer())).toList();
-        List<QuizQuestion> asked = new ArrayList<>(toQuiz(seed, questions).questions());
+        List<QuizQuestion> asked = new ArrayList<>(toQuiz(seed, 0, questions).questions());
+        List<LessonPlan.Step> steps = lesson ? new ArrayList<>(lessonPlan(node, seed).steps()) : null;
         Random random = new Random(seed);
         for (PathMistakeService.Mistake mistake : mistakes.dueForQuiz(userId, node.level(), MISTAKES_PER_QUIZ, keys)) {
-            asked.add(random.nextInt(asked.size() + 1), askAgain(mistake, random));
+            QuizQuestion again = askAgain(mistake, random);
+            asked.add(random.nextInt(asked.size() + 1), again);
+            if (steps != null) steps.add(random.nextInt(steps.size() + 1), new LessonPlan.Step(LessonPlan.QUESTION, again.id(), null, null));
         }
-        return new Quiz(seed, PASS_PERCENT, asked);
+        return new Quiz(seed, CHECKPOINT.equals(node.type()) ? passPercentOf(userId) : 0, asked, steps);
     }
 
     @Transactional(readOnly = true)
     public Checked check(UUID userId, long nodeId, long seed, String questionId, String answer) {
         NodeRow node = load(nodeId);
         requireOpen(userId, node);
+        if (CHECKPOINT.equals(node.type())) throw new BadRequestException("Bài kiểm tra chỉ có kết quả sau khi nộp bài.");
         if (PathMistakeService.isMistakeId(questionId)) return checkMistake(userId, questionId, answer);
         return checkAgainst(questionsOf(node, seed), questionId, answer);
     }
@@ -104,7 +115,7 @@ public class PathLearningService {
         Random random = new Random();
         List<QuizQuestion> asked = mistakes.dueForQuiz(userId, MAX_LEVEL, com.yibi.backend.service.plan.DailyPlanner.MISTAKES_PER_REVIEW, List.of())
                 .stream().map(mistake -> askAgain(mistake, random)).toList();
-        return new Quiz(0, 0, asked);
+        return new Quiz(0, 0, asked, null);
     }
 
     @Transactional(readOnly = true)
@@ -152,7 +163,8 @@ public class PathLearningService {
         int correct = recorded.correct();
         int[] again = gradeMistakes(userId, answers);
         int score = PathQuiz.scorePercent(correct, questions.size());
-        boolean passed = score >= PASS_PERCENT;
+        boolean passed = CHECKPOINT.equals(node.type()) ? score >= passPercentOf(userId)
+                : questions.stream().allMatch(question -> answers.containsKey(question.id()));
         jdbc.update("""
                 INSERT INTO user_path_progress (user_id, node_id, best_score, attempts, completed_at)
                 VALUES (?, ?, ?, 1, CASE WHEN ? THEN NOW() END)
@@ -162,7 +174,7 @@ public class PathLearningService {
                   completed_at = COALESCE(user_path_progress.completed_at, EXCLUDED.completed_at)
                 """, userId, nodeId, score, passed);
 
-        int cards = passed && "VOCABULARY".equals(node.type()) ? addToReviewDeck(userId, node.content()) : 0;
+        int cards = passed && LESSON.equals(node.type()) ? addToReviewDeck(userId, node.content()) : 0;
         Integer newLevel = passed ? raiseLevelIfFinished(userId, node.level()) : null;
         return new Outcome(score, correct, questions.size(), passed, cards, passed ? nextNode(userId, node.level()) : null, newLevel,
                 recorded.mistakesAdded(), again[1], recorded.mistakesResolved() + again[2]);
@@ -174,11 +186,14 @@ public class PathLearningService {
         requireOpen(userId, node);
         List<Map<String, Object>> lines = list(node.content().get("lines"));
         if (lineIndex < 0 || lineIndex >= lines.size()) throw new BadRequestException("Câu thoại không thuộc bài này.");
-        double accuracy = speechClient.score(audio, filename, text(lines.get(lineIndex).get("zh")));
+        String target = text(lines.get(lineIndex).get("zh"));
+        SpeechScoringClient.Heard heard = speechClient.assess(audio, filename, target);
+        com.yibi.backend.service.plan.SpeechAlignment.Result aligned = com.yibi.backend.service.plan.SpeechAlignment.align(target, heard.transcript());
+        double accuracy = aligned.accuracy();
         boolean passed = accuracy >= speakingPassAccuracy;
         jdbc.update("INSERT INTO path_answers (user_id, node_id, skill_key, is_correct) VALUES (?, ?, 'speaking', ?)", userId, nodeId, passed);
         questionBankService.updateMastery(userId, node.level() >= MAX_LEVEL ? "7-9" : String.valueOf(node.level()), "speaking", "general", passed);
-        return new Spoken(accuracy, passed);
+        return new Spoken(accuracy, passed, aligned.marks(), heard.transcript());
     }
 
     /** A test on the whole level; passing it moves the learner up without doing every node. */
@@ -186,13 +201,7 @@ public class PathLearningService {
     public Quiz startLevelTest(UUID userId, int level) {
         requireLevelTest(userId, level);
         long seed = newSeed();
-        return toQuiz(seed, levelTestQuestions(level, seed));
-    }
-
-    @Transactional(readOnly = true)
-    public Checked checkLevelTest(UUID userId, int level, long seed, String questionId, String answer) {
-        requireLevelTest(userId, level);
-        return checkAgainst(levelTestQuestions(level, seed), questionId, answer);
+        return toQuiz(seed, passPercentOf(userId), levelTestQuestions(level, seed));
     }
 
     @Transactional
@@ -201,7 +210,7 @@ public class PathLearningService {
         List<PathQuiz.Question> questions = levelTestQuestions(level, seed);
         int correct = recordAnswers(userId, null, level, questions, answers).correct();
         int score = PathQuiz.scorePercent(correct, questions.size());
-        boolean passed = score >= PASS_PERCENT;
+        boolean passed = score >= passPercentOf(userId);
         Integer newLevel = passed ? setLevel(userId, level + 1) : null;
         return new Outcome(score, correct, questions.size(), passed, 0, null, newLevel, 0, 0, 0);
     }
@@ -224,9 +233,15 @@ public class PathLearningService {
         return status;
     }
 
-    private Quiz toQuiz(long seed, List<PathQuiz.Question> questions) {
-        return new Quiz(seed, PASS_PERCENT, questions.stream()
-                .map(q -> new QuizQuestion(q.id(), q.type(), q.prompt(), q.pinyin(), q.audioText(), q.options(), false)).toList());
+    /** A learner aiming for a high score has to show it on the tests of the path too. */
+    private int passPercentOf(UUID userId) {
+        return jdbc.query("SELECT goal_type, target_hsk_level, target_score FROM learning_paths WHERE user_id = ?",
+                rs -> rs.next() ? com.yibi.backend.service.plan.ScoreGoal.passPercent(rs.getString(1), rs.getInt(2), (Integer) rs.getObject(3)) : PASS_PERCENT, userId);
+    }
+
+    private Quiz toQuiz(long seed, int passPercent, List<PathQuiz.Question> questions) {
+        return new Quiz(seed, passPercent, questions.stream()
+                .map(q -> new QuizQuestion(q.id(), q.type(), q.prompt(), q.pinyin(), q.audioText(), q.options(), false)).toList(), null);
     }
 
     private Checked checkAgainst(List<PathQuiz.Question> questions, String questionId, String answer) {
@@ -280,7 +295,8 @@ public class PathLearningService {
 
     private Integer setLevel(UUID userId, int level) {
         jdbc.update("UPDATE users SET hsk_level = ? WHERE id = ?", level, userId);
-        jdbc.update("UPDATE learning_paths SET current_hsk_level = ?, generated_at = NOW() WHERE user_id = ?", level, userId);
+        // A learner may go past their goal; the target can never sit below the level reached (chk_path_hsk).
+        jdbc.update("UPDATE learning_paths SET current_hsk_level = ?, target_hsk_level = GREATEST(target_hsk_level, ?), generated_at = NOW() WHERE user_id = ?", level, level, userId);
         return level;
     }
 
@@ -290,17 +306,20 @@ public class PathLearningService {
     }
 
     private List<PathQuiz.Question> questionsOf(NodeRow node, long seed) {
+        if (LESSON.equals(node.type())) return lessonPlan(node, seed).questions();
         Random random = new Random(seed);
         List<PathQuiz.Word> pool = wordPool(node.level());
         return switch (node.type()) {
-            case "VOCABULARY" -> PathQuiz.forWords(words(node.content()), pool, NODE_QUESTIONS, random);
-            case "HANZI" -> PathQuiz.forCharacters(list(node.content().get("characters")), characterPool(pool), NODE_QUESTIONS, random);
-            case "GRAMMAR" -> PathQuiz.forPrepared(list(node.content().get("questions")), "grammar", NODE_QUESTIONS, random);
             case "DIALOGUE" -> PathQuiz.forPrepared(list(node.content().get("questions")), "reading", NODE_QUESTIONS, random);
             case "READING" -> PathQuiz.forPrepared(list(node.content().get("questions")), "reading", NODE_QUESTIONS, random);
             case "LISTENING" -> PathQuiz.forPrepared(list(node.content().get("questions")), "listening", NODE_QUESTIONS, random);
             default -> checkpointQuestions(node, pool, random);
         };
+    }
+
+    private LessonPlan.Plan lessonPlan(NodeRow node, long seed) {
+        List<PathQuiz.Word> pool = wordPool(node.level());
+        return LessonPlan.build(node.content(), pool, characterPool(pool), seed);
     }
 
     /** Everything taught in the unit, in one short test. */
@@ -313,14 +332,18 @@ public class PathLearningService {
         List<PathQuiz.Question> prepared = new ArrayList<>();
         for (NodeRow sibling : siblings) {
             switch (sibling.type()) {
-                case "VOCABULARY" -> unitWords.addAll(words(sibling.content()));
-                case "GRAMMAR" -> prepared.addAll(PathQuiz.forPrepared(list(sibling.content().get("questions")), "grammar", 2, random));
+                case LESSON -> {
+                    unitWords.addAll(words(sibling.content()));
+                    prepared.addAll(PathQuiz.forPrepared(list(sibling.content().get("questions")), "grammar", 1, random));
+                }
                 case "DIALOGUE" -> prepared.addAll(PathQuiz.forPrepared(list(sibling.content().get("questions")), "reading", 1, random));
                 case "READING" -> prepared.addAll(PathQuiz.forPrepared(list(sibling.content().get("questions")), "reading", 1, random));
                 case "LISTENING" -> prepared.addAll(PathQuiz.forPrepared(list(sibling.content().get("questions")), "listening", 1, random));
                 default -> { }
             }
         }
+        // Grammar from many lessons must not crowd out the dialogue and passages.
+        Collections.shuffle(prepared, random);
         List<PathQuiz.Question> all = new ArrayList<>(PathQuiz.forWords(unitWords, pool, CHECKPOINT_QUESTIONS - Math.min(prepared.size(), 4), random));
         all.addAll(prepared.subList(0, Math.min(prepared.size(), 4)));
         return PathQuiz.mix(all, CHECKPOINT_QUESTIONS, random);
@@ -332,12 +355,12 @@ public class PathLearningService {
         Map<String, List<Map<String, Object>>> preparedBySkill = new TreeMap<>();
         jdbc.query("""
                 SELECT n.node_type, n.content->'questions' FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
-                WHERE u.hsk_level = ? AND n.node_type IN ('GRAMMAR', 'READING', 'LISTENING', 'DIALOGUE') ORDER BY n.id
+                WHERE u.hsk_level = ? AND n.node_type IN ('LESSON', 'READING', 'LISTENING', 'DIALOGUE') ORDER BY n.id
                 """, rs -> {
             String json = rs.getString(2);
             if (json == null) return;
             String skill = switch (rs.getString(1)) {
-                case "GRAMMAR" -> "grammar";
+                case LESSON -> "grammar";
                 case "LISTENING" -> "listening";
                 default -> "reading";
             };
@@ -354,7 +377,7 @@ public class PathLearningService {
         List<PathQuiz.Word> pool = new ArrayList<>();
         jdbc.query("""
                 SELECT n.content->'words' FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
-                WHERE u.hsk_level = ? AND n.node_type = 'VOCABULARY' ORDER BY n.id
+                WHERE u.hsk_level = ? AND n.node_type = 'LESSON' ORDER BY n.id
                 """, rs -> {
             pool.addAll(toWords(parseList(rs.getString(1))));
         }, level);

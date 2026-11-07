@@ -23,6 +23,7 @@ public class SrsController {
 
     private final SrsService srsService;
     private final SecurityUtils securityUtils;
+    private final com.yibi.backend.service.LessonAccessService lessonAccess;
 
     @GetMapping("/due")
     public ResponseEntity<ApiResponse<List<SrsCardResponse>>> getDueCards() {
@@ -47,6 +48,7 @@ public class SrsController {
 
     @PostMapping("/add-lesson/{lessonId}")
     public ResponseEntity<ApiResponse<SrsAddLessonResponse>> addLessonVocabulary(@PathVariable Long lessonId) {
+        lessonAccess.requireLesson(lessonId);
         UUID userId = securityUtils.getCurrentUserId();
         SrsAddLessonResponse result = srsService.addLessonVocabulary(userId, lessonId);
         return ResponseEntity.ok(ApiResponse.success("Lesson vocabulary added to your SRS deck", result));

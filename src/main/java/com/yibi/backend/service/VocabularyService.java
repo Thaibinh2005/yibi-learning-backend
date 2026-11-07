@@ -14,7 +14,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /** Read-only vocabulary catalog backed by the source-preserving HSK V6 tables. */
@@ -24,6 +27,7 @@ public class VocabularyService {
 
     private final JdbcTemplate jdbc;
     private final MeasureWordService measureWordService;
+    private final VocabularyLookupIndex lookupIndex;
 
     private static final String SELECT = """
             SELECT v.raw_record_id AS id, v.simplified AS hanzi, v.traditional AS hanzi_traditional,
@@ -56,24 +60,23 @@ public class VocabularyService {
     public List<VocabularyResponse> getVocabularies(String hskLevel, String search, int page, int size) {
         int safePage = Math.max(0, page);
         int safeSize = Math.min(Math.max(1, size), 100);
-        StringBuilder sql = new StringBuilder(SELECT).append(" WHERE 1=1 ");
-        java.util.ArrayList<Object> params = new java.util.ArrayList<>();
-        if (hskLevel != null && !hskLevel.isBlank()) {
-            sql.append(" AND v.level_code = ? ");
-            params.add(hskLevel.trim());
+        List<VocabularyLookupIndex.Hit> hits = lookupIndex.find(hskLevel, search, safePage, safeSize);
+        if (hits.isEmpty()) {
+            return List.of();
         }
-        if (search != null && !search.isBlank()) {
-            sql.append(" AND (v.simplified ILIKE ? OR v.traditional ILIKE ? OR reading.pinyin ILIKE ? OR sense.meaning_vi ILIKE ?) ");
-            String term = "%" + search.trim() + "%";
-            params.add(term);
-            params.add(term);
-            params.add(term);
-            params.add(term);
+        Map<Long, VocabularyResponse> byId = new HashMap<>();
+        String ids = String.join(",", Collections.nCopies(hits.size(), "?"));
+        jdbc.query(SELECT + " WHERE v.raw_record_id IN (" + ids + ")", this::mapRow, hits.stream().map(VocabularyLookupIndex.Hit::recordId).toArray())
+                .forEach(word -> byId.put(word.getId(), word));
+        List<VocabularyResponse> words = new ArrayList<>(hits.size());
+        for (VocabularyLookupIndex.Hit hit : hits) {
+            VocabularyResponse word = byId.get(hit.recordId());
+            if (word != null) {
+                word.setPinyin(hit.pinyin());
+                words.add(word);
+            }
         }
-        sql.append(" ORDER BY v.level_code NULLS LAST, v.simplified, v.raw_record_id LIMIT ? OFFSET ?");
-        params.add(safeSize);
-        params.add((long) safePage * safeSize);
-        return jdbc.query(sql.toString(), this::mapRow, params.toArray());
+        return words;
     }
 
     @Transactional(readOnly = true)

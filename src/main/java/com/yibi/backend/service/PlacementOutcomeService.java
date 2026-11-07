@@ -52,7 +52,8 @@ public class PlacementOutcomeService {
                 .orElseGet(() -> LearningPath.builder().user(user).build());
         path.setCurrentHskLevel(level);
         // A goal the learner chose stays unless they already passed it; a new path aims one band higher.
-        path.setTargetHskLevel(path.getId() == null ? Math.min(7, level + 1) : Math.max(path.getTargetHskLevel(), level));
+        // Measured at HSK 8 or 9 there is no higher band: the target stays at the level, never below it (chk_path_hsk).
+        path.setTargetHskLevel(path.getId() == null ? Math.max(level, Math.min(7, level + 1)) : Math.max(path.getTargetHskLevel(), level));
         path.setGeneratedAt(LocalDateTime.now());
         learningPathRepository.save(path);
     }

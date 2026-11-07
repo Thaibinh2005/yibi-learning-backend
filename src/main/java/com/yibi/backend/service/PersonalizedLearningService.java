@@ -39,11 +39,11 @@ public class PersonalizedLearningService {
 
     /** The kind of lesson that trains each skill; passages live in READING/LISTENING lessons. */
     private static final Map<String, String> LESSON_TYPE_OF_SKILL = Map.of(
-            "vocabulary", "VOCABULARY",
-            "phonetics", "VOCABULARY",
-            "characters", "HANZI",
-            "grammar", "GRAMMAR",
-            "writing", "GRAMMAR",
+            "vocabulary", "LESSON",
+            "phonetics", "LESSON",
+            "characters", "LESSON",
+            "grammar", "LESSON",
+            "writing", "LESSON",
             "reading", "READING",
             "listening", "LISTENING",
             "speaking", "DIALOGUE");
@@ -89,7 +89,7 @@ public class PersonalizedLearningService {
                 """, Integer.class, userId, levelCode);
         List<Attempt> attempts = loadAttempts(userId);
         List<DailyPlanner.SkillNeed> needs = skillNeeds(attempts);
-        List<Roadmap.Node> open = layOutLevel(userId, level, level, goal.getGoalType(), attempts, needs).stream()
+        List<Roadmap.Node> open = layOutLevel(userId, level, level, attempts).stream()
                 .flatMap(unit -> unit.nodes().stream()).filter(node -> !Roadmap.DONE.equals(node.status())).toList();
         // Far enough along the path to fill any day, plus nodes with wrong answers wherever they are.
         List<DailyPlanner.LessonCandidate> candidates = java.util.stream.IntStream.range(0, open.size())
@@ -134,12 +134,20 @@ public class PersonalizedLearningService {
     /** One level of the path with what the learner may open, and a summary of every level. */
     @Transactional(readOnly = true)
     public Roadmap.Result getRoadmap(UUID userId, Integer requestedLevel) {
-        LearningGoalResponse goal = learningGoalService.get(userId);
         int learner = pathLevel(userId);
         int shown = requestedLevel == null ? learner : Math.max(1, Math.min(requestedLevel, MAX_COURSE_LEVEL));
         List<Attempt> attempts = loadAttempts(userId);
         return new Roadmap.Result(learner, shown, levelSummaries(userId, learner),
-                layOutLevel(userId, shown, learner, goal.getGoalType(), attempts, skillNeeds(attempts)));
+                layOutLevel(userId, shown, learner, attempts));
+    }
+
+    public String goalType(UUID userId) {
+        return learningGoalService.get(userId).getGoalType();
+    }
+
+    /** The skills a learner most needs to practise, which their next lessons stress. */
+    public List<String> urgentSkills(UUID userId) {
+        return skillNeeds(loadAttempts(userId)).stream().filter(DailyPlanner.SkillNeed::urgent).map(DailyPlanner.SkillNeed::key).toList();
     }
 
     /** The learner's place on the path; the combined HSK 7-9 band is level 7. */
@@ -215,8 +223,7 @@ public class PersonalizedLearningService {
         }).toList();
     }
 
-    private List<Roadmap.Unit> layOutLevel(UUID userId, int level, int learner, String goalType,
-                                           List<Attempt> attempts, List<DailyPlanner.SkillNeed> needs) {
+    private List<Roadmap.Unit> layOutLevel(UUID userId, int level, int learner, List<Attempt> attempts) {
         Map<Long, List<Roadmap.NodeRef>> nodes = new HashMap<>();
         jdbc.query("""
                 SELECT n.unit_id, n.id, n.title, n.node_type FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
@@ -238,8 +245,7 @@ public class PersonalizedLearningService {
         Map<Long, Integer> wrong = attempts.stream()
                 .filter(attempt -> !attempt.correct() && attempt.nodeId() != null)
                 .collect(Collectors.toMap(Attempt::nodeId, attempt -> 1, Integer::sum));
-        return Roadmap.layOut(units, level, learner, completed, scores, wrong, goalType,
-                needs.stream().filter(DailyPlanner.SkillNeed::urgent).map(DailyPlanner.SkillNeed::lessonType).toList(), userId.hashCode());
+        return Roadmap.layOut(units, level, learner, completed, scores, wrong);
     }
 
     private static List<DailyPlanner.SkillNeed> skillNeeds(List<Attempt> attempts) {

@@ -27,7 +27,7 @@ public class StudyStatsService {
 
     public record Stats(int streakDays, int todayMinutes, int dailyGoalMinutes, int goalPercent, int answersToday,
                         int accuracyToday, int nodesCompleted, long dueCards, Integer bestExamScore, Integer bestExamLevel,
-                        List<DayStat> week) { }
+                        List<DayStat> week, Integer targetScore, Integer bestTowardTarget, Integer targetScale) { }
 
     @Transactional
     public void recordActivity(UUID userId, int seconds) {
@@ -64,6 +64,8 @@ public class StudyStatsService {
                 ORDER BY score_percent DESC, finished_at DESC LIMIT 1
                 """, rs -> rs.next() ? new int[]{rs.getInt(1), rs.getInt(2)} : null, userId);
 
+        Integer[] progress = targetProgress(userId);
+
         List<DayStat> week = new ArrayList<>();
         for (int back = WEEK_DAYS - 1; back >= 0; back--) {
             LocalDate day = today.minusDays(back);
@@ -74,7 +76,23 @@ public class StudyStatsService {
         return new Stats(streak(activeDays, today), todayMinutes, goal, goalPercent(todayMinutes, goal),
                 todayAnswers[0], todayAnswers[0] == 0 ? 0 : Math.round(todayAnswers[1] * 100f / todayAnswers[0]),
                 completed == null ? 0 : completed, srsCardRepository.countDueCards(userId, today),
-                bestExam == null ? null : bestExam[0], bestExam == null ? null : bestExam[1], week);
+                bestExam == null ? null : bestExam[0], bestExam == null ? null : bestExam[1], week,
+                progress == null ? null : progress[0], progress == null ? null : progress[1], progress == null ? null : progress[2]);
+    }
+
+    /** The target, the best estimate so far on that test, and its scale; null without a target score. */
+    private Integer[] targetProgress(UUID userId) {
+        return jdbc.query("SELECT goal_type, target_hsk_level, target_score FROM learning_paths WHERE user_id = ? AND target_score IS NOT NULL", rs -> {
+            if (!rs.next()) return null;
+            String type = rs.getString(1);
+            int level = rs.getInt(2);
+            int scale = com.yibi.backend.service.plan.ScoreGoal.scale(type, level);
+            if (scale == 0) return null;
+            Integer best = "HSKK".equals(type)
+                    ? jdbc.queryForObject("SELECT max(score_percent) FROM hskk_attempts WHERE user_id = ? AND finished_at IS NOT NULL", Integer.class, userId)
+                    : jdbc.queryForObject("SELECT max(score_percent) FROM mock_exam_results WHERE user_id = ? AND hsk_level = ?", Integer.class, userId, level);
+            return new Integer[] {rs.getInt(3), best == null ? null : com.yibi.backend.service.plan.ScoreGoal.estimatedScore(best, scale), scale};
+        }, userId);
     }
 
     /** Consecutive active days ending today, or yesterday when nothing has been done yet today. */

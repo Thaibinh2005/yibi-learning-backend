@@ -26,8 +26,8 @@ public class PathBuilderService implements ApplicationRunner {
 
     private static final String RESOURCE = "data/hsk_path_2025.json";
     private static final Map<String, Integer> LEVELS = new LinkedHashMap<>();
-    private static final int WORDS_PER_NODE = 10;
-    private static final int CHARACTERS_PER_NODE = 10;
+    private static final int WORDS_PER_LESSON = 5;
+    private static final int LINES_PER_LESSON = 2;
     private static final int WORDS_PER_FALLBACK_UNIT = 20;
 
     static {
@@ -97,33 +97,33 @@ public class PathBuilderService implements ApplicationRunner {
             int order = 1;
 
             List<Map<String, Object>> unitWords = strings(unit.get("words")).stream().map(words::get).filter(Objects::nonNull).toList();
-            int vocabularyParts = (unitWords.size() + WORDS_PER_NODE - 1) / WORDS_PER_NODE;
-            for (int part = 0; part < vocabularyParts; part++) {
-                List<Map<String, Object>> chunk = unitWords.subList(part * WORDS_PER_NODE, Math.min((part + 1) * WORDS_PER_NODE, unitWords.size()));
-                String title = "Từ vựng" + (vocabularyParts > 1 ? " " + (part + 1) : "");
-                insertNode(unitId, order++, "VOCABULARY", title, Map.of("words", chunk), null);
-            }
-
             List<Map<String, Object>> characters = newCharacters(unitWords, seenCharacters);
-            int characterParts = (characters.size() + CHARACTERS_PER_NODE - 1) / CHARACTERS_PER_NODE;
-            for (int part = 0; part < Math.min(characterParts, 2); part++) {
-                List<Map<String, Object>> chunk = characters.subList(part * CHARACTERS_PER_NODE, Math.min((part + 1) * CHARACTERS_PER_NODE, characters.size()));
-                insertNode(unitId, order++, "HANZI", "Chữ Hán" + (characterParts > 1 ? " " + (part + 1) : ""), Map.of("characters", chunk), null);
-            }
-
             List<Map<String, Object>> points = list(unit.get("grammar"));
             if (points.isEmpty()) {
                 points = grammar.subList(index * grammar.size() / units.size(), (index + 1) * grammar.size() / units.size());
             }
-            if (!points.isEmpty()) {
-                List<Map<String, Object>> questions = list(unit.get("grammar_questions"));
-                if (questions.isEmpty() && !bankGrammar.isEmpty()) {
-                    questions = List.of(bankGrammar.get(index % bankGrammar.size()), bankGrammar.get((index + 1) % bankGrammar.size()));
-                }
-                insertNode(unitId, order++, "GRAMMAR", "Ngữ pháp", Map.of("points", points, "questions", questions), null);
+            List<Map<String, Object>> questions = list(unit.get("grammar_questions"));
+            if (!points.isEmpty() && questions.isEmpty() && !bankGrammar.isEmpty()) {
+                questions = List.of(bankGrammar.get(index % bankGrammar.size()), bankGrammar.get((index + 1) % bankGrammar.size()));
+            }
+            Map<String, Object> dialogue = map(unit.get("dialogue"));
+            List<Map<String, Object>> lines = list(dialogue.get("lines"));
+            Set<Integer> usedLines = new HashSet<>();
+            int lessons = Math.round(unitWords.size() / (float) WORDS_PER_LESSON);
+            if (lessons == 0 && !(unitWords.isEmpty() && points.isEmpty())) lessons = 1;
+            for (int part = 0; part < lessons; part++) {
+                List<Map<String, Object>> chunk = share(unitWords, part, lessons);
+                Set<String> chunkWords = new HashSet<>();
+                chunk.forEach(word -> chunkWords.add(String.valueOf(word.get("simplified"))));
+                Map<String, Object> content = new LinkedHashMap<>();
+                content.put("words", chunk);
+                content.put("characters", characters.stream().filter(item -> chunkWords.contains(String.valueOf(item.get("word")))).toList());
+                content.put("points", share(points, part, lessons));
+                content.put("questions", share(questions, part, lessons));
+                content.put("lines", linesUsing(chunkWords, lines, usedLines));
+                insertNode(unitId, order++, "LESSON", "Bài " + (part + 1), content, null);
             }
 
-            Map<String, Object> dialogue = map(unit.get("dialogue"));
             if (!dialogue.isEmpty()) {
                 insertNode(unitId, order++, "DIALOGUE", "Hội thoại: " + dialogue.get("title"), dialogue, null);
             }
@@ -143,6 +143,24 @@ public class PathBuilderService implements ApplicationRunner {
             nodes += order - 1;
         }
         log.info("Learning path HSK {}: {} units, {} nodes.", code, units.size(), nodes);
+    }
+
+    /** One of several even parts of a list. */
+    private static List<Map<String, Object>> share(List<Map<String, Object>> items, int part, int parts) {
+        return items.subList(part * items.size() / parts, (part + 1) * items.size() / parts);
+    }
+
+    /** Dialogue lines a lesson can have read aloud: not yet used, and with one of its new words in them. */
+    private static List<Map<String, Object>> linesUsing(Set<String> words, List<Map<String, Object>> lines, Set<Integer> used) {
+        List<Map<String, Object>> chosen = new ArrayList<>();
+        for (int i = 0; i < lines.size() && chosen.size() < LINES_PER_LESSON; i++) {
+            String zh = String.valueOf(lines.get(i).get("zh"));
+            if (!used.contains(i) && words.stream().anyMatch(zh::contains)) {
+                used.add(i);
+                chosen.add(lines.get(i));
+            }
+        }
+        return chosen;
     }
 
     /** The themed units from the file; if a level has none yet, plain chunks so the path still works. */

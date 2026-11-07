@@ -37,7 +37,7 @@ public final class DailyPlanner {
     private static final int DEFAULT_LESSON_MINUTES = 10;
 
     private static final Map<String, Integer> LESSON_MINUTES = Map.of(
-            "VOCABULARY", 6, "GRAMMAR", 8, "HANZI", 5, "READING", 8, "LISTENING", 8, "DIALOGUE", 6, "CHECKPOINT", 6);
+            "LESSON", 6, "READING", 8, "LISTENING", 8, "DIALOGUE", 6, "CHECKPOINT", 6);
 
     private DailyPlanner() { }
 

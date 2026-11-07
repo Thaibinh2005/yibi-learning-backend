@@ -19,7 +19,7 @@ class DailyPlannerTest {
     private static List<LessonCandidate> lessons() {
         List<LessonCandidate> all = new ArrayList<>();
         long id = 1;
-        for (String type : List.of("VOCABULARY", "GRAMMAR", "HANZI", "READING", "LISTENING")) {
+        for (String type : List.of("LESSON", "DIALOGUE", "READING", "LISTENING")) {
             for (int i = 0; i < 4; i++) all.add(new LessonCandidate(id++, type + " " + i, type, 1));
         }
         return all;
@@ -40,8 +40,8 @@ class DailyPlannerTest {
     @Test
     void reviewsAndPracticeAlwaysLeaveRoomForTheNextLesson() {
         DailyPlanner.Plan plan = DailyPlanner.build(new DailyPlanner.Input(20, "1", 10, 0,
-                List.of(new DailyPlanner.SkillNeed("grammar", "Ngữ pháp", "GRAMMAR", true)),
-                List.of(new DailyPlanner.LessonCandidate(1, "Ngữ pháp", "GRAMMAR", 1)), true, 8));
+                List.of(new DailyPlanner.SkillNeed("reading", "Đọc", "READING", true)),
+                List.of(new DailyPlanner.LessonCandidate(1, "Bài đọc", "READING", 1)), true, 8));
         assertTrue(plan.items().stream().anyMatch(i -> DailyPlanner.LESSON.equals(i.type())), plan.items().toString());
         assertTrue(plan.minutesPlanned() <= 20);
     }
@@ -61,7 +61,7 @@ class DailyPlannerTest {
 
     @Test
     void reviewsComeBeforePracticeAndLessons() {
-        Plan plan = DailyPlanner.build(input(60, 10, 2, List.of(new SkillNeed("grammar", "Ngữ pháp", "GRAMMAR", true))));
+        Plan plan = DailyPlanner.build(input(60, 10, 2, List.of(new SkillNeed("grammar", "Ngữ pháp", "LESSON", true))));
         assertEquals(DailyPlanner.REVIEW_CARDS, plan.items().get(0).type());
         assertEquals(DailyPlanner.PRACTICE, plan.items().get(1).type());
         assertEquals(DailyPlanner.LESSON, plan.items().get(2).type());
@@ -91,15 +91,15 @@ class DailyPlannerTest {
     void lessonsFollowThePathOrderGiven() {
         Plan plan = DailyPlanner.build(input(60, 0, 0, List.of()));
         List<Item> items = lessonItems(plan);
-        assertEquals("VOCABULARY 0", items.get(0).title());
-        assertEquals("VOCABULARY 1", items.get(1).title());
+        assertEquals("LESSON 0", items.get(0).title());
+        assertEquals("LESSON 1", items.get(1).title());
     }
 
     @Test
     void lessonsWithWrongAnswersComeFirstAndSayWhy() {
         List<LessonCandidate> all = new ArrayList<>(lessons());
-        all.add(new LessonCandidate(100, "Bài sai ít", "HANZI", 1, 1));
-        all.add(new LessonCandidate(101, "Bài sai nhiều", "HANZI", 1, 3));
+        all.add(new LessonCandidate(100, "Bài sai ít", "LESSON", 1, 1));
+        all.add(new LessonCandidate(101, "Bài sai nhiều", "LESSON", 1, 3));
         Plan plan = DailyPlanner.build(new Input(30, "1", 0, 0, List.of(), all, true));
         assertEquals("Bài sai nhiều", plan.items().get(0).title());
         assertTrue(plan.items().get(0).detail().contains("sai 3 câu"));
@@ -109,7 +109,7 @@ class DailyPlannerTest {
     @Test
     void lessonForAWeakSkillSaysSo() {
         Plan plan = DailyPlanner.build(new Input(60, "1", 0, 0, List.of(new SkillNeed("reading", "Đọc", "READING", true)),
-                List.of(new LessonCandidate(1, "Bài đọc", "READING", 1), new LessonCandidate(2, "Từ vựng", "VOCABULARY", 1)), true));
+                List.of(new LessonCandidate(1, "Bài đọc", "READING", 1), new LessonCandidate(2, "Từ vựng", "LESSON", 1)), true));
         List<Item> items = lessonItems(plan);
         assertTrue(items.get(0).detail().contains("yếu"));
         assertFalse(items.get(1).detail().contains("yếu"));
@@ -165,7 +165,7 @@ class DailyPlannerTest {
     void paceComparesTheEstimateWithTheTargetDate() {
         LocalDate today = LocalDate.of(2026, 11, 6);
         // 20 vocabulary nodes = 120 minutes; 20 min/day gives 14 minutes of new learning, so 9 days.
-        Map<String, Integer> left = Map.of("VOCABULARY", 20);
+        Map<String, Integer> left = Map.of("LESSON", 20);
 
         var noDate = DailyPlanner.pace(left, 20, null, today);
         assertEquals(20, noDate.remainingLessons());

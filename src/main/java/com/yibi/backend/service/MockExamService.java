@@ -41,7 +41,9 @@ public class MockExamService {
 
     public record Review(String id, boolean correct, String answer, String explanation) { }
 
-    public record Result(int scorePercent, int correct, int total, boolean passed, List<Review> review) { }
+    /** @param targetScore set when this level is the one the learner's HSK target is about */
+    public record Result(int scorePercent, int correct, int total, boolean passed, List<Review> review,
+                         int estimatedScore, int scale, Integer targetScore) { }
 
     private record Key(String answer, String skill, String explanation) { }
 
@@ -70,7 +72,11 @@ public class MockExamService {
         }
         int score = keys.isEmpty() ? 0 : Math.round(correct * 100f / keys.size());
         jdbc.update("INSERT INTO mock_exam_results (user_id, hsk_level, score_percent) VALUES (?, ?, ?)", userId, level, score);
-        return new Result(score, correct, keys.size(), score >= PASS_PERCENT, review);
+        int scale = com.yibi.backend.service.plan.ScoreGoal.scaleOfLevel(level);
+        Integer target = jdbc.query("SELECT target_score FROM learning_paths WHERE user_id = ? AND goal_type = 'HSK' AND target_hsk_level = ?",
+                rs -> rs.next() ? (Integer) rs.getObject(1) : null, userId, level);
+        return new Result(score, correct, keys.size(), score >= PASS_PERCENT, review,
+                com.yibi.backend.service.plan.ScoreGoal.estimatedScore(score, scale), scale, target);
     }
 
     /** Candidates for the on-screen pinyin keyboard, exact readings first, then the most common words. */
@@ -146,7 +152,7 @@ public class MockExamService {
         List<Map<String, Object>> words = new ArrayList<>();
         jdbc.query("""
                 SELECT n.content->'words' FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
-                WHERE u.hsk_level = ? AND n.node_type = 'VOCABULARY' ORDER BY n.id
+                WHERE u.hsk_level = ? AND n.node_type = 'LESSON' ORDER BY n.id
                 """, rs -> { words.addAll(parseList(rs.getString(1))); }, level);
         Collections.shuffle(words, random);
         List<ExamQuestion> questions = new ArrayList<>();
