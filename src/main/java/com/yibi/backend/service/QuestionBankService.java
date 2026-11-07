@@ -133,6 +133,12 @@ public class QuestionBankService {
 
     @Transactional
     public Map<String, Object> startAdaptiveSession(java.util.UUID userId, String levelCode, int requestedLimit) {
+        return startAdaptiveSession(userId, levelCode, requestedLimit, false);
+    }
+
+    /** @param withSpeaking include read-aloud questions; pass true only while the speech service answers */
+    @Transactional
+    public Map<String, Object> startAdaptiveSession(java.util.UUID userId, String levelCode, int requestedLimit, boolean withSpeaking) {
         int limit = Math.max(5, Math.min(requestedLimit, 30));
         Long sessionId = jdbcTemplate.queryForObject("""
                 INSERT INTO practice_sessions(user_id, mode, standard_code, version_code, level_code)
@@ -156,7 +162,7 @@ public class QuestionBankService {
                     ON m.user_id=? AND m.standard_code=q.standard_code AND m.version_code=q.version_code
                    AND m.level_code=q.level_code AND m.skill_key=q.skill_key AND m.topic_key=q.topic_key
                   WHERE q.status='PUBLISHED' AND q.standard_code='NEW_HSK' AND q.version_code='2025'
-                    AND q.level_code=? AND q.question_type <> 'READ_ALOUD'
+                    AND q.level_code=? AND (q.question_type <> 'READ_ALOUD' OR ?)
                 ), ranked AS (
                   SELECT candidates.*,
                          row_number() OVER (PARTITION BY skill_key ORDER BY priority,
@@ -177,7 +183,7 @@ public class QuestionBankService {
                     item.put("promptAudioUrl", rs.getString("prompt_audio_url"));
                     item.put("selectionReason", selectionReason(rs.getInt("priority")));
                     return item;
-                }, userId, userId, levelCode, limit);
+                }, userId, userId, levelCode, withSpeaking, limit);
         if (selected.isEmpty()) throw new BadRequestException("Ngân hàng chưa có câu hỏi đã phát hành ở HSK " + levelCode + ".");
 
         int order = 1;
@@ -185,7 +191,7 @@ public class QuestionBankService {
             Long questionId = (Long) item.remove("id");
             item.put("options", jdbcTemplate.query("""
                     SELECT choice_key, choice_text FROM question_bank_choices
-                    WHERE question_id=? ORDER BY choice_order
+                    WHERE question_id=? ORDER BY random()
                     """, (rs, rowNum) -> Map.of("key", rs.getString(1), "text", rs.getString(2)), questionId));
             item.put("questionId", questionId);
             jdbcTemplate.update("""
@@ -199,6 +205,46 @@ public class QuestionBankService {
     @Transactional
     public Map<String, Object> submitAnswer(Long sessionId, java.util.UUID userId, String questionCode,
                                            String submittedAnswer, Integer responseTimeMs) {
+        Map<String, Object> question = loadAssignedQuestion(sessionId, userId, questionCode);
+        Long questionId = (Long) question.get("id");
+
+        Boolean correct = jdbcTemplate.query("""
+                SELECT is_correct FROM question_bank_choices
+                WHERE question_id=? AND lower(btrim(choice_text))=lower(btrim(?))
+                """, rs -> rs.next() ? rs.getBoolean(1) : null, questionId, submittedAnswer);
+        if (correct == null) {
+            // A learner arranging tiles can build a sentence that is not one of the listed options: it is just wrong.
+            if (!"SENTENCE_ORDER".equals(question.get("type"))) {
+                throw new BadRequestException("Đáp án không thuộc danh sách lựa chọn của câu hỏi.");
+            }
+            correct = false;
+        }
+        Long choiceId = jdbcTemplate.query("""
+                SELECT id FROM question_bank_choices
+                WHERE question_id=? AND lower(btrim(choice_text))=lower(btrim(?))
+                """, rs -> rs.next() ? rs.getLong(1) : null, questionId, submittedAnswer);
+
+        return recordAttempt(sessionId, userId, question, choiceId, submittedAnswer, correct, responseTimeMs);
+    }
+
+    /** The sentence to read, after the same checks as any answer in this session. */
+    @Transactional(readOnly = true)
+    public String readAloudTarget(Long sessionId, java.util.UUID userId, String questionCode) {
+        Map<String, Object> question = loadAssignedQuestion(sessionId, userId, questionCode);
+        if (!"READ_ALOUD".equals(question.get("type"))) throw new BadRequestException("Câu này không phải câu đọc to.");
+        return string(question.get("answer"));
+    }
+
+    @Transactional
+    public Map<String, Object> recordSpeakingAnswer(Long sessionId, java.util.UUID userId, String questionCode,
+                                                    double accuracy, boolean correct, Integer responseTimeMs) {
+        Map<String, Object> question = loadAssignedQuestion(sessionId, userId, questionCode);
+        Map<String, Object> result = recordAttempt(sessionId, userId, question, null, "accuracy=" + accuracy, correct, responseTimeMs);
+        result.put("accuracy", accuracy);
+        return result;
+    }
+
+    private Map<String, Object> loadAssignedQuestion(Long sessionId, java.util.UUID userId, String questionCode) {
         Map<String, Object> session = jdbcTemplate.query("""
                 SELECT id, level_code, session_state, lesson_id FROM practice_sessions WHERE id=? AND user_id=?
                 """, rs -> rs.next() ? Map.of(
@@ -210,14 +256,15 @@ public class QuestionBankService {
         if (!"IN_PROGRESS".equals(session.get("state"))) throw new BadRequestException("Lượt luyện tập này đã kết thúc.");
 
         Map<String, Object> question = jdbcTemplate.query("""
-                SELECT id, skill_key, topic_key, level_code, answer_text, explanation, lesson_id
+                SELECT id, skill_key, topic_key, level_code, answer_text, explanation, lesson_id, question_type
                 FROM question_bank_items WHERE question_code=? AND status='PUBLISHED'
                 """, rs -> rs.next() ? Map.of(
                         "id", rs.getLong("id"), "skill", rs.getString("skill_key"),
                         "topic", rs.getString("topic_key"), "level", rs.getString("level_code"),
                         "answer", rs.getString("answer_text") == null ? "" : rs.getString("answer_text"),
                         "explanation", rs.getString("explanation") == null ? "" : rs.getString("explanation"),
-                        "lessonId", rs.getObject("lesson_id") == null ? 0L : rs.getLong("lesson_id")) : null,
+                        "lessonId", rs.getObject("lesson_id") == null ? 0L : rs.getLong("lesson_id"),
+                        "type", rs.getString("question_type")) : null,
                 questionCode);
         if (question == null) throw new ResourceNotFoundException("Published question", "code", questionCode);
         if (!String.valueOf(session.get("level")).equals(String.valueOf(question.get("level")))) {
@@ -233,17 +280,12 @@ public class QuestionBankService {
                 SELECT EXISTS(SELECT 1 FROM practice_session_questions WHERE session_id=? AND question_id=?)
                 """, Boolean.class, sessionId, questionId);
         if (!Boolean.TRUE.equals(assigned)) throw new BadRequestException("Câu hỏi chưa được gán cho lượt luyện tập này.");
+        return question;
+    }
 
-        Boolean correct = jdbcTemplate.query("""
-                SELECT is_correct FROM question_bank_choices
-                WHERE question_id=? AND lower(btrim(choice_text))=lower(btrim(?))
-                """, rs -> rs.next() ? rs.getBoolean(1) : null, questionId, submittedAnswer);
-        if (correct == null) throw new BadRequestException("Đáp án không thuộc danh sách lựa chọn của câu hỏi.");
-        Long choiceId = jdbcTemplate.query("""
-                SELECT id FROM question_bank_choices
-                WHERE question_id=? AND lower(btrim(choice_text))=lower(btrim(?))
-                """, rs -> rs.next() ? rs.getLong(1) : null, questionId, submittedAnswer);
-
+    private Map<String, Object> recordAttempt(Long sessionId, java.util.UUID userId, Map<String, Object> question, Long choiceId,
+                                              String submittedAnswer, boolean correct, Integer responseTimeMs) {
+        Long questionId = (Long) question.get("id");
         jdbcTemplate.update("""
                 INSERT INTO question_attempts(session_id,user_id,question_id,selected_choice_id,
                   submitted_answer,is_correct,response_time_ms)

@@ -28,6 +28,7 @@ public class TokenBlacklistService {
 
     private static final String BLACKLIST_PREFIX = "jwt:blacklist:";
     private static final String REFRESH_PREFIX   = "jwt:refresh:";
+    private static final String USER_REFRESH_PREFIX = "jwt:user-refresh:";
 
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -65,6 +66,9 @@ public class TokenBlacklistService {
     public void storeRefreshToken(String refreshKey, String username, long ttlMillis) {
         String key = REFRESH_PREFIX + refreshKey;
         redisTemplate.opsForValue().set(key, username, ttlMillis, TimeUnit.MILLISECONDS);
+        String userKey = USER_REFRESH_PREFIX + username;
+        redisTemplate.opsForSet().add(userKey, refreshKey);
+        redisTemplate.expire(userKey, ttlMillis, TimeUnit.MILLISECONDS);
         log.debug("Stored refresh token for user: {}", username);
     }
 
@@ -83,6 +87,16 @@ public class TokenBlacklistService {
     public void deleteRefreshToken(String refreshKey) {
         redisTemplate.delete(REFRESH_PREFIX + refreshKey);
         log.debug("Deleted refresh token: {}", refreshKey);
+    }
+
+    /** Ends every session of a user once their current access token runs out, as after a password change. */
+    public void revokeAllRefreshTokens(String username) {
+        String userKey = USER_REFRESH_PREFIX + username;
+        java.util.Set<String> known = redisTemplate.opsForSet().members(userKey);
+        if (known != null) {
+            known.forEach(this::deleteRefreshToken);
+        }
+        redisTemplate.delete(userKey);
     }
 
     /**

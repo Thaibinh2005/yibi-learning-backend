@@ -38,6 +38,24 @@ public class LearningPath {
     @Builder.Default
     private Integer recommendedDailyWords = 10;
 
+    /** What the learner studies for: HSK, HSKK or COMMUNICATION */
+    @Column(name = "goal_type", nullable = false, length = 20)
+    @Builder.Default
+    private String goalType = "HSK";
+
+    /** Optional exam score the learner aims for */
+    @Column(name = "target_score")
+    private Integer targetScore;
+
+    /** Optional date the learner wants to reach the goal by */
+    @Column(name = "target_date")
+    private java.time.LocalDate targetDate;
+
+    /** Minutes the learner plans to study each day; sizes the daily plan */
+    @Column(name = "daily_minutes", nullable = false)
+    @Builder.Default
+    private Integer dailyMinutes = 20;
+
     /** Timestamp of last path generation / recalculation */
     @Column(name = "generated_at", nullable = false)
     @Builder.Default

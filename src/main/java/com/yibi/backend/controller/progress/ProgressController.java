@@ -21,6 +21,7 @@ public class ProgressController {
 
     private final ProgressService progressService;
     private final SecurityUtils securityUtils;
+    private final com.yibi.backend.service.LessonAccessService lessonAccess;
 
     @GetMapping("/my-lessons")
     public ResponseEntity<ApiResponse<List<UserProgressResponse>>> getUserProgress() {
@@ -38,6 +39,7 @@ public class ProgressController {
 
     @PostMapping("/update")
     public ResponseEntity<ApiResponse<UserProgressResponse>> updateProgress(@Valid @RequestBody ProgressUpdateDto dto) {
+        lessonAccess.requireLesson(dto.getLessonId());
         UUID userId = securityUtils.getCurrentUserId();
         UserProgressResponse result = progressService.updateProgress(userId, dto);
         return ResponseEntity.ok(ApiResponse.success("Progress updated", result));

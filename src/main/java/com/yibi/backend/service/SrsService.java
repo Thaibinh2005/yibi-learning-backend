@@ -111,26 +111,23 @@ public class SrsService {
                 unavailable++;
                 continue;
             }
-            String hanzi = word.get("hanzi") == null ? "" : String.valueOf(word.get("hanzi")).trim();
-            String pinyin = word.get("pinyin") == null ? "" : String.valueOf(word.get("pinyin")).trim();
-            if (hanzi.isBlank() || pinyin.isBlank()) {
+            String simplified = word.get("simplified") == null ? "" : String.valueOf(word.get("simplified")).trim();
+            if (simplified.isBlank()) {
                 unavailable++;
                 continue;
             }
-            List<Long> matches = jdbc.queryForList("""
-                    SELECT DISTINCT v.raw_record_id
-                    FROM hsk_vocabulary_records v
-                    JOIN hsk_vocabulary_readings r ON r.raw_record_id = v.raw_record_id
-                    WHERE v.simplified = ? AND r.pinyin = ? AND v.level_code = ?
-                    ORDER BY v.raw_record_id LIMIT 2
-                    """, Long.class, hanzi, pinyin, String.valueOf(lesson.getCourse().getHskLevel()));
-            // Exact Hanzi + Pinyin + level is still ambiguous when the source has
-            // multiple records; do not silently collapse distinct source entries.
-            if (matches.size() != 1) {
+            // The same record the learning path links this word to, so one word never becomes two cards.
+            Long vocabularyId = jdbc.queryForObject("""
+                    SELECT min(v.raw_record_id)
+                    FROM lesson_content_items i
+                    JOIN lessons l ON l.id = i.lesson_id JOIN courses c ON c.id = l.course_id
+                    JOIN hsk_vocabulary_records v ON v.raw_record_id = i.raw_record_id
+                    WHERE c.hsk_level = ? AND i.content_type = 'VOCABULARY' AND v.simplified = ?
+                    """, Long.class, lesson.getCourse().getHskLevel(), simplified);
+            if (vocabularyId == null) {
                 unavailable++;
                 continue;
             }
-            Long vocabularyId = matches.get(0);
             if (srsCardRepository.existsByUserIdAndHskVocabularyRecordId(userId, vocabularyId)) {
                 alreadyInDeck++;
                 continue;

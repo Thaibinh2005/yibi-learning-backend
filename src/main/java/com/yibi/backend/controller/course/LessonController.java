@@ -21,21 +21,24 @@ public class LessonController {
 
     private final LessonService lessonService;
     private final AiLessonContentService aiLessonContentService;
+    private final com.yibi.backend.service.LessonAccessService lessonAccess;
 
     @GetMapping("/course/{courseId}")
     public ResponseEntity<ApiResponse<List<LessonResponse>>> getLessonsByCourse(@PathVariable Long courseId) {
+        lessonAccess.requireCourse(courseId);
         List<LessonResponse> lessons = lessonService.getLessonsByCourseId(courseId);
         return ResponseEntity.ok(ApiResponse.success(lessons));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LessonResponse>> getLessonById(@PathVariable Long id) {
+        lessonAccess.requireLesson(id);
         LessonResponse lesson = lessonService.getLessonById(id);
         return ResponseEntity.ok(ApiResponse.success(lesson));
     }
 
     @PostMapping("/{id}/ai-content")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> generateAiLessonContent(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(
                 "AI lesson content is ready",
