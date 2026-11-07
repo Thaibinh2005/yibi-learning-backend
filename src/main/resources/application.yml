@@ -7,6 +7,13 @@ spring:
   application:
     name: yibi-backend
 
+  # SMTP and Google settings live in their own git-ignored file, next to the backend or one folder up.
+  # Real environment variables still win over it. See .env.auth.example.
+  config:
+    import:
+      - optional:file:./.env.auth[.properties]
+      - optional:file:../.env.auth[.properties]
+
   # ── PostgreSQL DataSource ────────────────────────────────
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/yibi_db}
@@ -59,6 +66,23 @@ spring:
           min-idle: 0
           max-wait: -1ms
 
+  # ── Email (forgot password). SMTP_USERNAME and SMTP_PASSWORD come from .env.auth ──
+  mail:
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:true}
+          starttls:
+            enable: ${SMTP_STARTTLS:true}
+          connectiontimeout: 10000
+          timeout: 15000
+          writetimeout: 15000
+
   # ── Jackson JSON ─────────────────────────────────────────
   jackson:
     serialization:
@@ -75,6 +99,19 @@ spring:
 
 # Gemini is called only by the backend. Keep keys in environment variables.
 app:
+  # Address of the web app, used in emailed links and after Google sign-in.
+  frontend-url: ${APP_FRONTEND_URL:http://localhost:5173}
+  mail:
+    from: ${MAIL_FROM:}
+  # Google OAuth 2.0. GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET come from .env.auth.
+  # redirect-uri must be listed exactly under "Authorized redirect URIs" in Google Cloud Console.
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:}
+    client-secret: ${GOOGLE_CLIENT_SECRET:}
+    redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8080/api/auth/google/callback}
+    auth-uri: ${GOOGLE_AUTH_URI:https://accounts.google.com/o/oauth2/v2/auth}
+    token-uri: ${GOOGLE_TOKEN_URI:https://oauth2.googleapis.com/token}
+    jwks-uri: ${GOOGLE_JWKS_URI:https://www.googleapis.com/oauth2/v3/certs}
   gemini:
     model: ${GEMINI_MODEL:gemini-3.8-flash}
     fallback-models: ${GEMINI_FALLBACK_MODELS:gemini-3.6-flash,gemini-3.5-flash-lite}

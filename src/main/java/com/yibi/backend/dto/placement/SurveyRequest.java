@@ -26,4 +26,8 @@ public class SurveyRequest {
     @NotBlank(message = "Start mode is required")
     @Pattern(regexp = "BASIC|PLACEMENT", message = "Start mode must be BASIC or PLACEMENT")
     private String startMode;
+
+    /** Optional: the learner's goal and daily study time. */
+    @jakarta.validation.Valid
+    private com.yibi.backend.dto.learningpath.LearningGoalRequest goal;
 }

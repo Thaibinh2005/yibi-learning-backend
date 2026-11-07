@@ -68,9 +68,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/courses/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/lessons/**").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/vocabularies/**").permitAll()
 
                         // Admin-only: base-level block (per-method @PreAuthorize adds fine-grained control)
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

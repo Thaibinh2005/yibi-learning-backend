@@ -21,6 +21,9 @@ public class QuestionBankAdaptiveTest {
         System.out.println(">>> ALL ADAPTIVE AND MASTERY TESTS PASSED! <<<");
     }
 
+    // Connects to the real local database and writes practice sessions for the default student account.
+    // Run it only by hand against a throwaway database, until it is moved to an isolated test database.
+    @org.junit.jupiter.api.Disabled("Writes to the real local database")
     @Test
     void testAdaptiveFlowAndMastery() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

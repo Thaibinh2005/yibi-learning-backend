@@ -137,6 +137,17 @@ public class AuthService {
         log.info("User logged out successfully");
     }
 
+    /** Signs in an account already vouched for, such as by Google. */
+    @Transactional
+    public AuthResponse issueTokens(User user) {
+        if (!user.isActive()) {
+            throw new IllegalArgumentException("Account is disabled");
+        }
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+        return buildAuthResponse(user);
+    }
+
     // ── Private Helpers ───────────────────────────────────────
 
     private AuthResponse buildAuthResponse(User user) {

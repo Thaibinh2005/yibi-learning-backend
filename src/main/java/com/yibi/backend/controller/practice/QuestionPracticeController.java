@@ -19,10 +19,13 @@ import java.util.Map;
 public class QuestionPracticeController {
 
     private final QuestionBankService questionBankService;
+    private final com.yibi.backend.service.PracticeSpeakingService speakingService;
     private final SecurityUtils securityUtils;
+    private final com.yibi.backend.service.LessonAccessService lessonAccess;
 
     @PostMapping("/lessons/{lessonId}/sessions")
     public ResponseEntity<ApiResponse<Map<String, Long>>> startLessonSession(@PathVariable Long lessonId) {
+        lessonAccess.requireLesson(lessonId);
         Long sessionId = questionBankService.startLessonSession(lessonId, securityUtils.getCurrentUserId());
         return ResponseEntity.ok(ApiResponse.success(Map.of("sessionId", sessionId)));
     }
@@ -30,8 +33,9 @@ public class QuestionPracticeController {
     @PostMapping("/adaptive-sessions")
     public ResponseEntity<ApiResponse<Map<String, Object>>> startAdaptiveSession(
             @Valid @RequestBody AdaptiveSessionRequest request) {
+        lessonAccess.requireLevelCode(request.getLevelCode());
         return ResponseEntity.ok(ApiResponse.success(questionBankService.startAdaptiveSession(
-                securityUtils.getCurrentUserId(), request.getLevelCode(), request.getLimit())));
+                securityUtils.getCurrentUserId(), request.getLevelCode(), request.getLimit(), speakingService.isAvailable())));
     }
 
     @GetMapping("/mastery-summary")
@@ -47,5 +51,15 @@ public class QuestionPracticeController {
         return ResponseEntity.ok(ApiResponse.success(questionBankService.submitAnswer(
                 sessionId, securityUtils.getCurrentUserId(), request.getQuestionCode(),
                 request.getAnswer(), request.getResponseTimeMs())));
+    }
+
+    @PostMapping(value = "/sessions/{sessionId}/speaking", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Map<String, Object>>> answerSpeaking(
+            @PathVariable Long sessionId,
+            @RequestParam String questionCode,
+            @RequestParam org.springframework.web.multipart.MultipartFile audio,
+            @RequestParam(required = false) Integer responseTimeMs) {
+        return ResponseEntity.ok(ApiResponse.success(speakingService.answer(
+                sessionId, securityUtils.getCurrentUserId(), questionCode, audio, responseTimeMs)));
     }
 }
