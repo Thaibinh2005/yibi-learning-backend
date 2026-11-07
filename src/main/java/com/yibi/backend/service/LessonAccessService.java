@@ -8,6 +8,9 @@ import com.yibi.backend.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /** Learners open library lessons up to their own level; admins see everything. Level 7 is the HSK 7-9 band. */
@@ -31,7 +34,15 @@ public class LessonAccessService {
     public void requireCourse(Long courseId) {
         Integer level = jdbc.query("SELECT hsk_level FROM courses WHERE id = ?",
                 rs -> rs.next() ? (Integer) rs.getObject(1) : null, courseId);
-        if (level != null) requireLevel(level);
+        if (level == null) return;
+        // A guest only browses the library's lesson list; opening a lesson asks them to sign in first.
+        if (isGuest()) return;
+        requireLevel(level);
+    }
+
+    private boolean isGuest() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken;
     }
 
     /** A level as the practice API names it: "1" to "6" or "7-9". Anything else matches no question, so it passes. */
