@@ -8,12 +8,12 @@ import com.yibi.backend.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-/** Learners open library lessons up to their own level; admins see everything. Level 7 is the HSK 7-9 band. */
+/**
+ * The textbook library is open at every level, whatever the learner's place on the path: a library lesson only has
+ * to exist. Adaptive practice stays limited to the learner's own level; admins see everything. Level 7 is HSK 7-9.
+ */
 @Service
 @RequiredArgsConstructor
 public class LessonAccessService {
@@ -24,25 +24,13 @@ public class LessonAccessService {
     private final JdbcTemplate jdbc;
 
     public void requireLesson(Long lessonId) {
-        Integer level = jdbc.query("""
-                SELECT c.hsk_level FROM lessons l JOIN courses c ON c.id = l.course_id WHERE l.id = ?
-                """, rs -> rs.next() ? (Integer) rs.getObject(1) : null, lessonId);
-        if (level == null) throw new ResourceNotFoundException("Lesson", "id", lessonId);
-        requireLevel(level);
+        Boolean exists = jdbc.queryForObject("SELECT EXISTS (SELECT 1 FROM lessons WHERE id = ?)", Boolean.class, lessonId);
+        if (!Boolean.TRUE.equals(exists)) throw new ResourceNotFoundException("Lesson", "id", lessonId);
     }
 
+    /** A course's lesson list is open to everyone, guests included; an unknown course simply has no lessons. */
     public void requireCourse(Long courseId) {
-        Integer level = jdbc.query("SELECT hsk_level FROM courses WHERE id = ?",
-                rs -> rs.next() ? (Integer) rs.getObject(1) : null, courseId);
-        if (level == null) return;
-        // A guest only browses the library's lesson list; opening a lesson asks them to sign in first.
-        if (isGuest()) return;
-        requireLevel(level);
-    }
-
-    private boolean isGuest() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken;
+        // Nothing to check: kept so the library endpoints have one place to add a rule later.
     }
 
     /** A level as the practice API names it: "1" to "6" or "7-9". Anything else matches no question, so it passes. */
