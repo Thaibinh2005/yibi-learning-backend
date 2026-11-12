@@ -7,7 +7,10 @@ import com.yibi.backend.dto.srs.SrsReviewRequest;
 import com.yibi.backend.dto.srs.SrsStatsResponse;
 import com.yibi.backend.dto.srs.SrsAddLessonResponse;
 import com.yibi.backend.security.SecurityUtils;
+import com.yibi.backend.dto.srs.SrsWritingCardResponse;
+import com.yibi.backend.dto.srs.SrsWritingRateRequest;
 import com.yibi.backend.service.SrsService;
+import com.yibi.backend.service.SrsWritingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import java.util.UUID;
 public class SrsController {
 
     private final SrsService srsService;
+    private final SrsWritingService srsWritingService;
     private final SecurityUtils securityUtils;
     private final com.yibi.backend.service.LessonAccessService lessonAccess;
 
@@ -67,5 +71,19 @@ public class SrsController {
         UUID userId = securityUtils.getCurrentUserId();
         SrsCardResponse card = srsService.rateVocabulary(userId, request);
         return ResponseEntity.ok(ApiResponse.success("Rating recorded", card));
+    }
+
+    /** Written characters due for review today. */
+    @GetMapping("/writing/due")
+    public ResponseEntity<ApiResponse<List<SrsWritingCardResponse>>> getDueWritingCards() {
+        UUID userId = securityUtils.getCurrentUserId();
+        return ResponseEntity.ok(ApiResponse.success(srsWritingService.getDueCards(userId)));
+    }
+
+    /** Four-button rating of a written character; creates its card on the first rating. */
+    @PostMapping("/writing/rate")
+    public ResponseEntity<ApiResponse<SrsWritingCardResponse>> rateWriting(@Valid @RequestBody SrsWritingRateRequest request) {
+        UUID userId = securityUtils.getCurrentUserId();
+        return ResponseEntity.ok(ApiResponse.success("Rating recorded", srsWritingService.rate(userId, request)));
     }
 }
