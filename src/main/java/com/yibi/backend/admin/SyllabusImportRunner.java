@@ -1,6 +1,7 @@
 package com.yibi.backend.admin;
 
 import com.yibi.backend.service.CurriculumImportService;
+import com.yibi.backend.service.HanziSyllableImportService;
 import com.yibi.backend.service.SyllabusImportService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ public class SyllabusImportRunner implements ApplicationRunner {
 
     private final SyllabusImportService syllabusImportService;
     private final CurriculumImportService curriculumImportService;
+    private final HanziSyllableImportService hanziSyllableImportService;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -36,6 +38,9 @@ public class SyllabusImportRunner implements ApplicationRunner {
         CurriculumImportService.Result curriculum = curriculumImportService.run();
         log.info("Curriculum import finished: grammar rows={}, meanings={}, courses created={}, lessons created={}",
                 curriculum.grammarRows(), curriculum.meanings(), curriculum.courses(), curriculum.lessons());
+        HanziSyllableImportService.Result hanzi = hanziSyllableImportService.run();
+        log.info("Hanzi syllables import finished: characters={}, new readings={}, without a reading={}",
+                hanzi.characters(), hanzi.readings(), hanzi.skipped());
         System.exit(0);
     }
 }

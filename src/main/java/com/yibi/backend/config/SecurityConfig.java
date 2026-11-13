@@ -75,6 +75,7 @@ public class SecurityConfig {
                                 "/api/courses", "/api/courses/*",
                                 "/api/lessons/course/*",
                                 "/api/topics", "/api/topics/**",
+                                "/api/hanzi/**",
                                 "/api/vocabularies", "/api/vocabularies/**").permitAll()
 
                         // Admin-only: base-level block (per-method @PreAuthorize adds fine-grained control)
