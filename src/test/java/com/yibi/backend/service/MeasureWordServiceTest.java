@@ -31,4 +31,9 @@ class MeasureWordServiceTest {
         assertEquals("quyển, cuốn (sách, vở)", MeasureWordService.meaningOf("本", null));
         assertNull(MeasureWordService.meaningOf("不存在", null));
     }
+
+    @Test
+    void theBundledTranslationOfAnExamplePhraseIsFound() {
+        assertEquals("một quyển sách", new MeasureWordService(null).translations().get("一本书"));
+    }
 }

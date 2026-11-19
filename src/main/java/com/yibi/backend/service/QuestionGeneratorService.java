@@ -44,6 +44,7 @@ public class QuestionGeneratorService {
     private final JdbcTemplate jdbcTemplate;
     private final ObjectMapper objectMapper;
     private final TransactionTemplate transactionTemplate;
+    private final LevelMeaningService levelMeaningService;
 
     private static final String STANDARD_CODE = "NEW_HSK";
     private static final String VERSION_CODE  = "2025";
@@ -52,7 +53,9 @@ public class QuestionGeneratorService {
     public QuestionGeneratorService(
             JdbcTemplate jdbcTemplate,
             ObjectMapper objectMapper,
-            PlatformTransactionManager transactionManager) {
+            PlatformTransactionManager transactionManager,
+            LevelMeaningService levelMeaningService) {
+        this.levelMeaningService = levelMeaningService;
         this.jdbcTemplate = jdbcTemplate;
         this.objectMapper = objectMapper;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
@@ -161,6 +164,7 @@ public class QuestionGeneratorService {
                       WHERE qi.question_type = 'PHONETICS_SELECT'
                         AND qi.level_code = ?
                         AND qs.raw_record_id IS NOT NULL
+                        AND qi.status <> 'RETIRED'
                   )
                 ORDER BY vr.raw_record_id
                 LIMIT ?
@@ -277,10 +281,11 @@ public class QuestionGeneratorService {
                       WHERE qi.question_type = 'MEANING_HANZI'
                         AND qi.level_code = ?
                         AND qs.raw_record_id IS NOT NULL
+                        AND qi.status <> 'RETIRED'
                   )
                 ORDER BY vr.raw_record_id
                 LIMIT ?
-                """, level, level, limit * 3);
+                """, level, level, limit * 40);
 
         // Pool chữ Hán toàn cấp kèm reading và meaning để lọc đồng âm/đồng nghĩa
         List<Map<String, Object>> poolRows = jdbcTemplate.queryForList("""
@@ -295,20 +300,23 @@ public class QuestionGeneratorService {
                 """, level);
 
         List<HanziPoolItem> pool = poolRows.stream()
-                .map(r -> new HanziPoolItem(str(r.get("simplified")), str(r.get("pinyin")), str(r.get("meaning"))))
+                .map(r -> new HanziPoolItem(str(r.get("simplified")), str(r.get("pinyin")),
+                        meaningAtLevel(str(r.get("simplified")), level, str(r.get("pinyin")), str(r.get("meaning")))))
                 .filter(h -> !h.simplified.isBlank())
                 .toList();
 
         List<GeneratedQuestionPreview> results = new ArrayList<>();
         int validCount = 0;
+        java.util.Set<String> asked = askedWords("MEANING_HANZI", level);
 
         for (Map<String, Object> row : candidates) {
             if (validCount >= limit) break;
 
             String simplified = str(row.get("simplified"));
             String pinyin     = str(row.get("pinyin"));
-            String meaning    = str(row.get("meaning"));
+            String meaning    = meaningAtLevel(str(row.get("simplified")), level, str(row.get("pinyin")), str(row.get("meaning")));
             Long   rawId      = toLong(row.get("raw_record_id"));
+            if (!inScope(simplified, level, pinyin) || !asked.add(baseWord(simplified))) continue;
 
             if (simplified.isBlank() || pinyin.isBlank() || meaning.isBlank()) {
                 results.add(skip(rawId, simplified, "MEANING_HANZI", level, "characters",
@@ -392,10 +400,11 @@ public class QuestionGeneratorService {
                       WHERE qi.question_type = 'VOCAB_MEANING'
                         AND qi.level_code = ?
                         AND qs.raw_record_id IS NOT NULL
+                        AND qi.status <> 'RETIRED'
                   )
                 ORDER BY vr.raw_record_id
                 LIMIT ?
-                """, level, level, limit * 3);
+                """, level, level, limit * 40);
 
         // Pool nghĩa tiếng Việt của toàn bộ cấp HSK
         List<Map<String, Object>> poolRows = jdbcTemplate.queryForList("""
@@ -410,20 +419,24 @@ public class QuestionGeneratorService {
                 """, level);
 
         List<MeaningPoolItem> pool = poolRows.stream()
-                .map(r -> new MeaningPoolItem(str(r.get("simplified")), str(r.get("meaning"))))
+                .map(r -> new MeaningPoolItem(str(r.get("simplified")),
+                        meaningAtLevel(str(r.get("simplified")), level, null, str(r.get("meaning")))))
                 .filter(m -> !m.meaning.isBlank() && !m.meaning.contains("(dạng er hóa)") && !m.meaning.contains("(dạng uốn lưỡi)"))
+                .filter(m -> !levelMeaningService.coversLevel(level) || levelMeaningService.find(m.simplified, level, null).isPresent())
                 .toList();
 
         List<GeneratedQuestionPreview> results = new ArrayList<>();
         int validCount = 0;
+        java.util.Set<String> asked = askedWords("VOCAB_MEANING", level);
 
         for (Map<String, Object> row : candidates) {
             if (validCount >= limit) break;
 
             String simplified     = str(row.get("simplified"));
             String pinyin         = str(row.get("pinyin"));
-            String correctMeaning = cleanMeaning(str(row.get("meaning")));
+            String correctMeaning = cleanMeaning(meaningAtLevel(str(row.get("simplified")), level, str(row.get("pinyin")), str(row.get("meaning"))));
             Long   rawId          = toLong(row.get("raw_record_id"));
+            if (!inScope(simplified, level, pinyin) || !asked.add(baseWord(simplified))) continue;
 
             if (simplified.isBlank() || correctMeaning.isBlank()) {
                 results.add(skip(rawId, simplified, "VOCAB_MEANING", level, "vocabulary",
@@ -831,6 +844,38 @@ public class QuestionGeneratorService {
     private static Long   toLong(Object v) { return v == null ? null : ((Number) v).longValue(); }
 
     private record PinyinPoolItem(String simplified, String pinyin) {}
+    /**
+     * The meaning a question at this level asks: the main meaning the official syllabus introduces at the level
+     * (本 at HSK 1 "quyển", not the first dictionary sense "gốc"); a word outside the list keeps its dictionary sense.
+     */
+    private String meaningAtLevel(String simplified, String level, String pinyin, String dictionaryMeaning) {
+        return levelMeaningService.find(simplified, level, pinyin).map(m -> m.getMain()).orElse(dictionaryMeaning);
+    }
+
+    /**
+     * A meaning question asks only words the official syllabus teaches at the level, once a level has level meanings;
+     * the words other sources put at the level keep their dictionary meaning on the word pages but are not tested.
+     */
+    private boolean inScope(String simplified, String level, String pinyin) {
+        return !levelMeaningService.coversLevel(level) || levelMeaningService.find(simplified, level, pinyin).isPresent();
+    }
+
+    /** The words that already have a question of this type at the level (the syllabus lists most words several times). */
+    private java.util.Set<String> askedWords(String type, String level) {
+        java.util.Set<String> words = new java.util.HashSet<>();
+        jdbcTemplate.query("""
+                SELECT vr.simplified FROM question_bank_items qi
+                JOIN question_bank_sources qs ON qs.question_id = qi.id
+                JOIN hsk_vocabulary_records vr ON vr.raw_record_id = qs.raw_record_id
+                WHERE qi.question_type = ? AND qi.level_code = ? AND qi.status NOT IN ('RETIRED', 'REJECTED')
+                """, rs -> { words.add(baseWord(rs.getString(1))); }, type, level);
+        return words;
+    }
+
+    private static String baseWord(String simplified) {
+        return simplified == null ? "" : simplified.trim().replaceAll("[0-9]+$", "");
+    }
+
     private record HanziPoolItem(String simplified, String pinyin, String meaning) {}
     private record MeaningPoolItem(String simplified, String meaning) {}
 

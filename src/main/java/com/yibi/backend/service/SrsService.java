@@ -49,6 +49,26 @@ public class SrsService {
         return cards.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
+    /** Cards due today for the words of one of the learner's decks (matched by word, as the deck progress is). */
+    @Transactional(readOnly = true)
+    public List<SrsCardResponse> getDueCards(UUID userId, long deckId) {
+        Boolean owned = jdbc.queryForObject("SELECT EXISTS (SELECT 1 FROM vocab_decks WHERE id = ? AND user_id = ?)",
+                Boolean.class, deckId, userId);
+        if (!Boolean.TRUE.equals(owned)) throw new ResourceNotFoundException("Deck", "id", deckId);
+        List<Long> ids = jdbc.queryForList("""
+                SELECT c.id FROM srs_cards c
+                JOIN hsk_vocabulary_records cv ON cv.raw_record_id = c.hsk_vocabulary_record_id
+                WHERE c.user_id = ? AND c.due_date <= CURRENT_DATE
+                  AND EXISTS (
+                      SELECT 1 FROM vocab_deck_words w JOIN hsk_vocabulary_records v ON v.raw_record_id = w.hsk_vocabulary_record_id
+                      WHERE w.deck_id = ? AND v.simplified = cv.simplified)
+                ORDER BY c.due_date, c.id
+                """, Long.class, userId, deckId);
+        Map<Long, SrsCard> byId = srsCardRepository.findAllById(ids).stream()
+                .collect(Collectors.toMap(SrsCard::getId, card -> card));
+        return ids.stream().map(byId::get).filter(java.util.Objects::nonNull).map(this::mapToResponse).toList();
+    }
+
     @Transactional(readOnly = true)
     public SrsStatsResponse getSrsStats(UUID userId) {
         LocalDate today = LocalDate.now();
@@ -313,6 +333,7 @@ public class SrsService {
                 .exampleTranslation(v.getExampleTranslation())
                 .exampleAudioUrl(v.getExampleAudioUrl())
                 .measureWords(v.getMeasureWords())
+                .levelMeaning(v.getLevelMeaning())
                 .repetition(card.getRepetitions())
                 .intervalDays(card.getIntervalDays())
                 .easeFactor(card.getEaseFactor())

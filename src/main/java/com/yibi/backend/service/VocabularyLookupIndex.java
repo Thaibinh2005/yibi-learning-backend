@@ -74,6 +74,23 @@ public class VocabularyLookupIndex {
                 .toList();
     }
 
+    /** Every word and level matching a search as "simplified|level", for filtering a list the learner made (a deck). */
+    public java.util.Set<String> matchingWords(String search) {
+        VocabularySearchTerm term = VocabularySearchTerm.of(search);
+        java.util.Set<String> found = new java.util.HashSet<>();
+        for (Entry entry : current()) {
+            if (rank(entry, term) >= 0) found.add(entry.simplified() + "|" + entry.level());
+        }
+        return found;
+    }
+
+    /** For each "simplified|level", the reading most records of the word agree on at that level. */
+    public Map<String, String> readings() {
+        Map<String, String> result = new HashMap<>();
+        for (Entry entry : current()) result.put(entry.simplified() + "|" + entry.level(), entry.pinyin());
+        return result;
+    }
+
     private List<Entry> current() {
         if (entries == null || loadedAt.plus(REFRESH_AFTER).isBefore(Instant.now())) {
             synchronized (this) {

@@ -3,7 +3,9 @@ package com.yibi.backend.controller.vocabulary;
 import com.yibi.backend.dto.common.ApiResponse;
 import com.yibi.backend.dto.vocabulary.DailyVocabularyResponse;
 import com.yibi.backend.dto.vocabulary.VocabularyResponse;
+import com.yibi.backend.dto.vocabulary.WordDetailsDtos;
 import com.yibi.backend.service.VocabularyService;
+import com.yibi.backend.service.WordDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.util.List;
 public class VocabularyController {
 
     private final VocabularyService vocabularyService;
+    private final WordDetailsService wordDetailsService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<VocabularyResponse>>> getVocabularies(
@@ -46,6 +49,12 @@ public class VocabularyController {
     public ResponseEntity<ApiResponse<VocabularyResponse>> getVocabularyById(@PathVariable Long id) {
         VocabularyResponse response = vocabularyService.getVocabularyById(id);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /** For the word detail modal: stored examples, characters, words sharing a character and topics of the word. */
+    @GetMapping("/{id}/details")
+    public ResponseEntity<ApiResponse<WordDetailsDtos.WordDetailsResponse>> getWordDetails(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(wordDetailsService.details(id)));
     }
 
 }

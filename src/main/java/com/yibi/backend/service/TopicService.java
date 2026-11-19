@@ -22,6 +22,7 @@ public class TopicService {
 
     private final JdbcTemplate jdbc;
     private final MeasureWordService measureWordService;
+    private final LevelMeaningService levelMeaningService;
 
     @Transactional(readOnly = true)
     public List<TopicResponse> getTopics(String hskLevel, String search, String sort) {
@@ -137,7 +138,8 @@ public class TopicService {
                     FROM hsk_vocabulary_examples e
                     JOIN hsk_vocabulary_records ev ON ev.raw_record_id = e.raw_record_id
                     WHERE ev.simplified = v.simplified
-                    ORDER BY (ev.level_code IS NOT DISTINCT FROM v.level_code) DESC, e.id
+                    ORDER BY (ev.level_code IS NOT DISTINCT FROM v.level_code) DESC,
+                             (e.source = 'level_meaning') DESC, e.id
                     LIMIT 1
                 ) example ON TRUE
                 WHERE t.slug = ?
@@ -172,6 +174,7 @@ public class TopicService {
                     .audioUrl(rs.getString("audio_url"))
                     .createdAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime())
                     .updatedAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime())
+                    .levelMeaning(levelMeaningService.find(rs.getString("hanzi"), levelCode, rs.getString("pinyin")).orElse(null))
                     .build();
         }, slug, level, level, safeSize, (long) safePage * safeSize);
 
@@ -234,6 +237,9 @@ public class TopicService {
             if (meaning != null && meaning.contains(";")) {
                 meaning = meaning.split(";")[0].trim();
             }
+            // A sample word of the official list shows the meaning of its level rather than the first dictionary sense.
+            var levelMeaning = levelMeaningService.find(rs.getString("hanzi"), rs.getString("level_code"), rs.getString("pinyin"));
+            if (levelMeaning.isPresent()) meaning = levelMeaning.get().getMain();
 
             TopicResponse.SampleWordDto dto = TopicResponse.SampleWordDto.builder()
                     .id(rs.getLong("id"))

@@ -3,6 +3,7 @@ package com.yibi.backend.controller.placement;
 import com.yibi.backend.dto.common.ApiResponse;
 import com.yibi.backend.dto.placement.*;
 import com.yibi.backend.security.SecurityUtils;
+import com.yibi.backend.service.PlacementReviewService;
 import com.yibi.backend.service.PlacementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class PlacementController {
 
     private final PlacementService placementService;
+    private final PlacementReviewService placementReviewService;
     private final SecurityUtils securityUtils;
 
     @GetMapping("/status")
@@ -62,6 +65,18 @@ public class PlacementController {
     @GetMapping("/{attemptId}/result")
     public ResponseEntity<ApiResponse<PlacementResultResponse>> getResult(@PathVariable Long attemptId) {
         return ResponseEntity.ok(ApiResponse.success(placementService.getResult(currentUser(), attemptId)));
+    }
+
+    /** The learner's finished attempts, newest first. */
+    @GetMapping("/history")
+    public ResponseEntity<ApiResponse<List<PlacementHistoryItem>>> getHistory() {
+        return ResponseEntity.ok(ApiResponse.success(placementReviewService.history(currentUser())));
+    }
+
+    /** Every question of a finished attempt with the learner's answer, the right answer and the explanation. */
+    @GetMapping("/{attemptId}/review")
+    public ResponseEntity<ApiResponse<PlacementReviewResponse>> getReview(@PathVariable Long attemptId) {
+        return ResponseEntity.ok(ApiResponse.success(placementReviewService.review(currentUser(), attemptId)));
     }
 
     private UUID currentUser() {

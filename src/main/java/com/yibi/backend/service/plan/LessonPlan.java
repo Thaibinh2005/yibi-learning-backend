@@ -26,7 +26,6 @@ public final class LessonPlan {
     private static final int MORE_CHARACTERS = 2;
     private static final int MORE_PRONUNCIATION = 4;
     private static final int FLAG_BITS = 3;
-    private static final int REVISITED_WORDS = 2;
 
     private LessonPlan() { }
 
@@ -66,7 +65,17 @@ public final class LessonPlan {
         return ((long) (random >>> FLAG_BITS) << FLAG_BITS) | flags;
     }
 
+    /** A lesson at HSK 1; its depth follows the seed (see {@link KnowledgeDepth#forSeed}). */
     public static Plan build(Map<String, Object> content, List<Word> pool, List<String> characterPool, long seed) {
+        return build(content, pool, characterPool, seed, 1);
+    }
+
+    /**
+     * A lesson whose word cards and questions follow the depth of its HSK level, when the seed is marked with
+     * {@link KnowledgeDepth#LEVEL_RULES}; an older seed rebuilds the lesson exactly as it was first shown.
+     */
+    public static Plan build(Map<String, Object> content, List<Word> pool, List<String> characterPool, long seed, int hskLevel) {
+        KnowledgeDepth depth = KnowledgeDepth.forSeed(hskLevel, seed);
         int flags = (int) (seed & ((1 << FLAG_BITS) - 1));
         Random random = new Random(seed);
 
@@ -76,16 +85,17 @@ public final class LessonPlan {
         List<Block> wordBlocks = new ArrayList<>();
         for (int i = 0; i < taught.size(); i++) {
             Map<String, Object> word = taught.get(i);
-            String kind = i % 2 == 0 ? PathQuiz.MEANING_TO_HANZI : PathQuiz.HANZI_TO_MEANING;
-            Block block = new Block().show(new Step(TEACH_WORD, null, null, word)).ask(PathQuiz.ask(toWord(word), pool, kind, random));
+            String kind = depth.kinds().get(i % depth.kinds().size());
+            Block block = new Block().show(new Step(TEACH_WORD, null, null, forCard(word, depth)))
+                    .ask(PathQuiz.ask(toWord(word), pool, kind, depth, random));
             blocks.add(block);
             wordBlocks.add(block);
         }
 
         // A word comes back later in the lesson, asked by its pronunciation.
-        int revisited = (flags & MORE_PRONUNCIATION) != 0 ? taught.size() : Math.min(REVISITED_WORDS, taught.size());
+        int revisited = (flags & MORE_PRONUNCIATION) != 0 ? taught.size() : Math.min(depth.revisitedWords(), taught.size());
         for (int i = 0; i < revisited; i++) {
-            Question again = PathQuiz.ask(toWord(taught.get(i)), pool, PathQuiz.HANZI_TO_PINYIN, random);
+            Question again = PathQuiz.ask(toWord(taught.get(i)), pool, PathQuiz.HANZI_TO_PINYIN, depth, random);
             if (again != null) insertAfter(blocks, wordBlocks.get(i), new Block().ask(again), random);
         }
 
@@ -156,9 +166,33 @@ public final class LessonPlan {
         return new Plan(steps, questions);
     }
 
+    /** Set on a word whose meaning_vi and part_of_speech are those its level teaches (see PathLearningService). */
+    public static final String LEVEL_MEANING = "level_meaning";
+
     public static Word toWord(Map<String, Object> item) {
         String meaning = text(item.get("meaning_vi"));
-        return new Word(text(item.get("simplified")), text(item.get("pinyin")), meaning.isBlank() ? text(item.get("meaning_en")) : meaning);
+        String example = null;
+        String exampleMeaning = null;
+        if (item.get("example") instanceof Map<?, ?> sentence) {
+            example = text(sentence.get("zh"));
+            exampleMeaning = text(sentence.get("vi"));
+        }
+        return new Word(text(item.get("simplified")), text(item.get("pinyin")), meaning.isBlank() ? text(item.get("meaning_en")) : meaning,
+                example, exampleMeaning, text(item.get("part_of_speech")));
+    }
+
+    /** The word as its card shows it: only the meanings of the level, and at HSK 1 no long example. */
+    static Map<String, Object> forCard(Map<String, Object> word, KnowledgeDepth depth) {
+        if (depth == KnowledgeDepth.LEGACY) return word;
+        Map<String, Object> card = new java.util.LinkedHashMap<>(word);
+        // A meaning of the level from the syllabus is already cut to what the level teaches.
+        boolean ofLevel = Boolean.TRUE.equals(word.get(LEVEL_MEANING));
+        for (String key : ofLevel ? List.of("meaning_en") : List.of("meaning_vi", "meaning_en")) {
+            String meaning = text(word.get(key));
+            if (!meaning.isBlank()) card.put(key, depth.cardMeaning(meaning));
+        }
+        if (word.get("example") instanceof Map<?, ?> sentence && !depth.showsExample(text(sentence.get("zh")))) card.remove("example");
+        return card;
     }
 
     @SuppressWarnings("unchecked")

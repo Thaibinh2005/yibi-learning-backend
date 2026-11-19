@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yibi.backend.exception.BadRequestException;
 import com.yibi.backend.exception.ResourceNotFoundException;
 import com.yibi.backend.repository.SrsCardRepository;
+import com.yibi.backend.service.plan.KnowledgeDepth;
 import com.yibi.backend.service.plan.LessonPlan;
 import com.yibi.backend.service.plan.PathQuiz;
 import com.yibi.backend.service.plan.Roadmap;
@@ -40,6 +41,8 @@ public class PathLearningService {
     private final SrsCardRepository srsCardRepository;
     private final SpeechScoringClient speechClient;
     private final PathMistakeService mistakes;
+    private final PathExampleService examples;
+    private final LevelMeaningService levelMeanings;
 
     @org.springframework.beans.factory.annotation.Value("${app.speech.pass-accuracy:0.7}")
     private double speakingPassAccuracy;
@@ -77,8 +80,9 @@ public class PathLearningService {
         String status = requireOpen(userId, node);
         Integer best = jdbc.query("SELECT best_score FROM user_path_progress WHERE user_id = ? AND node_id = ?",
                 rs -> rs.next() ? rs.getInt(1) : 0, userId, nodeId);
+        // The lesson shows each word with what its level teaches, as the quizzes started from now on ask it.
         return new NodeDetail(node.id(), node.title(), node.type(), node.level(), node.unitTitle(), status,
-                best == null ? 0 : best, node.content());
+                best == null ? 0 : best, withLevelMeanings(node.content(), node.level()));
     }
 
     @Transactional(readOnly = true)
@@ -86,7 +90,9 @@ public class PathLearningService {
         NodeRow node = load(nodeId);
         requireOpen(userId, node);
         boolean lesson = LESSON.equals(node.type());
-        long seed = lesson ? LessonPlan.seed(learningService.goalType(userId), learningService.urgentSkills(userId), (int) newSeed()) : newSeed();
+        long seed = KnowledgeDepth.mark(lesson
+                ? LessonPlan.seed(learningService.goalType(userId), learningService.urgentSkills(userId), (int) newSeed())
+                : newSeed());
         List<PathQuiz.Question> questions = questionsOf(node, seed);
         List<String> keys = questions.stream().map(q -> PathMistakeService.keyOf(q.prompt(), q.answer())).toList();
         List<QuizQuestion> asked = new ArrayList<>(toQuiz(seed, 0, questions).questions());
@@ -200,7 +206,7 @@ public class PathLearningService {
     @Transactional(readOnly = true)
     public Quiz startLevelTest(UUID userId, int level) {
         requireLevelTest(userId, level);
-        long seed = newSeed();
+        long seed = KnowledgeDepth.mark(newSeed());
         return toQuiz(seed, passPercentOf(userId), levelTestQuestions(level, seed));
     }
 
@@ -308,32 +314,35 @@ public class PathLearningService {
     private List<PathQuiz.Question> questionsOf(NodeRow node, long seed) {
         if (LESSON.equals(node.type())) return lessonPlan(node, seed).questions();
         Random random = new Random(seed);
-        List<PathQuiz.Word> pool = wordPool(node.level());
+        List<PathQuiz.Word> pool = wordPool(node.level(), seed);
         return switch (node.type()) {
             case "DIALOGUE" -> PathQuiz.forPrepared(list(node.content().get("questions")), "reading", NODE_QUESTIONS, random);
             case "READING" -> PathQuiz.forPrepared(list(node.content().get("questions")), "reading", NODE_QUESTIONS, random);
             case "LISTENING" -> PathQuiz.forPrepared(list(node.content().get("questions")), "listening", NODE_QUESTIONS, random);
-            default -> checkpointQuestions(node, pool, random);
+            default -> checkpointQuestions(node, pool, KnowledgeDepth.forSeed(node.level(), seed), random, seed);
         };
     }
 
     private LessonPlan.Plan lessonPlan(NodeRow node, long seed) {
-        List<PathQuiz.Word> pool = wordPool(node.level());
-        return LessonPlan.build(node.content(), pool, characterPool(pool), seed);
+        List<PathQuiz.Word> pool = wordPool(node.level(), seed);
+        Map<String, Object> content = KnowledgeDepth.usesLevelMeanings(seed) ? withLevelMeanings(node.content(), node.level()) : node.content();
+        return LessonPlan.build(content, pool, characterPool(pool), seed, node.level());
     }
 
     /** Everything taught in the unit, in one short test. */
-    private List<PathQuiz.Question> checkpointQuestions(NodeRow node, List<PathQuiz.Word> pool, Random random) {
+    private List<PathQuiz.Question> checkpointQuestions(NodeRow node, List<PathQuiz.Word> pool, KnowledgeDepth depth, Random random, long seed) {
         List<NodeRow> siblings = jdbc.query("""
                 SELECT n.id, n.title, n.node_type, n.content::text FROM path_nodes n
                 WHERE n.unit_id = ? AND n.node_type <> 'CHECKPOINT' ORDER BY n.node_order
-                """, (rs, i) -> new NodeRow(rs.getLong(1), rs.getString(2), rs.getString(3), node.level(), node.unitId(), node.unitTitle(), parse(rs.getString(4))), node.unitId());
+                """, (rs, i) -> new NodeRow(rs.getLong(1), rs.getString(2), rs.getString(3), node.level(), node.unitId(), node.unitTitle(),
+                        examples.withExamples(parse(rs.getString(4)), node.level())), node.unitId());
         List<PathQuiz.Word> unitWords = new ArrayList<>();
         List<PathQuiz.Question> prepared = new ArrayList<>();
         for (NodeRow sibling : siblings) {
             switch (sibling.type()) {
                 case LESSON -> {
-                    unitWords.addAll(words(sibling.content()));
+                    unitWords.addAll(words(KnowledgeDepth.usesLevelMeanings(seed)
+                            ? withLevelMeanings(sibling.content(), node.level()) : sibling.content()));
                     prepared.addAll(PathQuiz.forPrepared(list(sibling.content().get("questions")), "grammar", 1, random));
                 }
                 case "DIALOGUE" -> prepared.addAll(PathQuiz.forPrepared(list(sibling.content().get("questions")), "reading", 1, random));
@@ -344,14 +353,14 @@ public class PathLearningService {
         }
         // Grammar from many lessons must not crowd out the dialogue and passages.
         Collections.shuffle(prepared, random);
-        List<PathQuiz.Question> all = new ArrayList<>(PathQuiz.forWords(unitWords, pool, CHECKPOINT_QUESTIONS - Math.min(prepared.size(), 4), random));
+        List<PathQuiz.Question> all = new ArrayList<>(PathQuiz.forWords(unitWords, pool, CHECKPOINT_QUESTIONS - Math.min(prepared.size(), 4), depth, random));
         all.addAll(prepared.subList(0, Math.min(prepared.size(), 4)));
         return PathQuiz.mix(all, CHECKPOINT_QUESTIONS, random);
     }
 
     private List<PathQuiz.Question> levelTestQuestions(int level, long seed) {
         Random random = new Random(seed);
-        List<PathQuiz.Word> pool = wordPool(level);
+        List<PathQuiz.Word> pool = wordPool(level, seed);
         Map<String, List<Map<String, Object>>> preparedBySkill = new TreeMap<>();
         jdbc.query("""
                 SELECT n.node_type, n.content->'questions' FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
@@ -366,22 +375,58 @@ public class PathLearningService {
             };
             preparedBySkill.computeIfAbsent(skill, key -> new ArrayList<>()).addAll(parseList(json));
         }, level);
-        List<PathQuiz.Question> all = new ArrayList<>(PathQuiz.forWords(pool, pool, 13, random));
+        List<PathQuiz.Question> all = new ArrayList<>(PathQuiz.forWords(pool, pool, 13, KnowledgeDepth.forSeed(level, seed), random));
         int perSkill = preparedBySkill.isEmpty() ? 0 : (LEVEL_TEST_QUESTIONS - all.size()) / preparedBySkill.size();
         preparedBySkill.forEach((skill, prepared) -> all.addAll(PathQuiz.forPrepared(prepared, skill, perSkill, random)));
         return PathQuiz.mix(all, LEVEL_TEST_QUESTIONS, random);
     }
 
     /** Wrong options come from the same level. Ordered, so a seed reproduces the same options. */
-    private List<PathQuiz.Word> wordPool(int level) {
-        List<PathQuiz.Word> pool = new ArrayList<>();
+    private List<PathQuiz.Word> wordPool(int level, long seed) {
+        List<Map<String, Object>> items = new ArrayList<>();
         jdbc.query("""
                 SELECT n.content->'words' FROM path_nodes n JOIN path_units u ON u.id = n.unit_id
                 WHERE u.hsk_level = ? AND n.node_type = 'LESSON' ORDER BY n.id
                 """, rs -> {
-            pool.addAll(toWords(parseList(rs.getString(1))));
+            items.addAll(parseList(rs.getString(1)));
         }, level);
-        return pool;
+        List<Map<String, Object>> words = examples.withExamples(items, level);
+        return new ArrayList<>(toWords(KnowledgeDepth.usesLevelMeanings(seed) ? atLevel(words, level) : words));
+    }
+
+    /** The lesson content with each word's meaning and word class those its level teaches (see {@link #atLevel}). */
+    private Map<String, Object> withLevelMeanings(Map<String, Object> content, int level) {
+        if (!(content.get("words") instanceof List<?>)) return content;
+        Map<String, Object> copy = new java.util.LinkedHashMap<>(content);
+        copy.put("words", atLevel(list(content.get("words")), level));
+        return copy;
+    }
+
+    /**
+     * A lesson, checkpoint or level test asks only what its level teaches: a word of the official syllabus gets
+     * the main and secondary meanings and the word classes introduced at this level (分 at HSK 3: "chia", 动、名);
+     * any other word keeps its dictionary meaning.
+     */
+    private List<Map<String, Object>> atLevel(List<Map<String, Object>> words, int level) {
+        String code = level >= MAX_LEVEL ? "7-9" : String.valueOf(level);
+        List<Map<String, Object>> result = new ArrayList<>(words.size());
+        for (Map<String, Object> word : words) {
+            var meaning = levelMeanings.find(String.valueOf(word.get("simplified")), code,
+                    word.get("pinyin") == null ? null : String.valueOf(word.get("pinyin")));
+            if (meaning.isEmpty()) {
+                result.add(word);
+                continue;
+            }
+            Map<String, Object> copy = new java.util.LinkedHashMap<>(word);
+            List<String> senses = new ArrayList<>();
+            senses.add(meaning.get().getMain());
+            senses.addAll(meaning.get().getSecondary());
+            copy.put("meaning_vi", String.join("; ", senses));
+            if (meaning.get().getPartOfSpeech() != null) copy.put("part_of_speech", meaning.get().getPartOfSpeech());
+            copy.put(LessonPlan.LEVEL_MEANING, true);
+            result.add(copy);
+        }
+        return result;
     }
 
     private static List<String> characterPool(List<PathQuiz.Word> pool) {
@@ -395,8 +440,7 @@ public class PathLearningService {
     }
 
     private static List<PathQuiz.Word> toWords(List<Map<String, Object>> items) {
-        return items.stream().map(item -> new PathQuiz.Word(text(item.get("simplified")), text(item.get("pinyin")),
-                !text(item.get("meaning_vi")).isBlank() ? text(item.get("meaning_vi")) : text(item.get("meaning_en")))).toList();
+        return items.stream().map(LessonPlan::toWord).toList();
     }
 
     private NodeRow load(long nodeId) {
@@ -404,7 +448,7 @@ public class PathLearningService {
                 SELECT n.id, n.title, n.node_type, u.hsk_level, u.id, u.title_vi, n.content::text
                 FROM path_nodes n JOIN path_units u ON u.id = n.unit_id WHERE n.id = ?
                 """, rs -> rs.next() ? new NodeRow(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getInt(4),
-                rs.getLong(5), rs.getString(6), parse(rs.getString(7))) : null, nodeId);
+                rs.getLong(5), rs.getString(6), examples.withExamples(parse(rs.getString(7)), rs.getInt(4))) : null, nodeId);
         if (node == null) throw new ResourceNotFoundException("Path node", "id", nodeId);
         return node;
     }

@@ -1,10 +1,17 @@
 package com.yibi.backend.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yibi.backend.dto.vocabulary.MeasureWordResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.Normalizer;
 import java.util.*;
 
@@ -12,14 +19,19 @@ import java.util.*;
  * Looks up measure words (量词) for nouns from measure_word_links
  * (built by scripts/extract_measure_words.py).
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MeasureWordService {
+
+    /** Vietnamese translations of the example phrases (一本书 -> một quyển sách), made by translate_measure_words.py. */
+    static final String TRANSLATIONS = "data/measure_word_phrases.json";
 
     /** Show at most this many measure words per noun (CEDICT order = most common first). */
     static final int MAX_PER_NOUN = 3;
 
     private final JdbcTemplate jdbc;
+    private volatile Map<String, String> translations;
 
     /** Strip homograph digits used by some sources: 会1 -> 会. */
     public static String cleanNoun(String hanzi) {
@@ -72,11 +84,30 @@ public class MeasureWordService {
                     .pinyin(mwPinyin)
                     .meaningVi(meaningOf(mw, rs.getString("meaning")))
                     .examplePhrase("一" + mw + noun)
+                    .exampleTranslation(translations().get("一" + mw + noun))
                     .examplePinyin(yiWithSandhi(mwPinyin) + " " + mwPinyin
                             + (nounPy == null || nounPy.isBlank() ? "" : " " + nounPy.trim()))
                     .build());
         }, nouns.toArray());
         return result;
+    }
+
+    /** The bundled translations, read once; an empty map when the file is missing or unreadable. */
+    Map<String, String> translations() {
+        Map<String, String> loaded = translations;
+        if (loaded != null) return loaded;
+        loaded = Map.of();
+        ClassPathResource resource = new ClassPathResource(TRANSLATIONS);
+        if (resource.exists()) {
+            try (InputStream in = resource.getInputStream()) {
+                JsonNode phrases = new ObjectMapper().readTree(in).path("phrases");
+                if (phrases.isObject()) loaded = Map.copyOf(new ObjectMapper().convertValue(phrases, new TypeReference<Map<String, String>>() { }));
+            } catch (IOException ex) {
+                log.warn("Cannot read {}: {}", TRANSLATIONS, ex.getMessage());
+            }
+        }
+        translations = loaded;
+        return loaded;
     }
 
     public List<MeasureWordResponse> findForNoun(String hanzi, String pinyin) {

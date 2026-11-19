@@ -23,4 +23,6 @@ public class MeasureWordResponse {
     private String examplePhrase;
     /** Example pinyin with 一 tone sandhi applied, e.g. yì běn shū */
     private String examplePinyin;
+    /** Vietnamese translation of the example, e.g. "một quyển sách"; null when none has been written yet */
+    private String exampleTranslation;
 }

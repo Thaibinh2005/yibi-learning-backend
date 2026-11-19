@@ -34,4 +34,7 @@ public class VocabularyResponse {
 
     /** Measure words (量词) used with this noun; empty when none. */
     private java.util.List<com.yibi.backend.dto.vocabulary.MeasureWordResponse> measureWords;
+
+    /** The meaning for this level from the official syllabus; null when the word keeps its dictionary meaning. */
+    private com.yibi.backend.dto.vocabulary.LevelMeaningResponse levelMeaning;
 }

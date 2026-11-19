@@ -28,6 +28,7 @@ public class VocabularyService {
     private final JdbcTemplate jdbc;
     private final MeasureWordService measureWordService;
     private final VocabularyLookupIndex lookupIndex;
+    private final LevelMeaningService levelMeaningService;
 
     private static final String SELECT = """
             SELECT v.raw_record_id AS id, v.simplified AS hanzi, v.traditional AS hanzi_traditional,
@@ -51,7 +52,8 @@ public class VocabularyService {
                 FROM hsk_vocabulary_examples e
                 JOIN hsk_vocabulary_records ev ON ev.raw_record_id = e.raw_record_id
                 WHERE ev.simplified = v.simplified
-                ORDER BY (ev.level_code IS NOT DISTINCT FROM v.level_code) DESC, e.id
+                ORDER BY (ev.level_code IS NOT DISTINCT FROM v.level_code) DESC,
+                         (e.source = 'level_meaning') DESC, e.id
                 LIMIT 1
             ) example ON TRUE
             """;
@@ -73,6 +75,7 @@ public class VocabularyService {
             VocabularyResponse word = byId.get(hit.recordId());
             if (word != null) {
                 word.setPinyin(hit.pinyin());
+                word.setLevelMeaning(levelMeaningService.find(word.getHanzi(), word.getLevelCode(), word.getPinyin()).orElse(null));
                 words.add(word);
             }
         }
@@ -126,6 +129,7 @@ public class VocabularyService {
                     .date(date)
                     .dateLabel(dateLabel)
                     .isToday(i == 0)
+                    .levelMeaning(v.getLevelMeaning())
                     .build());
         }
 
@@ -159,6 +163,7 @@ public class VocabularyService {
                 .dateLabel("Từ vựng ngẫu nhiên hôm nay")
                 .isToday(true)
                 .measureWords(measureWordService.findForNoun(v.getHanzi(), v.getPinyin()))
+                .levelMeaning(v.getLevelMeaning())
                 .build();
     }
 
@@ -243,6 +248,8 @@ public class VocabularyService {
         if (levelCode != null && levelCode.matches("[1-6]")) numericLevel = Integer.valueOf(levelCode);
         String definitions = rs.getString("definitions_source");
         String definitionsLanguage = rs.getString("definitions_language");
+        String hanzi = rs.getString("hanzi");
+        String pinyin = rs.getString("pinyin");
         return VocabularyResponse.builder()
                 .id(rs.getLong("id"))
                 .hanzi(rs.getString("hanzi"))
@@ -260,6 +267,7 @@ public class VocabularyService {
                 .audioUrl(rs.getString("audio_url"))
                 .createdAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime())
                 .updatedAt(rs.getTimestamp("created_at") == null ? null : rs.getTimestamp("created_at").toLocalDateTime())
+                .levelMeaning(levelMeaningService.find(hanzi, levelCode, pinyin).orElse(null))
                 .build();
     }
 }

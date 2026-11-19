@@ -26,6 +26,7 @@ public class LessonService {
     private final LessonRepository lessonRepository;
     private final CourseRepository courseRepository;
     private final JdbcTemplate jdbc;
+    private final PathExampleService examples;
 
     @Transactional(readOnly = true)
     public List<LessonResponse> getLessonsByCourseId(Long courseId) {
@@ -115,7 +116,10 @@ public class LessonService {
                 .lessonOrder(lesson.getLessonOrder())
                 .contentType(lesson.getContentType())
                 .contentRefId(lesson.getContentRefId())
-                .lessonPayload(lesson.getLessonPayload())
+                // A copy with Vietnamese example sentences; the stored payload is left as it is.
+                .lessonPayload(lesson.getCourse() != null && lesson.getCourse().getHskLevel() != null
+                        ? examples.withLessonExamples(lesson.getLessonPayload(), lesson.getCourse().getHskLevel())
+                        : lesson.getLessonPayload())
                 .createdAt(lesson.getCreatedAt())
                 .updatedAt(lesson.getUpdatedAt())
                 .build();

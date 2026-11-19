@@ -5,6 +5,7 @@ import com.yibi.backend.dto.auth.AuthResponse;
 import com.yibi.backend.dto.auth.LoginRequest;
 import com.yibi.backend.dto.auth.RegisterRequest;
 import com.yibi.backend.entity.Role;
+import com.yibi.backend.exception.BadRequestException;
 import com.yibi.backend.entity.User;
 import com.yibi.backend.repository.UserRepository;
 import com.yibi.backend.security.JwtTokenProvider;
@@ -63,6 +64,30 @@ public class AuthService {
         user = userRepository.save(user);
         log.info("New user registered: {} ({})", user.getUsername(), user.getEmail());
 
+        return buildAuthResponse(user);
+    }
+
+    /**
+     * Creates the account once its email has been proven with a code (see RegistrationOtpService) and signs it in.
+     * The password arrives already hashed: it was hashed when the code was requested and only the hash was kept.
+     */
+    @Transactional
+    public AuthResponse registerVerified(String username, String email, String passwordHash) {
+        if (userRepository.existsByUsername(username)) {
+            throw new BadRequestException("Tên đăng nhập '" + username + "' đã có người dùng. Hãy đăng ký lại với tên khác.");
+        }
+        if (userRepository.existsByEmail(email)) {
+            throw new BadRequestException("Email này đã được đăng ký. Hãy đăng nhập.");
+        }
+        User user = userRepository.save(User.builder()
+                .username(username)
+                .email(email)
+                .passwordHash(passwordHash)
+                .role(Role.ROLE_USER)
+                .isActive(true)
+                .lastLogin(LocalDateTime.now())
+                .build());
+        log.info("New user registered with a verified email: {}", user.getUsername());
         return buildAuthResponse(user);
     }
 

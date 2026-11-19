@@ -41,7 +41,8 @@ public class PlacementService {
             "'listening','reading','vocabulary','grammar','characters','writing','speaking'";
     private static final String SKILL_FILTER_WITHOUT_SPEAKING =
             "'listening','reading','vocabulary','grammar','characters','writing'";
-    private static final Map<String, String> SKILL_LABELS = Map.of(
+    /** Vietnamese skill names, shared with PlacementReviewService. */
+    static final Map<String, String> SKILL_LABELS = Map.of(
             "listening", "Nghe hiểu", "reading", "Đọc hiểu", "vocabulary", "Từ vựng", "grammar", "Ngữ pháp",
             "characters", "Chữ Hán", "writing", "Viết câu", "speaking", "Phát âm");
 

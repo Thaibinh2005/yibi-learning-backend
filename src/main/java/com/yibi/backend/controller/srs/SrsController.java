@@ -26,14 +26,23 @@ public class SrsController {
 
     private final SrsService srsService;
     private final SrsWritingService srsWritingService;
+    private final com.yibi.backend.service.WordDetailsService wordDetailsService;
     private final SecurityUtils securityUtils;
     private final com.yibi.backend.service.LessonAccessService lessonAccess;
 
+    /** Cards due today; with deckId, only the words of that deck of the learner. */
     @GetMapping("/due")
-    public ResponseEntity<ApiResponse<List<SrsCardResponse>>> getDueCards() {
+    public ResponseEntity<ApiResponse<List<SrsCardResponse>>> getDueCards(@RequestParam(required = false) Long deckId) {
         UUID userId = securityUtils.getCurrentUserId();
-        List<SrsCardResponse> dueCards = srsService.getDueCards(userId);
+        List<SrsCardResponse> dueCards = deckId == null ? srsService.getDueCards(userId) : srsService.getDueCards(userId, deckId);
         return ResponseEntity.ok(ApiResponse.success(dueCards));
+    }
+
+    /** The learner's flashcard for a word (null if none) and their decks, marking those holding it. */
+    @GetMapping("/words/{vocabularyId}")
+    public ResponseEntity<ApiResponse<com.yibi.backend.dto.vocabulary.WordDetailsDtos.WordStudyResponse>> getWordStudy(
+            @PathVariable Long vocabularyId) {
+        return ResponseEntity.ok(ApiResponse.success(wordDetailsService.study(securityUtils.getCurrentUserId(), vocabularyId)));
     }
 
     @GetMapping("/stats")
