@@ -91,6 +91,24 @@ public class VocabularyLookupIndex {
         return result;
     }
 
+    /** A word of the HSK bank as used to split a sentence: its record at the lowest level and that reading. */
+    public record DictionaryWord(long recordId, String level, String pinyin) {}
+
+    /** Every simplified word with its lowest-level record, for splitting Chinese text into known words. */
+    public Map<String, DictionaryWord> dictionary() {
+        Map<String, DictionaryWord> result = new HashMap<>();
+        for (Entry entry : current()) {
+            if (entry.pinyin() == null || entry.pinyin().isBlank()) continue;
+            result.merge(entry.simplified(), new DictionaryWord(entry.recordId(), entry.level(), entry.pinyin()),
+                    (a, b) -> levelOrder(b.level()) < levelOrder(a.level()) ? b : a);
+        }
+        return result;
+    }
+
+    private static int levelOrder(String level) {
+        return level == null ? 99 : level.startsWith("7") ? 7 : level.chars().allMatch(Character::isDigit) ? Integer.parseInt(level) : 98;
+    }
+
     private List<Entry> current() {
         if (entries == null || loadedAt.plus(REFRESH_AFTER).isBefore(Instant.now())) {
             synchronized (this) {

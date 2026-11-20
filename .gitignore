@@ -31,3 +31,6 @@ bin/
 .DS_Store
 Thumbs.db
 .env.auth
+
+# Learners uploaded audio/video (local media storage)
+media-storage/

@@ -94,8 +94,9 @@ spring:
   # A short recording of one sentence; the speaking question uploads it.
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 6MB
+      # Raised for learners' audio/video uploads; MultipartSizeFilter keeps every other upload at 6 MB.
+      max-file-size: 110MB
+      max-request-size: 112MB
 
 # Gemini is called only by the backend. Keep keys in environment variables.
 app:
@@ -119,6 +120,15 @@ app:
   speech:
     base-url: ${SPEECH_SERVICE_URL:http://localhost:8001}
     pass-accuracy: ${SPEECH_PASS_ACCURACY:0.7}
+  # Learners' own dictation/shadowing material. Files go to the local disk for now (app.media.storage=local).
+  media:
+    storage: ${MEDIA_STORAGE:local}
+    dir: ${MEDIA_DIR:./media-storage}
+  listening:
+    max-videos-per-day: ${LISTENING_MAX_VIDEOS_PER_DAY:5}
+    max-translated-segments-per-day: ${LISTENING_MAX_TRANSLATED_PER_DAY:300}
+    max-media-mb: ${LISTENING_MAX_MEDIA_MB:100}
+    max-media-minutes: ${LISTENING_MAX_MEDIA_MINUTES:20}
 
 # ── Server ──────────────────────────────────────────────────
 server:

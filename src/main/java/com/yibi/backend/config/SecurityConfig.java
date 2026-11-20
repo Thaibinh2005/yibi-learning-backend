@@ -70,6 +70,11 @@ public class SecurityConfig {
                         // Public endpoints
                         .requestMatchers("/api/auth/**").permitAll()
 
+                        // A learner's media file, opened by the player with a signed, expiring link (checked in the service).
+                        .requestMatchers(HttpMethod.GET, "/api/listening/media/*").permitAll()
+                        // The community listening library is browsable by guests; opening a lesson needs an account.
+                        .requestMatchers(HttpMethod.GET, "/api/listening/library", "/api/listening/library/**").permitAll()
+
                         // Guests may browse read-only content: the course library, topics and vocabulary.
                         .requestMatchers(HttpMethod.GET,
                                 "/api/courses", "/api/courses/*",
