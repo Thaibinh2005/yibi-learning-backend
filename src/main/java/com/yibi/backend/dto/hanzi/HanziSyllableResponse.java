@@ -14,6 +14,6 @@ public class HanziSyllableResponse {
 
     private String hanzi;
     private String pinyin;
-    /** "1" to "6", "7-9", or "1-2" for the list shared by levels 1 and 2. */
+    /** "1" to "6", or "7-9". */
     private String levelCode;
 }

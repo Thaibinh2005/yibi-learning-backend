@@ -40,7 +40,7 @@ public class HanziService {
         return jdbc.query(sql.toString(), (rs, i) -> map(rs.getString(1), rs.getString(2), rs.getString(3)), args.toArray());
     }
 
-    /** All writing characters, optionally of one level ("1" to "6", "7-9", "1-2"); the first reading of each. */
+    /** All writing characters, optionally of one level ("1" to "6", "7-9"); the first reading of each. */
     /** Accepts v for ü, and u after j, q, x, where the final is stored as ü. */
     private static String normaliseFinal(String initial, String finalSound) {
         if (finalSound == null) return null;
