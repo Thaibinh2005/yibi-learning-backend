@@ -17,6 +17,23 @@ mvn spring-boot:run
 - `--import-passage-audio` uploads the mp3 files in `data/passage-audio` (named by passage, e.g. `L3-P2.mp3`)
   to MinIO and links them to the listening lessons. Run it after the first import.
 - Run the frontend on port 5173; the backend allows CORS from that origin only.
+- At startup the backend also loads the bundled AI example sentences (`hsk_ai_examples.json`) and level
+  meanings (`hsk_level_meanings.json`); nothing to run, and no Gemini key is needed for them.
+
+## Dictation & shadowing (Nghe & Nói)
+
+- Start the speech service (`yibi-speech-service` on port 8001, or set `SPEECH_SERVICE_URL`; run
+  `pip install -r requirements.txt` first):
+  it reads YouTube subtitles, transcribes uploaded files with Whisper and scores shadowing. Without it,
+  learners can still add typed text.
+- Vietnamese translations come from Gemini: put `GEMINI_API_KEY` (and optional `GEMINI_API_KEY_FALLBACK_1..2`)
+  in `yibi-backend/.env` or the `.env` one folder up; the backend reads only the `GEMINI_*` entries from it.
+  Without a key, lessons still get pinyin.
+- Flyway V30 turns the old `video_transcripts` table into `listening_lessons` + `media_sources` and cannot be
+  undone: back up your database before the first start on this version. It also creates 7 starter categories.
+- Uploaded files are stored in `./media-storage` (git-ignored). Limits are set with `LISTENING_*` variables
+  (5 videos and 300 translated sentences per learner per day, 100 MB / 20 minutes per file).
+- Community lessons are not bundled: each database has its own; admins publish them in the "Thư viện video" tab.
 
 Sources: meanings from CVDICT (CC BY-SA 4.0), grammar from krmanik/HSK-3.0, examples from Tatoeba
 (CC BY 2.0 FR), passages written with Gemini and not reviewed. Audio is made with edge-tts.
