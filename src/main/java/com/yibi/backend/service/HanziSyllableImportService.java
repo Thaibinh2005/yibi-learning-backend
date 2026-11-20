@@ -19,7 +19,8 @@ import java.util.Set;
 
 /**
  * Fills hanzi_syllables with every pinyin reading of the HSK writing characters (书写字),
- * split into initial, final and tone. Safe to run again: existing rows are kept.
+ * split into initial, final and tone. Safe to run again: existing rows are kept. The standard has one
+ * shared writing list for levels 1 and 2, so each of its characters is level 1 or 2 by the recognition lists.
  */
 @Slf4j
 @Service
@@ -33,9 +34,11 @@ public class HanziSyllableImportService {
     @Transactional
     public Result run() {
         List<Map<String, Object>> rows = jdbc.queryForList("""
-                SELECT hanzi, COALESCE(level_code, '1-2') AS level_code
-                FROM hsk_hanzi_records
-                WHERE source_level_label LIKE '%书写字' AND char_length(hanzi) = 1
+                SELECT w.hanzi, COALESCE(w.level_code, CASE WHEN EXISTS (
+                           SELECT 1 FROM hsk_hanzi_records r WHERE r.hanzi = w.hanzi AND r.level_code = '1')
+                       THEN '1' ELSE '2' END) AS level_code
+                FROM hsk_hanzi_records w
+                WHERE w.source_level_label LIKE '%书写字' AND char_length(w.hanzi) = 1
                 """);
         int readings = 0;
         int skipped = 0;
