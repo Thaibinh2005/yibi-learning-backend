@@ -43,4 +43,7 @@ public final class WordDetailsDtos {
                        LocalDateTime lastReviewed, boolean due) {}
 
     public record DeckMembership(Long id, String name, boolean contains) {}
+
+    /** One word's flashcard state for the learner; a word with no flashcard has no entry. status as in {@link Card}. */
+    public record WordStatus(Long vocabularyId, String status, boolean due) {}
 }
