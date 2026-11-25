@@ -4,6 +4,7 @@ import com.yibi.backend.dto.common.ApiResponse;
 import com.yibi.backend.dto.vocabulary.DailyVocabularyResponse;
 import com.yibi.backend.dto.vocabulary.VocabularyResponse;
 import com.yibi.backend.dto.vocabulary.WordDetailsDtos;
+import com.yibi.backend.service.LessonAccessService;
 import com.yibi.backend.service.VocabularyService;
 import com.yibi.backend.service.WordDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class VocabularyController {
 
     private final VocabularyService vocabularyService;
     private final WordDetailsService wordDetailsService;
+    private final LessonAccessService lessonAccess;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<VocabularyResponse>>> getVocabularies(
@@ -43,6 +45,13 @@ public class VocabularyController {
             @RequestParam(required = false) String hskLevel) {
         DailyVocabularyResponse response = vocabularyService.getRandomVocabulary(hskLevel);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /** The words of one lesson, for studying them as flashcards in place. */
+    @GetMapping("/lesson/{lessonId}")
+    public ResponseEntity<ApiResponse<List<VocabularyResponse>>> getLessonVocabularies(@PathVariable Long lessonId) {
+        lessonAccess.requireLesson(lessonId);
+        return ResponseEntity.ok(ApiResponse.success(vocabularyService.getLessonVocabularies(lessonId)));
     }
 
     @GetMapping("/{id}")

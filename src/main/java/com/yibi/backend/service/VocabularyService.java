@@ -16,8 +16,10 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 /** Read-only vocabulary catalog backed by the source-preserving HSK V6 tables. */
@@ -88,6 +90,44 @@ public class VocabularyService {
                 .findFirst().orElseThrow(() -> new ResourceNotFoundException("Vocabulary", "id", id));
         v.setMeasureWords(measureWordService.findForNoun(v.getHanzi(), v.getPinyin()));
         return v;
+    }
+
+    /** The words of a lesson in lesson order, each as the record the flashcard deck links it to (same rule as adding a lesson). */
+    @Transactional(readOnly = true)
+    public List<VocabularyResponse> getLessonVocabularies(Long lessonId) {
+        List<Long> ids = jdbc.queryForList("""
+                SELECT (SELECT min(v2.raw_record_id)
+                        FROM lesson_content_items i2
+                        JOIN lessons l2 ON l2.id = i2.lesson_id
+                        JOIN courses c2 ON c2.id = l2.course_id
+                        JOIN hsk_vocabulary_records v2 ON v2.raw_record_id = i2.raw_record_id
+                        WHERE c2.hsk_level = c.hsk_level AND i2.content_type = 'VOCABULARY'
+                          AND v2.simplified = v.simplified)
+                FROM lesson_content_items i
+                JOIN lessons l ON l.id = i.lesson_id
+                JOIN courses c ON c.id = l.course_id
+                JOIN hsk_vocabulary_records v ON v.raw_record_id = i.raw_record_id
+                WHERE i.lesson_id = ? AND i.content_type = 'VOCABULARY'
+                ORDER BY i.item_order, i.id
+                """, Long.class, lessonId);
+        List<Long> ordered = new LinkedHashSet<>(ids).stream().filter(Objects::nonNull).toList();
+        if (ordered.isEmpty()) {
+            return List.of();
+        }
+        Map<Long, VocabularyResponse> byId = new HashMap<>();
+        String marks = String.join(",", Collections.nCopies(ordered.size(), "?"));
+        jdbc.query(SELECT + " WHERE v.raw_record_id IN (" + marks + ")", this::mapRow, ordered.toArray())
+                .forEach(word -> byId.put(word.getId(), word));
+        List<VocabularyResponse> words = new ArrayList<>(ordered.size());
+        for (Long id : ordered) {
+            VocabularyResponse word = byId.get(id);
+            if (word != null) {
+                word.setMeasureWords(measureWordService.findForNoun(word.getHanzi(), word.getPinyin()));
+                word.setLevelMeaning(levelMeaningService.find(word.getHanzi(), word.getLevelCode(), word.getPinyin()).orElse(null));
+                words.add(word);
+            }
+        }
+        return words;
     }
 
     @Transactional(readOnly = true)

@@ -1,0 +1,2112 @@
+{
+  "level": "2",
+  "source": "Written for Yibi on the outline of the 2025 HSK syllabus (hsk_grammar_2025.json); examples are original sentences.",
+  "notes": [
+    {
+      "category": "语素",
+      "categoryName": "后缀",
+      "subcategory": "",
+      "content": "面",
+      "title": "Hậu tố 面",
+      "structure": "Từ phương vị + 面",
+      "explanation": "面 thêm sau từ phương vị thành 上面, 下面, 里面, 外面, 前面, 后面…, chỉ vị trí, gần nghĩa với 边. Dạng này cũng dùng như danh từ đứng riêng: 前面是学校.",
+      "examples": [
+        {
+          "zh": "桌子上面有一本书。",
+          "pinyin": "zhuō zi shàng miàn yǒu yì běn shū。",
+          "vi": "Trên bàn có một quyển sách."
+        },
+        {
+          "zh": "前面是我的学校。",
+          "pinyin": "qián miàn shì wǒ de xué xiào。",
+          "vi": "Phía trước là trường của tôi."
+        },
+        {
+          "zh": "他在外面等你。",
+          "pinyin": "tā zài wài miàn děng nǐ。",
+          "vi": "Anh ấy đang đợi bạn ở bên ngoài."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "名词",
+      "subcategory": "方位名词",
+      "content": "左、右",
+      "title": "Danh từ phương vị 左 và 右",
+      "structure": "左 / 右 + 边 (面)  ·  往 + 左 / 右 + Động từ",
+      "explanation": "左 là trái, 右 là phải; thường ghép thành 左边, 右边 hoặc đứng sau danh từ (学校左边). Khi chỉ đường dùng 往左, 往右 (về bên trái, bên phải).",
+      "examples": [
+        {
+          "zh": "我的左边是王老师。",
+          "pinyin": "wǒ de zuǒ bian shì wáng lǎo shī。",
+          "vi": "Bên trái tôi là thầy Vương."
+        },
+        {
+          "zh": "学校在医院右边。",
+          "pinyin": "xué xiào zài yī yuàn yòu bian。",
+          "vi": "Trường học ở bên phải bệnh viện."
+        },
+        {
+          "zh": "请往左走。",
+          "pinyin": "qǐng wǎng zuǒ zǒu。",
+          "vi": "Xin đi về phía bên trái."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "动词",
+      "subcategory": "动词重叠",
+      "content": "AA、A一A、A了A、ABAB",
+      "title": "Động từ lặp lại",
+      "structure": "AA  ·  A一A  ·  A了A  ·  ABAB",
+      "explanation": "Lặp lại động từ làm hành động nhẹ nhàng, ngắn hoặc mang tính thử: 看看 (xem thử), 说一说, 休息休息. A了A nói đã làm một chút (xong). Động từ hai âm tiết lặp thành ABAB. Hay dùng khi đề nghị, xin phép.",
+      "examples": [
+        {
+          "zh": "你看看这个。",
+          "pinyin": "nǐ kàn kan zhè ge。",
+          "vi": "Bạn xem thử cái này đi."
+        },
+        {
+          "zh": "我们休息休息吧。",
+          "pinyin": "wǒ men xiū xi xiū xi ba。",
+          "vi": "Chúng ta nghỉ một lát nhé."
+        },
+        {
+          "zh": "我想了想，没去。",
+          "pinyin": "wǒ xiǎng le xiang，méi qù。",
+          "vi": "Tôi nghĩ một lát rồi không đi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "动词",
+      "subcategory": "能愿动词",
+      "content": "可能",
+      "title": "Động từ năng nguyện 可能",
+      "structure": "Chủ ngữ + 可能 + Động từ",
+      "explanation": "可能 nói khả năng xảy ra: \"có thể, có lẽ\". Phủ định: 不可能 (không thể nào). Khác 能 (nói khả năng làm được hoặc được phép).",
+      "examples": [
+        {
+          "zh": "明天可能下雨。",
+          "pinyin": "míng tiān kě néng xià yǔ。",
+          "vi": "Ngày mai có thể mưa."
+        },
+        {
+          "zh": "他可能不在家。",
+          "pinyin": "tā kě néng bú zài jiā。",
+          "vi": "Có lẽ anh ấy không ở nhà."
+        },
+        {
+          "zh": "这不可能。",
+          "pinyin": "zhè bù kě néng。",
+          "vi": "Điều này không thể nào."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "动词",
+      "subcategory": "离合词",
+      "content": "帮忙、游泳、跳舞、跑步",
+      "title": "Từ li hợp: 帮忙, 游泳, 跳舞, 跑步",
+      "structure": "Động từ + (了 / số lượng) + tân ngữ",
+      "explanation": "Giống các từ li hợp khác, 帮忙 游泳 跳舞 跑步 không đi trực tiếp với tân ngữ. Muốn nói giúp ai thì chen người vào giữa (帮我一个忙) hoặc dùng 给 / 帮 ở trước.",
+      "examples": [
+        {
+          "zh": "你能帮我一个忙吗？",
+          "pinyin": "nǐ néng bāng wǒ yí gè máng ma？",
+          "vi": "Bạn giúp tôi một việc được không?"
+        },
+        {
+          "zh": "我每天早上跑步。",
+          "pinyin": "wǒ měi tiān zǎo shang pǎo bù。",
+          "vi": "Sáng nào tôi cũng chạy bộ."
+        },
+        {
+          "zh": "她喜欢跳舞。",
+          "pinyin": "tā xǐ huan tiào wǔ。",
+          "vi": "Cô ấy thích nhảy múa."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "代词",
+      "subcategory": "疑问代词",
+      "content": "为什么",
+      "title": "Hỏi lý do với 为什么",
+      "structure": "为什么 + Động từ / Tính từ ?",
+      "explanation": "为什么 nghĩa là \"tại sao\", đứng trước vị ngữ. Trả lời thường mở đầu bằng 因为.",
+      "examples": [
+        {
+          "zh": "你为什么不去？",
+          "pinyin": "nǐ wèi shén me bú qù？",
+          "vi": "Sao bạn không đi?"
+        },
+        {
+          "zh": "他为什么没来？",
+          "pinyin": "tā wèi shén me méi lái？",
+          "vi": "Sao anh ấy không đến?"
+        },
+        {
+          "zh": "你为什么学汉语？",
+          "pinyin": "nǐ wèi shén me xué hàn yǔ？",
+          "vi": "Vì sao bạn học tiếng Trung?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "代词",
+      "subcategory": "人称代词",
+      "content": "自己",
+      "title": "Đại từ 自己: tự mình",
+      "structure": "自己 + Động từ  ·  Đại từ + 自己",
+      "explanation": "自己 nghĩa là \"tự mình, bản thân\", nhấn mạnh người đó tự làm hoặc chỉ chính chủ ngữ. Có thể đứng sau đại từ: 我自己, 他自己.",
+      "examples": [
+        {
+          "zh": "我自己做饭。",
+          "pinyin": "wǒ zì jǐ zuò fàn。",
+          "vi": "Tôi tự nấu cơm."
+        },
+        {
+          "zh": "请你自己看看。",
+          "pinyin": "qǐng nǐ zì jǐ kàn kan。",
+          "vi": "Mời bạn tự xem thử."
+        },
+        {
+          "zh": "他自己一个人去。",
+          "pinyin": "tā zì jǐ yí gè rén qù。",
+          "vi": "Anh ấy tự đi một mình."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "代词",
+      "subcategory": "指示代词",
+      "content": "那么、那样、这么、这样、每",
+      "title": "Đại từ chỉ mức độ và cách thức: 这么, 那么, 这样, 那样, 每",
+      "structure": "这么 / 那么 + Tính từ  ·  这样 / 那样 + Động từ  ·  每 + Lượng từ",
+      "explanation": "这么 / 那么 (\"thế này, thế kia\") đứng trước tính từ để nói mức độ. 这样 / 那样 (\"như thế này, như thế kia\") chỉ cách thức hoặc tình trạng. 每 là \"mỗi\", đi với lượng từ hoặc 天, 年…",
+      "examples": [
+        {
+          "zh": "今天这么冷！",
+          "pinyin": "jīn tiān zhè me lěng！",
+          "vi": "Hôm nay lạnh thế này!"
+        },
+        {
+          "zh": "你这样说不对。",
+          "pinyin": "nǐ zhè yàng shuō bú duì。",
+          "vi": "Bạn nói như vậy là không đúng."
+        },
+        {
+          "zh": "他每天都学汉语。",
+          "pinyin": "tā měi tiān dōu xué hàn yǔ。",
+          "vi": "Ngày nào anh ấy cũng học tiếng Trung."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "形容词",
+      "subcategory": "形容词重叠",
+      "content": "AA、AABB",
+      "title": "Tính từ lặp lại",
+      "structure": "AA  ·  AABB",
+      "explanation": "Lặp lại tính từ làm hình ảnh sinh động hơn: tính từ một âm tiết lặp thành AA (大大的), hai âm tiết thành AABB (干干净净). Thường kèm 的 hoặc 地; không thêm 很 trước.",
+      "examples": [
+        {
+          "zh": "她的眼睛大大的。",
+          "pinyin": "tā de yǎn jing dà dà de。",
+          "vi": "Mắt cô ấy to tròn."
+        },
+        {
+          "zh": "房间干干净净的。",
+          "pinyin": "fáng jiān gān gān jìng jìng de。",
+          "vi": "Căn phòng sạch sẽ tinh tươm."
+        },
+        {
+          "zh": "他高高兴兴地回家了。",
+          "pinyin": "tā gāo gāo xìng xìng de huí jiā le。",
+          "vi": "Anh ấy vui vẻ về nhà."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "数词",
+      "subcategory": "",
+      "content": "万、好多、多",
+      "title": "Số từ 万, 好多, 多",
+      "structure": "Số + 万  ·  好多 + Danh từ  ·  Số + 多",
+      "explanation": "万 là mười nghìn (一万, 三万五). 好多 nghĩa là \"rất nhiều\" (好多人). 多 đứng sau số để nói \"hơn, khoảng\": 五千多块 (hơn năm nghìn đồng).",
+      "examples": [
+        {
+          "zh": "这个手机五千多块钱。",
+          "pinyin": "zhè ge shǒu jī wǔ qiān duō kuài qián。",
+          "vi": "Chiếc điện thoại này hơn năm nghìn đồng."
+        },
+        {
+          "zh": "学校有一万多个学生。",
+          "pinyin": "xué xiào yǒu yí wàn duō gè xué sheng。",
+          "vi": "Trường có hơn một vạn học sinh."
+        },
+        {
+          "zh": "好多人都喜欢他。",
+          "pinyin": "hǎo duō rén dōu xǐ huan tā。",
+          "vi": "Rất nhiều người thích anh ấy."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "量词",
+      "subcategory": "名量词",
+      "content": "（1）专用名量词：条、位、间、名",
+      "title": "Lượng từ chuyên dụng: 条, 位, 间, 名",
+      "structure": "Số từ + 条 / 位 / 间 / 名 + Danh từ",
+      "explanation": "条 dùng cho vật dài, mảnh (一条路, 一条鱼). 位 là cách nói lịch sự khi đếm người (三位老师). 间 dùng cho phòng, nhà (一间房间). 名 đếm người theo nghề hoặc vai trò (一名医生, 两名学生).",
+      "examples": [
+        {
+          "zh": "这条路很长。",
+          "pinyin": "zhè tiáo lù hěn cháng。",
+          "vi": "Con đường này rất dài."
+        },
+        {
+          "zh": "三位老师都来了。",
+          "pinyin": "sān wèi lǎo shī dōu lái le。",
+          "vi": "Cả ba thầy cô đều đến."
+        },
+        {
+          "zh": "他是一名医生。",
+          "pinyin": "tā shì yì míng yī shēng。",
+          "vi": "Anh ấy là một bác sĩ."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "量词",
+      "subcategory": "名量词",
+      "content": "（2）借用名量词：包",
+      "title": "Lượng từ mượn danh từ: 包",
+      "structure": "Số từ + 包 + Danh từ",
+      "explanation": "包 (gói, túi) vốn là danh từ, được mượn làm lượng từ cho thứ đựng trong gói: 一包茶 (một gói trà). Cũng dùng cho một túi đồ nói chung.",
+      "examples": [
+        {
+          "zh": "我买了一包茶。",
+          "pinyin": "wǒ mǎi le yì bāo chá。",
+          "vi": "Tôi mua một gói trà."
+        },
+        {
+          "zh": "桌子上有一包东西。",
+          "pinyin": "zhuō zi shàng yǒu yì bāo dōng xi。",
+          "vi": "Trên bàn có một túi đồ."
+        },
+        {
+          "zh": "他要两包茶。",
+          "pinyin": "tā yào liǎng bāo chá。",
+          "vi": "Anh ấy muốn hai gói trà."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "量词",
+      "subcategory": "动量词",
+      "content": "次",
+      "title": "Động lượng từ 次",
+      "structure": "Động từ + Số từ + 次",
+      "explanation": "次 nghĩa là \"lần\", đứng sau động từ để đếm số lần diễn ra hành động. Nếu tân ngữ là đại từ chỉ người, đặt tân ngữ trước 次: 看过他两次.",
+      "examples": [
+        {
+          "zh": "我去过两次北京。",
+          "pinyin": "wǒ qù guo liǎng cì běi jīng。",
+          "vi": "Tôi đã đến Bắc Kinh hai lần."
+        },
+        {
+          "zh": "我每天吃三次药。",
+          "pinyin": "wǒ měi tiān chī sān cì yào。",
+          "vi": "Mỗi ngày tôi uống thuốc ba lần."
+        },
+        {
+          "zh": "这个电影我看了一次。",
+          "pinyin": "zhè ge diàn yǐng wǒ kàn le yí cì。",
+          "vi": "Bộ phim này tôi xem một lần."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "副词",
+      "subcategory": "程度副词",
+      "content": "多、好、最",
+      "title": "Phó từ chỉ mức độ: 多, 好, 最",
+      "structure": "多 / 好 / 最 + Tính từ",
+      "explanation": "多 + tính từ dùng trong câu cảm thán hoặc hỏi mức độ (多好啊！, 多大？). 好 + tính từ nhấn mạnh \"thật là\" trong khẩu ngữ (好冷). 最 + tính từ nghĩa là \"nhất\" (最大).",
+      "examples": [
+        {
+          "zh": "这个多好啊！",
+          "pinyin": "zhè ge duō hǎo a！",
+          "vi": "Cái này tốt biết bao!"
+        },
+        {
+          "zh": "今天好冷！",
+          "pinyin": "jīn tiān hǎo lěng！",
+          "vi": "Hôm nay lạnh thật!"
+        },
+        {
+          "zh": "他是我最好的朋友。",
+          "pinyin": "tā shì wǒ zuì hǎo de péng you。",
+          "vi": "Anh ấy là người bạn tốt nhất của tôi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "副词",
+      "subcategory": "范围副词",
+      "content": "一起",
+      "title": "Phó từ 一起: cùng nhau",
+      "structure": "Chủ ngữ + 一起 + Động từ  ·  和 / 跟 + người + 一起 + Động từ",
+      "explanation": "一起 là \"cùng nhau\", đứng trước động từ. Thường đi với 和 hoặc 跟 để nói cùng với ai: 和朋友一起吃饭.",
+      "examples": [
+        {
+          "zh": "我们一起去吧。",
+          "pinyin": "wǒ men yì qǐ qù ba。",
+          "vi": "Chúng ta cùng đi nhé."
+        },
+        {
+          "zh": "我和朋友一起吃饭。",
+          "pinyin": "wǒ hé péng you yì qǐ chī fàn。",
+          "vi": "Tôi ăn cơm cùng bạn."
+        },
+        {
+          "zh": "你们一起来。",
+          "pinyin": "nǐ men yì qǐ lái。",
+          "vi": "Các bạn cùng đến đi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "副词",
+      "subcategory": "时间副词",
+      "content": "还2、已经、有时（候）、快、快要、正",
+      "title": "Phó từ chỉ thời gian: 已经, 有时候, 快, 快要, 正, 还",
+      "structure": "已经 + Động từ (+ 了)  ·  有时候 + Động từ  ·  快要 + Động từ + 了  ·  还 + 没 + Động từ",
+      "explanation": "已经 nói việc đã xảy ra rồi, thường kèm 了. 有时候 nghĩa là \"đôi khi\". 快 / 快要…了 là \"sắp\". 正 nhấn mạnh đang diễn ra lúc đó. 还 + 没 là \"vẫn chưa\".",
+      "examples": [
+        {
+          "zh": "他已经回家了。",
+          "pinyin": "tā yǐ jīng huí jiā le。",
+          "vi": "Anh ấy đã về nhà rồi."
+        },
+        {
+          "zh": "我有时候坐地铁。",
+          "pinyin": "wǒ yǒu shí hou zuò dì tiě。",
+          "vi": "Đôi khi tôi đi tàu điện ngầm."
+        },
+        {
+          "zh": "他还没来。",
+          "pinyin": "tā hái méi lái。",
+          "vi": "Anh ấy vẫn chưa đến."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "副词",
+      "subcategory": "频率副词",
+      "content": "常、经常",
+      "title": "Phó từ tần suất: 常, 经常",
+      "structure": "Chủ ngữ + 常 / 经常 + Động từ",
+      "explanation": "常 và 经常 nghĩa là \"thường xuyên\", đứng trước động từ. Phủ định hay dùng 不常 hoặc 不经常 (\"không thường\").",
+      "examples": [
+        {
+          "zh": "我经常去那儿。",
+          "pinyin": "wǒ jīng cháng qù nàr。",
+          "vi": "Tôi thường xuyên đến đó."
+        },
+        {
+          "zh": "他常常跑步。",
+          "pinyin": "tā cháng cháng pǎo bù。",
+          "vi": "Anh ấy hay chạy bộ."
+        },
+        {
+          "zh": "我不常喝咖啡。",
+          "pinyin": "wǒ bù cháng hē kā fēi。",
+          "vi": "Tôi không hay uống cà phê."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "副词",
+      "subcategory": "否定副词",
+      "content": "别",
+      "title": "Phó từ 别: đừng",
+      "structure": "别 + Động từ (+ 了)",
+      "explanation": "别 dùng để ngăn cản, khuyên \"đừng\", nhẹ hơn 不要 một chút. Thêm 了 cuối câu để bảo ngừng việc đang làm: 别说了！",
+      "examples": [
+        {
+          "zh": "别说话！",
+          "pinyin": "bié shuō huà！",
+          "vi": "Đừng nói chuyện!"
+        },
+        {
+          "zh": "别走。",
+          "pinyin": "bié zǒu。",
+          "vi": "Đừng đi."
+        },
+        {
+          "zh": "别客气。",
+          "pinyin": "bié kè qi。",
+          "vi": "Đừng khách sáo."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "副词",
+      "subcategory": "关联副词",
+      "content": "再2、就1",
+      "title": "Phó từ liên kết 再 và 就",
+      "structure": "Động từ 1 + 了 + (Tân ngữ) + 再 + Động từ 2  ·  Động từ 1 + 了 + 就 + Động từ 2",
+      "explanation": "再 nói việc thứ hai sẽ làm sau khi việc thứ nhất xong: 吃了饭再走. 就 nối việc xảy ra ngay sau việc trước, hoặc nhấn mạnh sớm, gọn: 下了课就回家.",
+      "examples": [
+        {
+          "zh": "你吃了饭再走吧。",
+          "pinyin": "nǐ chī le fàn zài zǒu ba。",
+          "vi": "Bạn ăn cơm xong rồi hãy đi."
+        },
+        {
+          "zh": "我下了课就回家。",
+          "pinyin": "wǒ xià le kè jiù huí jiā。",
+          "vi": "Tan học là tôi về nhà."
+        },
+        {
+          "zh": "等一下再说。",
+          "pinyin": "děng yí xià zài shuō。",
+          "vi": "Đợi một lát rồi hãy nói."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "副词",
+      "subcategory": "语气副词",
+      "content": "都2、就2、还是1",
+      "title": "Phó từ ngữ khí: 都, 就, 还是",
+      "structure": "都 + ……了  ·  就 + Danh từ / số lượng  ·  还是 + Động từ",
+      "explanation": "都…了 nhấn mạnh việc đã đến mức nào đó, thường kèm ý ngạc nhiên hoặc trách. 就 nhấn mạnh sự khẳng định (\"chính là\") hoặc số ít. 还是 nói sau khi cân nhắc thì \"tốt hơn là\" hoặc \"vẫn là\".",
+      "examples": [
+        {
+          "zh": "都十点了，快睡觉。",
+          "pinyin": "dōu shí diǎn le，kuài shuì jiào。",
+          "vi": "Đã mười giờ rồi, mau đi ngủ."
+        },
+        {
+          "zh": "我就是王老师。",
+          "pinyin": "wǒ jiù shì wáng lǎo shī。",
+          "vi": "Tôi chính là thầy Vương."
+        },
+        {
+          "zh": "还是你去吧。",
+          "pinyin": "hái shi nǐ qù ba。",
+          "vi": "Vẫn là bạn đi thì hơn."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "介词",
+      "subcategory": "引出时间、处所",
+      "content": "从1",
+      "title": "Giới từ 从: từ (thời gian, nơi chốn)",
+      "structure": "从 + thời điểm / nơi chốn + Động từ  ·  从……到……",
+      "explanation": "从 dẫn ra điểm bắt đầu về thời gian hoặc nơi chốn, hay đi cùng 到 (\"đến\"): 从八点到十二点, 从北京到上海. Cụm 从… đứng trước động từ.",
+      "examples": [
+        {
+          "zh": "我从明天开始学汉语。",
+          "pinyin": "wǒ cóng míng tiān kāi shǐ xué hàn yǔ。",
+          "vi": "Từ ngày mai tôi bắt đầu học tiếng Trung."
+        },
+        {
+          "zh": "他从中国来。",
+          "pinyin": "tā cóng zhōng guó lái。",
+          "vi": "Anh ấy từ Trung Quốc đến."
+        },
+        {
+          "zh": "从八点到十点，我上课。",
+          "pinyin": "cóng bā diǎn dào shí diǎn，wǒ shàng kè。",
+          "vi": "Từ tám giờ đến mười giờ tôi có tiết học."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "介词",
+      "subcategory": "引出方向、路径",
+      "content": "往",
+      "title": "Giới từ 往: về phía",
+      "structure": "往 + phương hướng / nơi chốn + Động từ",
+      "explanation": "往 dẫn ra hướng di chuyển: 往前走 (đi thẳng), 往左看. Thường đi với động từ chuyển động; chỉ hướng đi, chưa chắc đã đến nơi.",
+      "examples": [
+        {
+          "zh": "请往前走。",
+          "pinyin": "qǐng wǎng qián zǒu。",
+          "vi": "Xin đi thẳng về phía trước."
+        },
+        {
+          "zh": "他往学校去了。",
+          "pinyin": "tā wǎng xué xiào qù le。",
+          "vi": "Anh ấy đi về phía trường học."
+        },
+        {
+          "zh": "往左看。",
+          "pinyin": "wǎng zuǒ kàn。",
+          "vi": "Nhìn sang bên trái."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "介词",
+      "subcategory": "引出方向、路径",
+      "content": "从2",
+      "title": "Giới từ 从: qua, theo đường",
+      "structure": "从 + nơi chốn + Động từ chuyển động",
+      "explanation": "从 còn dẫn ra con đường hoặc nơi đi qua: 从这儿走 (đi lối này), 从那儿进来. Cụm này đứng trước động từ.",
+      "examples": [
+        {
+          "zh": "你从这儿走。",
+          "pinyin": "nǐ cóng zhèr zǒu。",
+          "vi": "Bạn đi lối này."
+        },
+        {
+          "zh": "他从那儿进来了。",
+          "pinyin": "tā cóng nàr jìn lai le。",
+          "vi": "Anh ấy đi vào từ bên đó."
+        },
+        {
+          "zh": "请从左边过去。",
+          "pinyin": "qǐng cóng zuǒ bian guò qu。",
+          "vi": "Xin đi qua từ bên trái."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "介词",
+      "subcategory": "引出对象",
+      "content": "给",
+      "title": "Giới từ 给: cho, giúp",
+      "structure": "Chủ ngữ + 给 + người + Động từ",
+      "explanation": "给 dẫn ra người nhận hoặc người được hưởng hành động: 给妈妈打电话 (gọi điện cho mẹ). Cụm 给 + người đứng trước động từ.",
+      "examples": [
+        {
+          "zh": "我给朋友打电话。",
+          "pinyin": "wǒ gěi péng you dǎ diàn huà。",
+          "vi": "Tôi gọi điện cho bạn."
+        },
+        {
+          "zh": "她给我做饭。",
+          "pinyin": "tā gěi wǒ zuò fàn。",
+          "vi": "Cô ấy nấu cơm cho tôi."
+        },
+        {
+          "zh": "我给妈妈买了一件衣服。",
+          "pinyin": "wǒ gěi mā ma mǎi le yí jiàn yī fu。",
+          "vi": "Tôi mua cho mẹ một bộ quần áo."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "介词",
+      "subcategory": "引出对象",
+      "content": "比",
+      "title": "Giới từ 比: hơn",
+      "structure": "A + 比 + B + Tính từ",
+      "explanation": "比 dùng để so sánh hai đối tượng: A \"hơn\" B. Tính từ đứng sau B, không thêm 很 hay 非常 trước tính từ. Phủ định: A 没有 B + tính từ.",
+      "examples": [
+        {
+          "zh": "他比我高。",
+          "pinyin": "tā bǐ wǒ gāo。",
+          "vi": "Anh ấy cao hơn tôi."
+        },
+        {
+          "zh": "今天比昨天冷。",
+          "pinyin": "jīn tiān bǐ zuó tiān lěng。",
+          "vi": "Hôm nay lạnh hơn hôm qua."
+        },
+        {
+          "zh": "这个比那个贵。",
+          "pinyin": "zhè ge bǐ nà ge guì。",
+          "vi": "Cái này đắt hơn cái kia."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "介词",
+      "subcategory": "引出对象",
+      "content": "跟1",
+      "title": "Giới từ 跟: cùng với, với",
+      "structure": "Chủ ngữ + 跟 + người + Động từ",
+      "explanation": "跟 dẫn ra người cùng làm hoặc đối tượng của hành động, gần nghĩa 和. Hay gặp với 学, 说, 一起: 跟老师学汉语.",
+      "examples": [
+        {
+          "zh": "我跟朋友去看电影。",
+          "pinyin": "wǒ gēn péng you qù kàn diàn yǐng。",
+          "vi": "Tôi cùng bạn đi xem phim."
+        },
+        {
+          "zh": "他想跟你说话。",
+          "pinyin": "tā xiǎng gēn nǐ shuō huà。",
+          "vi": "Anh ấy muốn nói chuyện với bạn."
+        },
+        {
+          "zh": "我跟王老师学汉语。",
+          "pinyin": "wǒ gēn wáng lǎo shī xué hàn yǔ。",
+          "vi": "Tôi học tiếng Trung với thầy Vương."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "介词",
+      "subcategory": "引出原因",
+      "content": "因为1",
+      "title": "Giới từ 因为: vì",
+      "structure": "因为 + danh từ / cụm từ，kết quả",
+      "explanation": "Khi đi với danh từ hoặc cụm ngắn, 因为 là giới từ dẫn ra nguyên nhân: 因为下雨，我没去. Câu trả lời cho 为什么.",
+      "examples": [
+        {
+          "zh": "因为下雨，我没去学校。",
+          "pinyin": "yīn wèi xià yǔ，wǒ méi qù xué xiào。",
+          "vi": "Vì trời mưa nên tôi không đến trường."
+        },
+        {
+          "zh": "他因为生病没来上班。",
+          "pinyin": "tā yīn wèi shēng bìng méi lái shàng bān。",
+          "vi": "Anh ấy vì bị ốm nên không đi làm."
+        },
+        {
+          "zh": "你为什么不去？因为太累了。",
+          "pinyin": "nǐ wèi shén me bú qù？yīn wèi tài lèi le。",
+          "vi": "Sao bạn không đi? Vì mệt quá."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "连词",
+      "subcategory": "连接词或短语",
+      "content": "跟2",
+      "title": "Liên từ 跟: và",
+      "structure": "A + 跟 + B",
+      "explanation": "Trong khẩu ngữ, 跟 nối hai danh từ hoặc đại từ như 和: 我跟他是同学. Không dùng để nối hai động từ hay hai câu.",
+      "examples": [
+        {
+          "zh": "我跟他是同学。",
+          "pinyin": "wǒ gēn tā shì tóng xué。",
+          "vi": "Tôi và anh ấy là bạn học."
+        },
+        {
+          "zh": "桌子上有书跟本子。",
+          "pinyin": "zhuō zi shàng yǒu shū gēn běn zi。",
+          "vi": "Trên bàn có sách và vở."
+        },
+        {
+          "zh": "苹果跟水都在这儿。",
+          "pinyin": "píng guǒ gēn shuǐ dōu zài zhèr。",
+          "vi": "Táo và nước đều ở đây."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "连词",
+      "subcategory": "连接分句或者句子",
+      "content": "但、但是、那、虽然、还是2、因为2、所以",
+      "title": "Liên từ nối vế câu: 但是, 虽然, 因为, 所以, 那, 还是",
+      "structure": "虽然……，但是……  ·  因为……，所以……  ·  A 还是 B ？",
+      "explanation": "但 / 但是 nối ý đối lập (\"nhưng\"), đi với 虽然 (\"tuy\"). 因为 (\"vì\") và 所以 (\"nên\") nối nguyên nhân với kết quả. 那 là \"vậy thì\" để đáp lại ý người khác. 还是 nối hai lựa chọn (\"hay là\") trong câu hỏi.",
+      "examples": [
+        {
+          "zh": "他很忙，但是很高兴。",
+          "pinyin": "tā hěn máng，dàn shì hěn gāo xìng。",
+          "vi": "Anh ấy bận nhưng rất vui."
+        },
+        {
+          "zh": "今天下雨，所以我不去。",
+          "pinyin": "jīn tiān xià yǔ，suǒ yǐ wǒ bú qù。",
+          "vi": "Hôm nay mưa nên tôi không đi."
+        },
+        {
+          "zh": "你喝茶还是喝咖啡？",
+          "pinyin": "nǐ hē chá hái shi hē kā fēi？",
+          "vi": "Bạn uống trà hay uống cà phê?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "助词",
+      "subcategory": "结构助词",
+      "content": "得、地",
+      "title": "Trợ từ kết cấu 得 và 地",
+      "structure": "Động từ + 得 + bổ ngữ  ·  Tính từ + 地 + Động từ",
+      "explanation": "得 nối động từ với bổ ngữ trạng thái (跑得很快). 地 nối trạng ngữ với động từ (高兴地说). Cùng với 的 (nối định ngữ với danh từ), ba chữ đều đọc de nhưng khác chức năng.",
+      "examples": [
+        {
+          "zh": "他跑得很快。",
+          "pinyin": "tā pǎo de hěn kuài。",
+          "vi": "Anh ấy chạy rất nhanh."
+        },
+        {
+          "zh": "她高兴地笑了。",
+          "pinyin": "tā gāo xìng de xiào le。",
+          "vi": "Cô ấy vui vẻ cười."
+        },
+        {
+          "zh": "他说得很好。",
+          "pinyin": "tā shuō de hěn hǎo。",
+          "vi": "Anh ấy nói rất tốt."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "助词",
+      "subcategory": "动态助词",
+      "content": "过",
+      "title": "Trợ từ động thái 过: từng",
+      "structure": "Động từ + 过  ·  没(有) + Động từ + 过",
+      "explanation": "过 đứng sau động từ để nói từng có kinh nghiệm làm việc đó. Phủ định: 没(有) + động từ + 过. Hỏi: …过…吗？ hoặc …过没有？",
+      "examples": [
+        {
+          "zh": "我去过中国。",
+          "pinyin": "wǒ qù guo zhōng guó。",
+          "vi": "Tôi từng đến Trung Quốc."
+        },
+        {
+          "zh": "他没吃过这个菜。",
+          "pinyin": "tā méi chī guo zhè ge cài。",
+          "vi": "Anh ấy chưa từng ăn món này."
+        },
+        {
+          "zh": "你看过这个电影吗？",
+          "pinyin": "nǐ kàn guo zhè ge diàn yǐng ma？",
+          "vi": "Bạn đã xem bộ phim này chưa?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "助词",
+      "subcategory": "动态助词",
+      "content": "着",
+      "title": "Trợ từ động thái 着: đang ở trạng thái",
+      "structure": "Động từ + 着",
+      "explanation": "着 đứng sau động từ để nói một trạng thái hoặc tư thế đang kéo dài: 门开着 (cửa đang mở), 坐着, 站着. Không dùng với hành động ngắn, tức thời.",
+      "examples": [
+        {
+          "zh": "门开着。",
+          "pinyin": "mén kāi zhe。",
+          "vi": "Cửa đang mở."
+        },
+        {
+          "zh": "他坐着看书。",
+          "pinyin": "tā zuò zhe kàn shū。",
+          "vi": "Anh ấy ngồi đọc sách."
+        },
+        {
+          "zh": "桌子上放着一本书。",
+          "pinyin": "zhuō zi shàng fàng zhe yì běn shū。",
+          "vi": "Trên bàn đặt một quyển sách."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "词类",
+      "categoryName": "助词",
+      "subcategory": "语气助词",
+      "content": "呢4、吧2、的2、啊1",
+      "title": "Trợ từ ngữ khí: 呢, 吧, 的, 啊",
+      "structure": "Câu + 呢 / 吧 / 的 / 啊",
+      "explanation": "呢 làm câu hỏi nhẹ hơn hoặc nhấn mạnh. 吧 dùng khi hỏi để xác nhận (\"phải không\"). 的 ở cuối câu khẳng định chắc chắn. 啊 làm giọng thân mật hoặc cảm thán.",
+      "examples": [
+        {
+          "zh": "你是学生吧？",
+          "pinyin": "nǐ shì xué sheng ba？",
+          "vi": "Bạn là học sinh phải không?"
+        },
+        {
+          "zh": "他会来的。",
+          "pinyin": "tā huì lái de。",
+          "vi": "Anh ấy sẽ đến mà."
+        },
+        {
+          "zh": "你好啊！",
+          "pinyin": "nǐ hǎo a！",
+          "vi": "Chào bạn nhé!"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "结构类型",
+      "subcategory": "基本结构类型",
+      "content": "动补短语1",
+      "title": "Cụm động bổ",
+      "structure": "Động từ + Bổ ngữ",
+      "explanation": "Cụm gồm động từ và bổ ngữ nói kết quả, xu hướng hoặc trạng thái của hành động: 看完, 走出去, 跑得快.",
+      "examples": [
+        {
+          "zh": "看完",
+          "pinyin": "kàn wán",
+          "vi": "xem xong"
+        },
+        {
+          "zh": "走进来",
+          "pinyin": "zǒu jìn lai",
+          "vi": "đi vào (về phía người nói)"
+        },
+        {
+          "zh": "写得很好",
+          "pinyin": "xiě de hěn hǎo",
+          "vi": "viết rất tốt"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "结构类型",
+      "subcategory": "其他结构类型",
+      "content": "（1）“的”字短语",
+      "title": "Cụm chữ 的",
+      "structure": "Danh từ / Động từ / Tính từ + 的",
+      "explanation": "Thêm 的 sau một từ hoặc cụm để thành cụm danh từ thay cho người hoặc vật đã rõ: 我的 (cái của tôi), 红的 (cái màu đỏ), 吃的 (đồ ăn).",
+      "examples": [
+        {
+          "zh": "这本书是我的。",
+          "pinyin": "zhè běn shū shì wǒ de。",
+          "vi": "Quyển sách này là của tôi."
+        },
+        {
+          "zh": "我要红的。",
+          "pinyin": "wǒ yào hóng de。",
+          "vi": "Tôi muốn cái màu đỏ."
+        },
+        {
+          "zh": "桌子上有吃的。",
+          "pinyin": "zhuō zi shàng yǒu chī de。",
+          "vi": "Trên bàn có đồ ăn."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "结构类型",
+      "subcategory": "其他结构类型",
+      "content": "（2）连谓短语",
+      "title": "Cụm liên vị (chuỗi động từ)",
+      "structure": "Động từ 1 + Động từ 2",
+      "explanation": "Hai (hoặc nhiều) động từ cùng chủ ngữ đứng liền nhau, không có từ nối, như một chuỗi hành động: 去买东西, 坐车去.",
+      "examples": [
+        {
+          "zh": "去商店买东西",
+          "pinyin": "qù shāng diàn mǎi dōng xi",
+          "vi": "đi cửa hàng mua đồ"
+        },
+        {
+          "zh": "坐飞机去北京",
+          "pinyin": "zuò fēi jī qù běi jīng",
+          "vi": "đi máy bay đến Bắc Kinh"
+        },
+        {
+          "zh": "开门进来",
+          "pinyin": "kāi mén jìn lai",
+          "vi": "mở cửa đi vào"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "结构类型",
+      "subcategory": "其他结构类型",
+      "content": "（3）兼语短语",
+      "title": "Cụm kiêm ngữ",
+      "structure": "Động từ 1 + Tân ngữ (cũng là chủ ngữ) + Động từ 2",
+      "explanation": "Tân ngữ của động từ thứ nhất đồng thời là chủ ngữ của động từ thứ hai: 请他来 (mời anh ấy đến), 让我看看. Hay gặp với 请, 叫, 让.",
+      "examples": [
+        {
+          "zh": "请他进来",
+          "pinyin": "qǐng tā jìn lai",
+          "vi": "mời anh ấy vào"
+        },
+        {
+          "zh": "让我看看",
+          "pinyin": "ràng wǒ kàn kan",
+          "vi": "cho tôi xem thử"
+        },
+        {
+          "zh": "叫你去",
+          "pinyin": "jiào nǐ qù",
+          "vi": "bảo bạn đi"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "功能类型",
+      "subcategory": "名词性短语",
+      "content": "",
+      "title": "Cụm danh từ",
+      "structure": "(Định ngữ +) Danh từ",
+      "explanation": "Cụm có danh từ làm trung tâm, thường làm chủ ngữ hoặc tân ngữ: 我的书, 三个学生, 汉语老师.",
+      "examples": [
+        {
+          "zh": "我的书",
+          "pinyin": "wǒ de shū",
+          "vi": "sách của tôi"
+        },
+        {
+          "zh": "三个学生",
+          "pinyin": "sān gè xué sheng",
+          "vi": "ba học sinh"
+        },
+        {
+          "zh": "汉语老师",
+          "pinyin": "hàn yǔ lǎo shī",
+          "vi": "giáo viên tiếng Trung"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "功能类型",
+      "subcategory": "动词性短语",
+      "content": "",
+      "title": "Cụm động từ",
+      "structure": "Động từ + Tân ngữ / Bổ ngữ",
+      "explanation": "Cụm có động từ làm trung tâm, thường làm vị ngữ: 学汉语, 吃完饭, 去北京.",
+      "examples": [
+        {
+          "zh": "学汉语",
+          "pinyin": "xué hàn yǔ",
+          "vi": "học tiếng Trung"
+        },
+        {
+          "zh": "吃完饭",
+          "pinyin": "chī wán fàn",
+          "vi": "ăn cơm xong"
+        },
+        {
+          "zh": "去北京",
+          "pinyin": "qù běi jīng",
+          "vi": "đi Bắc Kinh"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "功能类型",
+      "subcategory": "形容词性短语",
+      "content": "",
+      "title": "Cụm tính từ",
+      "structure": "Phó từ + Tính từ",
+      "explanation": "Cụm có tính từ làm trung tâm, thường làm vị ngữ: 很高兴, 非常好, 太大了.",
+      "examples": [
+        {
+          "zh": "很高兴",
+          "pinyin": "hěn gāo xìng",
+          "vi": "rất vui"
+        },
+        {
+          "zh": "非常好",
+          "pinyin": "fēi cháng hǎo",
+          "vi": "rất tốt"
+        },
+        {
+          "zh": "太大了",
+          "pinyin": "tài dà le",
+          "vi": "to quá"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "短语",
+      "categoryName": "固定短语",
+      "subcategory": "其他",
+      "content": "什么的",
+      "title": "Cách liệt kê với 什么的",
+      "structure": "A、B + 什么的",
+      "explanation": "什么的 đặt cuối một chuỗi liệt kê, nghĩa là \"vân vân, những thứ như vậy\": 苹果、香蕉什么的. Chỉ dùng trong khẩu ngữ.",
+      "examples": [
+        {
+          "zh": "我喜欢吃苹果、香蕉什么的。",
+          "pinyin": "wǒ xǐ huan chī píng guǒ、xiāng jiāo shén me de。",
+          "vi": "Tôi thích ăn táo, chuối và những thứ như vậy."
+        },
+        {
+          "zh": "桌子上有书、本子什么的。",
+          "pinyin": "zhuō zi shàng yǒu shū、běn zi shén me de。",
+          "vi": "Trên bàn có sách, vở và đủ thứ."
+        },
+        {
+          "zh": "他会写字、画画什么的。",
+          "pinyin": "tā huì xiě zì、huà huà shén me de。",
+          "vi": "Anh ấy biết viết chữ, vẽ tranh và những thứ như vậy."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "固定格式",
+      "categoryName": "",
+      "subcategory": "",
+      "content": "还是……吧",
+      "title": "Cấu trúc 还是……吧: nên … thì hơn",
+      "structure": "还是 + Động từ + 吧",
+      "explanation": "Đưa ra gợi ý sau khi cân nhắc: \"tốt hơn là …\". Nghe nhẹ nhàng, dùng khi khuyên người khác hoặc tự quyết định.",
+      "examples": [
+        {
+          "zh": "天气不好，我们还是在家看书吧。",
+          "pinyin": "tiān qì bù hǎo，wǒ men hái shi zài jiā kàn shū ba。",
+          "vi": "Thời tiết xấu, chúng ta ở nhà đọc sách thì hơn."
+        },
+        {
+          "zh": "你还是休息一下吧。",
+          "pinyin": "nǐ hái shi xiū xi yí xià ba。",
+          "vi": "Bạn nên nghỉ một chút thì hơn."
+        },
+        {
+          "zh": "太晚了，还是明天去吧。",
+          "pinyin": "tài wǎn le，hái shi míng tiān qù ba。",
+          "vi": "Muộn quá rồi, ngày mai đi thì hơn."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "固定格式",
+      "categoryName": "",
+      "subcategory": "",
+      "content": "要/快要/就要……了",
+      "title": "Sắp … rồi: 要 / 快要 / 就要 ……了",
+      "structure": "要 / 快要 / 就要 + Động từ / Tính từ + 了",
+      "explanation": "Nói việc sắp xảy ra. 快要 nhấn mạnh rất gần; 就要 nhấn mạnh sắp sửa và có thể kèm thời gian cụ thể (明天就要走了). 快…了 và 要…了 cũng dùng như vậy.",
+      "examples": [
+        {
+          "zh": "要下雨了。",
+          "pinyin": "yào xià yǔ le。",
+          "vi": "Sắp mưa rồi."
+        },
+        {
+          "zh": "火车快要开了。",
+          "pinyin": "huǒ chē kuài yào kāi le。",
+          "vi": "Tàu sắp chạy rồi."
+        },
+        {
+          "zh": "我们明天就要走了。",
+          "pinyin": "wǒ men míng tiān jiù yào zǒu le。",
+          "vi": "Ngày mai chúng tôi đi rồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "固定格式",
+      "categoryName": "",
+      "subcategory": "",
+      "content": "都……了",
+      "title": "Cấu trúc 都……了: đã … rồi",
+      "structure": "都 + thời gian / sự việc + 了",
+      "explanation": "Nhấn mạnh việc đã đến mức nào đó, thường kèm ý ngạc nhiên hoặc trách móc: 都十二点了 (đã mười hai giờ rồi).",
+      "examples": [
+        {
+          "zh": "都十二点了，你怎么还不睡？",
+          "pinyin": "dōu shí èr diǎn le，nǐ zěn me hái bú shuì？",
+          "vi": "Mười hai giờ rồi sao bạn còn chưa ngủ?"
+        },
+        {
+          "zh": "他都三十岁了。",
+          "pinyin": "tā dōu sān shí suì le。",
+          "vi": "Anh ấy đã ba mươi tuổi rồi."
+        },
+        {
+          "zh": "饭都冷了。",
+          "pinyin": "fàn dōu lěng le。",
+          "vi": "Cơm đã nguội cả rồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "主语",
+      "subcategory": "",
+      "content": "受事主语",
+      "title": "Chủ ngữ là đối tượng chịu tác động",
+      "structure": "Vật bị tác động + Động từ (+ 了)",
+      "explanation": "Chủ ngữ không phải người làm mà là vật chịu hành động; không cần 被: 饭做好了 (cơm đã nấu xong), 衣服洗了.",
+      "examples": [
+        {
+          "zh": "饭做好了。",
+          "pinyin": "fàn zuò hǎo le。",
+          "vi": "Cơm đã nấu xong."
+        },
+        {
+          "zh": "作业写完了。",
+          "pinyin": "zuò yè xiě wán le。",
+          "vi": "Bài tập đã viết xong."
+        },
+        {
+          "zh": "衣服洗了。",
+          "pinyin": "yī fu xǐ le。",
+          "vi": "Quần áo đã giặt rồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "谓语",
+      "subcategory": "",
+      "content": "名词性短语作谓语",
+      "title": "Cụm danh từ làm vị ngữ",
+      "structure": "Chủ ngữ + Cụm danh từ (không có 是)",
+      "explanation": "Trong khẩu ngữ, cụm danh từ chỉ quê quán, ngày, giá tiền có thể làm vị ngữ mà không cần 是: 他北京人, 今天五月三号.",
+      "examples": [
+        {
+          "zh": "他北京人。",
+          "pinyin": "tā běi jīng rén。",
+          "vi": "Anh ấy người Bắc Kinh."
+        },
+        {
+          "zh": "今天五月三号。",
+          "pinyin": "jīn tiān wǔ yuè sān hào。",
+          "vi": "Hôm nay là mồng ba tháng năm."
+        },
+        {
+          "zh": "这件衣服三百块。",
+          "pinyin": "zhè jiàn yī fu sān bǎi kuài。",
+          "vi": "Bộ quần áo này ba trăm đồng."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "定语",
+      "subcategory": "",
+      "content": "动词或动词性短语、主谓短语作定语",
+      "title": "Động từ hoặc cụm chủ vị làm định ngữ",
+      "structure": "Động từ / cụm chủ vị + 的 + Danh từ",
+      "explanation": "Thêm 的 để cả động từ hoặc cụm làm định ngữ: 买的书 (sách đã mua), 我写的字 (chữ tôi viết). Khác tiếng Việt, mệnh đề bổ nghĩa đứng TRƯỚC danh từ.",
+      "examples": [
+        {
+          "zh": "这是我买的书。",
+          "pinyin": "zhè shì wǒ mǎi de shū。",
+          "vi": "Đây là quyển sách tôi mua."
+        },
+        {
+          "zh": "他做的菜很好吃。",
+          "pinyin": "tā zuò de cài hěn hǎo chī。",
+          "vi": "Món anh ấy nấu rất ngon."
+        },
+        {
+          "zh": "来的人是谁？",
+          "pinyin": "lái de rén shì shéi？",
+          "vi": "Người đến là ai?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "补语",
+      "subcategory": "结果补语1",
+      "content": "动词+错/懂/好/会/完",
+      "title": "Bổ ngữ kết quả: 错, 懂, 好, 会, 完",
+      "structure": "Động từ + 错 / 懂 / 好 / 会 / 完",
+      "explanation": "Thêm sau động từ để nói kết quả của hành động: 看懂 (xem hiểu), 写错 (viết sai), 做好 (làm xong), 学会 (học được), 吃完 (ăn xong). Phủ định bằng 没(有): 没看懂.",
+      "examples": [
+        {
+          "zh": "这个字我写错了。",
+          "pinyin": "zhè ge zì wǒ xiě cuò le。",
+          "vi": "Chữ này tôi viết sai rồi."
+        },
+        {
+          "zh": "老师说的话你听懂了吗？",
+          "pinyin": "lǎo shī shuō de huà nǐ tīng dǒng le ma？",
+          "vi": "Lời thầy nói bạn nghe hiểu chưa?"
+        },
+        {
+          "zh": "我吃完饭了。",
+          "pinyin": "wǒ chī wán fàn le。",
+          "vi": "Tôi ăn cơm xong rồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "补语",
+      "subcategory": "趋向补语1",
+      "content": "简单趋向补语的趋向意义用法：（1）动词+来/去",
+      "title": "Bổ ngữ xu hướng đơn: 来 và 去",
+      "structure": "Động từ + 来 / 去",
+      "explanation": "来 nói hướng về phía người nói, 去 nói hướng ra xa người nói: 拿来 (mang lại), 带去 (mang đi). Tân ngữ nơi chốn đặt giữa động từ và 来 / 去: 回学校去.",
+      "examples": [
+        {
+          "zh": "请你带书来。",
+          "pinyin": "qǐng nǐ dài shū lái。",
+          "vi": "Xin bạn mang sách đến."
+        },
+        {
+          "zh": "他回家去了。",
+          "pinyin": "tā huí jiā qù le。",
+          "vi": "Anh ấy về nhà rồi."
+        },
+        {
+          "zh": "我拿来了一杯茶。",
+          "pinyin": "wǒ ná lái le yì bēi chá。",
+          "vi": "Tôi mang đến một tách trà."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "补语",
+      "subcategory": "趋向补语1",
+      "content": "（2）动词+上/下/进/出/过/回",
+      "title": "Bổ ngữ xu hướng đơn: 上, 下, 进, 出, 过, 回",
+      "structure": "Động từ + 上 / 下 / 进 / 出 / 过 / 回",
+      "explanation": "Chỉ hướng của động tác: 上 (lên), 下 (xuống), 进 (vào), 出 (ra), 过 (qua), 回 (về). Có thể ghép thêm 来 / 去 để thành bổ ngữ xu hướng kép.",
+      "examples": [
+        {
+          "zh": "他走进教室。",
+          "pinyin": "tā zǒu jìn jiào shì。",
+          "vi": "Anh ấy đi vào lớp học."
+        },
+        {
+          "zh": "请坐下。",
+          "pinyin": "qǐng zuò xià。",
+          "vi": "Xin ngồi xuống."
+        },
+        {
+          "zh": "他跑回家了。",
+          "pinyin": "tā pǎo huí jiā le。",
+          "vi": "Anh ấy chạy về nhà rồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "补语",
+      "subcategory": "趋向补语1",
+      "content": "复合趋向补语的趋向意义用法：动词+出来/出去/过来/过去/回来/回去/进来/进去/起来/上来/上去/下来/下去",
+      "title": "Bổ ngữ xu hướng kép",
+      "structure": "Động từ + 出来 / 进去 / 回来 / 上去 / 下来 …",
+      "explanation": "Ghép hướng với 来 hoặc 去: 走进来 (đi vào, về phía người nói), 走进去 (đi vào, xa người nói), 跑出去, 拿出来. Chọn 来 hay 去 theo vị trí người nói.",
+      "examples": [
+        {
+          "zh": "他从房间里走出来了。",
+          "pinyin": "tā cóng fáng jiān lǐ zǒu chū lai le。",
+          "vi": "Anh ấy từ trong phòng đi ra."
+        },
+        {
+          "zh": "你快进来吧。",
+          "pinyin": "nǐ kuài jìn lai ba。",
+          "vi": "Bạn mau vào đi."
+        },
+        {
+          "zh": "他跑回去了。",
+          "pinyin": "tā pǎo huí qu le。",
+          "vi": "Anh ấy chạy về rồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "补语",
+      "subcategory": "状态补语1",
+      "content": "动词+得+形容词性短语",
+      "title": "Bổ ngữ trạng thái với 得",
+      "structure": "Động từ + 得 + (很) + Tính từ",
+      "explanation": "Nói hành động diễn ra như thế nào, đánh giá nó: 说得很好, 跑得快. Nếu có tân ngữ thì lặp động từ: 说汉语说得很好 (hoặc đặt tân ngữ lên trước).",
+      "examples": [
+        {
+          "zh": "她唱得很好。",
+          "pinyin": "tā chàng de hěn hǎo。",
+          "vi": "Cô ấy hát rất hay."
+        },
+        {
+          "zh": "他汉语说得很好。",
+          "pinyin": "tā hàn yǔ shuō de hěn hǎo。",
+          "vi": "Anh ấy nói tiếng Trung rất giỏi."
+        },
+        {
+          "zh": "你写得太快了。",
+          "pinyin": "nǐ xiě de tài kuài le。",
+          "vi": "Bạn viết nhanh quá."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "补语",
+      "subcategory": "数量补语2",
+      "content": "（1）表示动作持续的时间",
+      "title": "Bổ ngữ thời lượng",
+      "structure": "Động từ + Thời lượng (+ Tân ngữ)",
+      "explanation": "Sau động từ, từ chỉ khoảng thời gian cho biết hành động kéo dài bao lâu: 学了两年, 睡了八个小时. Tân ngữ danh từ thường đặt sau thời lượng; tân ngữ là đại từ chỉ người đặt trước thời lượng.",
+      "examples": [
+        {
+          "zh": "我学了两年汉语。",
+          "pinyin": "wǒ xué le liǎng nián hàn yǔ。",
+          "vi": "Tôi học tiếng Trung hai năm rồi."
+        },
+        {
+          "zh": "他睡了八个小时。",
+          "pinyin": "tā shuì le bā gè xiǎo shí。",
+          "vi": "Anh ấy ngủ tám tiếng."
+        },
+        {
+          "zh": "我在这儿住了三天。",
+          "pinyin": "wǒ zài zhèr zhù le sān tiān。",
+          "vi": "Tôi ở đây ba ngày."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子成分",
+      "categoryName": "补语",
+      "subcategory": "数量补语2",
+      "content": "（2）形容词+数量补语",
+      "title": "Tính từ + bổ ngữ số lượng",
+      "structure": "Tính từ + Số lượng",
+      "explanation": "Sau tính từ thêm số lượng để nói mức chênh lệch cụ thể: 大两岁 (lớn hơn hai tuổi), 贵十块. Thường dùng trong câu so sánh với 比.",
+      "examples": [
+        {
+          "zh": "他比我大两岁。",
+          "pinyin": "tā bǐ wǒ dà liǎng suì。",
+          "vi": "Anh ấy lớn hơn tôi hai tuổi."
+        },
+        {
+          "zh": "这个比那个贵十块。",
+          "pinyin": "zhè ge bǐ nà ge guì shí kuài。",
+          "vi": "Cái này đắt hơn cái kia mười đồng."
+        },
+        {
+          "zh": "我比他小三岁。",
+          "pinyin": "wǒ bǐ tā xiǎo sān suì。",
+          "vi": "Tôi nhỏ hơn anh ấy ba tuổi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "句型",
+      "subcategory": "单句",
+      "content": "主谓句4：主谓谓语句",
+      "title": "Câu có vị ngữ là cụm chủ vị",
+      "structure": "Chủ đề + (Chủ ngữ nhỏ + Vị ngữ nhỏ)",
+      "explanation": "Vị ngữ của câu chính là một cụm chủ vị, thường nói về một bộ phận hoặc đặc điểm của người, vật: 他身体很好 (cơ thể anh ấy khỏe), 我头疼.",
+      "examples": [
+        {
+          "zh": "他身体很好。",
+          "pinyin": "tā shēn tǐ hěn hǎo。",
+          "vi": "Anh ấy sức khỏe rất tốt."
+        },
+        {
+          "zh": "我今天头疼。",
+          "pinyin": "wǒ jīn tiān tóu téng。",
+          "vi": "Hôm nay tôi đau đầu."
+        },
+        {
+          "zh": "这个地方人很多。",
+          "pinyin": "zhè ge dì fang rén hěn duō。",
+          "vi": "Chỗ này rất đông người."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "句类",
+      "subcategory": "疑问句",
+      "content": "用“还是”连接的选择问句",
+      "title": "Câu hỏi lựa chọn với 还是",
+      "structure": "A 还是 B ？",
+      "explanation": "还是 nối hai khả năng để người nghe chọn: 你喝茶还是喝咖啡？ Trong câu hỏi dùng 还是, không dùng 或者.",
+      "examples": [
+        {
+          "zh": "你喝茶还是喝咖啡？",
+          "pinyin": "nǐ hē chá hái shi hē kā fēi？",
+          "vi": "Bạn uống trà hay uống cà phê?"
+        },
+        {
+          "zh": "你去还是他去？",
+          "pinyin": "nǐ qù hái shi tā qù？",
+          "vi": "Bạn đi hay anh ấy đi?"
+        },
+        {
+          "zh": "今天去还是明天去？",
+          "pinyin": "jīn tiān qù hái shi míng tiān qù？",
+          "vi": "Đi hôm nay hay đi ngày mai?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "句类",
+      "subcategory": "祈使句",
+      "content": "用“别”的祈使句",
+      "title": "Câu cầu khiến với 别",
+      "structure": "别 + Động từ (+ 了)",
+      "explanation": "别 + động từ khuyên hoặc ngăn đừng làm gì. Thêm 了 để bảo ngừng việc đang làm: 别说了！ Có thể thêm 吧 cho giọng mềm.",
+      "examples": [
+        {
+          "zh": "别说话了！",
+          "pinyin": "bié shuō huà le！",
+          "vi": "Đừng nói chuyện nữa!"
+        },
+        {
+          "zh": "别去了。",
+          "pinyin": "bié qù le。",
+          "vi": "Đừng đi nữa."
+        },
+        {
+          "zh": "别太累了。",
+          "pinyin": "bié tài lèi le。",
+          "vi": "Đừng làm mình mệt quá."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "“是”字句2",
+      "content": "表示说明或特征",
+      "title": "Câu chữ 是: nêu đặc điểm",
+      "structure": "Chủ ngữ + 是 + từ / cụm từ + 的",
+      "explanation": "Dùng 是…的 để nói đặc điểm, tính chất của chủ ngữ (màu sắc, chất liệu, mới cũ): 这本书是新的. Tính từ đơn thêm 的 để thành cụm danh từ.",
+      "examples": [
+        {
+          "zh": "这本书是新的。",
+          "pinyin": "zhè běn shū shì xīn de。",
+          "vi": "Quyển sách này là sách mới."
+        },
+        {
+          "zh": "我的手机是白色的。",
+          "pinyin": "wǒ de shǒu jī shì bái sè de。",
+          "vi": "Điện thoại của tôi màu trắng."
+        },
+        {
+          "zh": "这个菜是甜的。",
+          "pinyin": "zhè ge cài shì tián de。",
+          "vi": "Món này có vị ngọt."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "“有”字句2",
+      "content": "表示达到",
+      "title": "Câu chữ 有: đạt tới",
+      "structure": "A + 有 + B + (这么 / 那么) + Tính từ / Số lượng",
+      "explanation": "有 còn nói A đạt tới mức của B hoặc một con số: 他有我这么高 (anh ấy cao bằng tôi). Phủ định: 没有. Hay dùng trong câu hỏi: 你有他那么忙吗？",
+      "examples": [
+        {
+          "zh": "他有我这么高。",
+          "pinyin": "tā yǒu wǒ zhè me gāo。",
+          "vi": "Anh ấy cao bằng tôi."
+        },
+        {
+          "zh": "那个孩子有十岁了。",
+          "pinyin": "nà ge hái zi yǒu shí suì le。",
+          "vi": "Đứa trẻ kia đã mười tuổi rồi."
+        },
+        {
+          "zh": "你有他那么忙吗？",
+          "pinyin": "nǐ yǒu tā nà me máng ma？",
+          "vi": "Bạn có bận như anh ấy không?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "存现句2",
+      "content": "处所+动词+着(+数量短语)+名词",
+      "title": "Câu tồn hiện với 着",
+      "structure": "Nơi chốn + Động từ + 着 + (Số lượng) + Danh từ",
+      "explanation": "Nói ở một nơi có vật hoặc người đang ở trạng thái nào (đặt, ngồi, đứng, treo…): 桌子上放着一本书. Nơi chốn đứng đầu câu.",
+      "examples": [
+        {
+          "zh": "桌子上放着两本书。",
+          "pinyin": "zhuō zi shàng fàng zhe liǎng běn shū。",
+          "vi": "Trên bàn đặt hai quyển sách."
+        },
+        {
+          "zh": "外面站着一个人。",
+          "pinyin": "wài miàn zhàn zhe yí gè rén。",
+          "vi": "Bên ngoài có một người đang đứng."
+        },
+        {
+          "zh": "房间里坐着三个人。",
+          "pinyin": "fáng jiān lǐ zuò zhe sān gè rén。",
+          "vi": "Trong phòng có ba người đang ngồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "比较句1",
+      "content": "（1）A比B+形容词",
+      "title": "So sánh hơn với 比",
+      "structure": "A + 比 + B + Tính từ",
+      "explanation": "Nói A hơn B. Không dùng 很, 非常, 太 trước tính từ. Muốn nói hơn nhiều dùng 得多 hoặc 多了; hơn một chút dùng 一点儿.",
+      "examples": [
+        {
+          "zh": "我比他大。",
+          "pinyin": "wǒ bǐ tā dà。",
+          "vi": "Tôi lớn tuổi hơn anh ấy."
+        },
+        {
+          "zh": "今天比昨天热。",
+          "pinyin": "jīn tiān bǐ zuó tiān rè。",
+          "vi": "Hôm nay nóng hơn hôm qua."
+        },
+        {
+          "zh": "这个比那个好。",
+          "pinyin": "zhè ge bǐ nà ge hǎo。",
+          "vi": "Cái này tốt hơn cái kia."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "比较句1",
+      "content": "（2）A比B+形容词+数量补语/程度补语",
+      "title": "So sánh với 比: nói mức hơn kém",
+      "structure": "A + 比 + B + Tính từ + Số lượng / 一点儿 / 得多",
+      "explanation": "Sau tính từ nói mức hơn kém cụ thể (一岁, 十块) hoặc ước lượng: 一点儿 (một chút), 得多 hoặc 多了 (nhiều).",
+      "examples": [
+        {
+          "zh": "他比我大一岁。",
+          "pinyin": "tā bǐ wǒ dà yí suì。",
+          "vi": "Anh ấy lớn hơn tôi một tuổi."
+        },
+        {
+          "zh": "这个比那个便宜十块。",
+          "pinyin": "zhè ge bǐ nà ge pián yi shí kuài。",
+          "vi": "Cái này rẻ hơn cái kia mười đồng."
+        },
+        {
+          "zh": "今天比昨天冷得多。",
+          "pinyin": "jīn tiān bǐ zuó tiān lěng de duō。",
+          "vi": "Hôm nay lạnh hơn hôm qua nhiều."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "比较句1",
+      "content": "（3）A有/没有B（+这么/那么）+形容词",
+      "title": "So sánh bằng và kém: 有 / 没有",
+      "structure": "A + 有 / 没有 + B + (这么 / 那么) + Tính từ",
+      "explanation": "没有 nói A không bằng B: 我没有他高. 有 dùng trong câu hỏi hoặc nói \"bằng\": 你有他那么高吗？ Có thể thêm 这么 / 那么.",
+      "examples": [
+        {
+          "zh": "我没有他高。",
+          "pinyin": "wǒ méi yǒu tā gāo。",
+          "vi": "Tôi không cao bằng anh ấy."
+        },
+        {
+          "zh": "今天没有昨天那么热。",
+          "pinyin": "jīn tiān méi yǒu zuó tiān nà me rè。",
+          "vi": "Hôm nay không nóng như hôm qua."
+        },
+        {
+          "zh": "这个有那个好吗？",
+          "pinyin": "zhè ge yǒu nà ge hǎo ma？",
+          "vi": "Cái này có tốt bằng cái kia không?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "比较句1",
+      "content": "（4）A比B+动词+得+形容词/A+动词+得+比+B+形容词",
+      "title": "So sánh cách làm với 比 và 得",
+      "structure": "A + Động từ + 得 + 比 + B + Tính từ  ·  A + 比 + B + Động từ + 得 + Tính từ",
+      "explanation": "Muốn so sánh cách làm một việc, đặt 比 trước hoặc sau bổ ngữ: 他跑得比我快 hoặc 他比我跑得快 (anh ấy chạy nhanh hơn tôi).",
+      "examples": [
+        {
+          "zh": "他跑得比我快。",
+          "pinyin": "tā pǎo de bǐ wǒ kuài。",
+          "vi": "Anh ấy chạy nhanh hơn tôi."
+        },
+        {
+          "zh": "她比我说得好。",
+          "pinyin": "tā bǐ wǒ shuō de hǎo。",
+          "vi": "Cô ấy nói giỏi hơn tôi."
+        },
+        {
+          "zh": "你写得比他好看。",
+          "pinyin": "nǐ xiě de bǐ tā hǎo kàn。",
+          "vi": "Bạn viết đẹp hơn anh ấy."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "“是……的”句1",
+      "content": "强调时间、地点、方式、动作者",
+      "title": "Câu 是……的: nhấn mạnh thời gian, nơi chốn, cách thức",
+      "structure": "Chủ ngữ + 是 + (thông tin nhấn mạnh) + Động từ + 的",
+      "explanation": "Dùng khi việc đã xảy ra và người nói biết rồi, muốn hỏi hoặc nhấn mạnh \"khi nào, ở đâu, bằng cách nào, ai làm\". Thông tin nhấn mạnh nằm giữa 是 và 的; trong câu khẳng định có thể bỏ 是.",
+      "examples": [
+        {
+          "zh": "你是什么时候来的？",
+          "pinyin": "nǐ shì shén me shí hou lái de？",
+          "vi": "Bạn đến từ khi nào?"
+        },
+        {
+          "zh": "我是坐飞机来的。",
+          "pinyin": "wǒ shì zuò fēi jī lái de。",
+          "vi": "Tôi đến bằng máy bay."
+        },
+        {
+          "zh": "这本书是他买的。",
+          "pinyin": "zhè běn shū shì tā mǎi de。",
+          "vi": "Quyển sách này là anh ấy mua."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "兼语句1",
+      "content": "表使令：主语+请/叫/让……+宾语1+动词+宾语2",
+      "title": "Câu kiêm ngữ biểu thị sai khiến",
+      "structure": "Chủ ngữ + 请 / 叫 / 让 + Người + Động từ",
+      "explanation": "请, 叫, 让 dùng để nhờ hoặc bảo người khác làm việc; người đó vừa là tân ngữ của động từ đầu, vừa là chủ ngữ của động từ sau: 老师让我们回家.",
+      "examples": [
+        {
+          "zh": "老师让我们回家。",
+          "pinyin": "lǎo shī ràng wǒ men huí jiā。",
+          "vi": "Thầy cô cho chúng tôi về nhà."
+        },
+        {
+          "zh": "我请你吃饭。",
+          "pinyin": "wǒ qǐng nǐ chī fàn。",
+          "vi": "Tôi mời bạn ăn cơm."
+        },
+        {
+          "zh": "妈妈叫我去买东西。",
+          "pinyin": "mā ma jiào wǒ qù mǎi dōng xi。",
+          "vi": "Mẹ bảo tôi đi mua đồ."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "特殊句式",
+      "subcategory": "双宾语句2",
+      "content": "主语+动词+给+宾语1+宾语2",
+      "title": "Câu hai tân ngữ với 给",
+      "structure": "Chủ ngữ + Động từ + 给 + Người + Vật",
+      "explanation": "Một số động từ như 送, 还, 卖, 借, 买 cần 给 để dẫn người nhận, tạo câu hai tân ngữ: 送给他一本书 (tặng anh ấy một quyển sách).",
+      "examples": [
+        {
+          "zh": "我送给朋友一本书。",
+          "pinyin": "wǒ sòng gěi péng you yì běn shū。",
+          "vi": "Tôi tặng bạn một quyển sách."
+        },
+        {
+          "zh": "他还给我两百块钱。",
+          "pinyin": "tā huán gěi wǒ liǎng bǎi kuài qián。",
+          "vi": "Anh ấy trả lại tôi hai trăm đồng."
+        },
+        {
+          "zh": "妈妈买给我一件衣服。",
+          "pinyin": "mā ma mǎi gěi wǒ yí jiàn yī fu。",
+          "vi": "Mẹ mua cho tôi một bộ quần áo."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "复句",
+      "subcategory": "选择复句",
+      "content": "（是）……，还是……",
+      "title": "Câu phức lựa chọn: (是)……，还是……",
+      "structure": "(是) A，还是 B",
+      "explanation": "Nói \"A hay là B\" khi hỏi hoặc khi chưa quyết định giữa hai khả năng. 是 ở đầu vế có thể bỏ.",
+      "examples": [
+        {
+          "zh": "你是学生，还是老师？",
+          "pinyin": "nǐ shì xué sheng，hái shi lǎo shī？",
+          "vi": "Bạn là học sinh hay là thầy cô?"
+        },
+        {
+          "zh": "是你去，还是我去？",
+          "pinyin": "shì nǐ qù，hái shi wǒ qù？",
+          "vi": "Bạn đi hay là tôi đi?"
+        },
+        {
+          "zh": "我们是坐车去，还是走路去？",
+          "pinyin": "wǒ men shì zuò chē qù，hái shi zǒu lù qù？",
+          "vi": "Chúng ta đi xe hay đi bộ?"
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "复句",
+      "subcategory": "转折复句",
+      "content": "虽然……，但是……",
+      "title": "Câu phức chuyển ý: 虽然……，但是……",
+      "structure": "虽然 A，但是 B",
+      "explanation": "\"Tuy … nhưng …\": hai vế đối lập. 虽然 đứng ở vế đầu, 但是 (hoặc 可是) ở vế sau. Tiếng Trung dùng cả hai từ, khác tiếng Việt thường chỉ dùng một.",
+      "examples": [
+        {
+          "zh": "虽然很累，但是他很高兴。",
+          "pinyin": "suī rán hěn lèi，dàn shì tā hěn gāo xìng。",
+          "vi": "Tuy rất mệt nhưng anh ấy rất vui."
+        },
+        {
+          "zh": "虽然下雨，但是我们还是去。",
+          "pinyin": "suī rán xià yǔ，dàn shì wǒ men hái shi qù。",
+          "vi": "Tuy trời mưa nhưng chúng tôi vẫn đi."
+        },
+        {
+          "zh": "这个菜虽然不好看，但是很好吃。",
+          "pinyin": "zhè ge cài suī rán bù hǎo kàn，dàn shì hěn hǎo chī。",
+          "vi": "Món này tuy không đẹp nhưng rất ngon."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "复句",
+      "subcategory": "因果复句",
+      "content": "因为……，所以……",
+      "title": "Câu phức nhân quả: 因为……，所以……",
+      "structure": "因为 nguyên nhân，所以 kết quả",
+      "explanation": "\"Vì … nên …\": 因为 nêu nguyên nhân, 所以 nêu kết quả. Tiếng Trung hay dùng cả hai từ, khác tiếng Việt thường chỉ dùng một.",
+      "examples": [
+        {
+          "zh": "因为下雨，所以我没去。",
+          "pinyin": "yīn wèi xià yǔ，suǒ yǐ wǒ méi qù。",
+          "vi": "Vì trời mưa nên tôi không đi."
+        },
+        {
+          "zh": "因为他生病了，所以没来。",
+          "pinyin": "yīn wèi tā shēng bìng le，suǒ yǐ méi lái。",
+          "vi": "Vì anh ấy bị ốm nên không đến."
+        },
+        {
+          "zh": "因为我喜欢汉语，所以学汉语。",
+          "pinyin": "yīn wèi wǒ xǐ huan hàn yǔ，suǒ yǐ xué hàn yǔ。",
+          "vi": "Vì tôi thích tiếng Trung nên tôi học tiếng Trung."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "句子的类型",
+      "categoryName": "复句",
+      "subcategory": "紧缩复句",
+      "content": "一……就……",
+      "title": "Câu rút gọn: 一……就……",
+      "structure": "一 + Động từ 1，就 + Động từ 2",
+      "explanation": "Hai việc nối tiếp ngay: \"vừa … là …\". Có thể hai chủ ngữ khác nhau. Cũng dùng với nghĩa điều kiện: 一下雨他就不去 (hễ mưa là anh ấy không đi).",
+      "examples": [
+        {
+          "zh": "我一到家就给你打电话。",
+          "pinyin": "wǒ yí dào jiā jiù gěi nǐ dǎ diàn huà。",
+          "vi": "Tôi vừa về đến nhà là gọi điện cho bạn."
+        },
+        {
+          "zh": "他一看就懂了。",
+          "pinyin": "tā yí kàn jiù dǒng le。",
+          "vi": "Anh ấy vừa nhìn là hiểu ngay."
+        },
+        {
+          "zh": "一下雨他就不去。",
+          "pinyin": "yí xià yǔ tā jiù bú qù。",
+          "vi": "Hễ trời mưa là anh ấy không đi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "动作的态",
+      "categoryName": "",
+      "subcategory": "持续态",
+      "content": "动词+着：（1）表示状态的持续",
+      "title": "Thể kéo dài: trạng thái với 着",
+      "structure": "Động từ + 着",
+      "explanation": "Động từ + 着 nói một trạng thái (tư thế, vị trí) đang kéo dài: 门开着, 灯亮着, 他坐着.",
+      "examples": [
+        {
+          "zh": "灯开着。",
+          "pinyin": "dēng kāi zhe。",
+          "vi": "Đèn đang bật."
+        },
+        {
+          "zh": "窗户开着。",
+          "pinyin": "chuāng hu kāi zhe。",
+          "vi": "Cửa sổ đang mở."
+        },
+        {
+          "zh": "他站着不动。",
+          "pinyin": "tā zhàn zhe bú dòng。",
+          "vi": "Anh ấy đứng im không động đậy."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "动作的态",
+      "categoryName": "",
+      "subcategory": "持续态",
+      "content": "（2）表示动作的持续",
+      "title": "Thể kéo dài: động tác kèm theo với 着",
+      "structure": "Động từ 1 + 着 + Động từ 2",
+      "explanation": "着 sau động từ thứ nhất nói cách thức hoặc tư thế đi kèm hành động thứ hai: 笑着说 (vừa cười vừa nói), 站着等 (đứng chờ).",
+      "examples": [
+        {
+          "zh": "他笑着说话。",
+          "pinyin": "tā xiào zhe shuō huà。",
+          "vi": "Anh ấy vừa cười vừa nói."
+        },
+        {
+          "zh": "我们站着等车。",
+          "pinyin": "wǒ men zhàn zhe děng chē。",
+          "vi": "Chúng tôi đứng đợi xe."
+        },
+        {
+          "zh": "她听着音乐做作业。",
+          "pinyin": "tā tīng zhe yīn yuè zuò zuò yè。",
+          "vi": "Cô ấy vừa nghe nhạc vừa làm bài tập."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "动作的态",
+      "categoryName": "",
+      "subcategory": "经历态",
+      "content": "用动态助词“过”表示",
+      "title": "Thể kinh nghiệm với 过",
+      "structure": "Động từ + 过  ·  没(有) + Động từ + 过",
+      "explanation": "过 sau động từ nói từng làm việc đó trong quá khứ; phủ định: 没(有)…过; hỏi: …过…吗？ hoặc …过没有？",
+      "examples": [
+        {
+          "zh": "你去过北京吗？",
+          "pinyin": "nǐ qù guo běi jīng ma？",
+          "vi": "Bạn đã từng đến Bắc Kinh chưa?"
+        },
+        {
+          "zh": "我没学过汉语。",
+          "pinyin": "wǒ méi xué guo hàn yǔ。",
+          "vi": "Tôi chưa từng học tiếng Trung."
+        },
+        {
+          "zh": "他看过这本书。",
+          "pinyin": "tā kàn guo zhè běn shū。",
+          "vi": "Anh ấy đã từng đọc quyển sách này."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "特殊表达法",
+      "categoryName": "数的表达法",
+      "subcategory": "",
+      "content": "序数表示法2：数词+量词",
+      "title": "Cách nói thứ tự bằng số từ + lượng từ",
+      "structure": "Số từ + Lượng từ (一楼, 三号, 二班)",
+      "explanation": "Ngoài 第 + số, có thể dùng số + lượng từ để chỉ thứ tự: 三楼 (tầng 3), 二班 (lớp 2), 五号 (số 5, ngày 5). Dùng khi đã rõ đang nói về cái gì.",
+      "examples": [
+        {
+          "zh": "我住在三楼。",
+          "pinyin": "wǒ zhù zài sān lóu。",
+          "vi": "Tôi ở tầng ba."
+        },
+        {
+          "zh": "我是二班的学生。",
+          "pinyin": "wǒ shì èr bān de xué sheng。",
+          "vi": "Tôi là học sinh lớp hai."
+        },
+        {
+          "zh": "他的房间是五号。",
+          "pinyin": "tā de fáng jiān shì wǔ hào。",
+          "vi": "Phòng của anh ấy là số năm."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "特殊表达法",
+      "categoryName": "数的表达法",
+      "subcategory": "",
+      "content": "概数表达法1：（1）用“几”表示概数",
+      "title": "Số ước chừng với 几",
+      "structure": "几 + Lượng từ  ·  十几 / 几十 / 几百",
+      "explanation": "几 nói số lượng không rõ và ít (dưới mười): 几个人, 几天. 十几 là mười mấy, 几十 là mấy chục, 几百 là mấy trăm.",
+      "examples": [
+        {
+          "zh": "桌子上有几本书。",
+          "pinyin": "zhuō zi shàng yǒu jǐ běn shū。",
+          "vi": "Trên bàn có vài quyển sách."
+        },
+        {
+          "zh": "他今年十几岁。",
+          "pinyin": "tā jīn nián shí jǐ suì。",
+          "vi": "Năm nay cậu ấy mười mấy tuổi."
+        },
+        {
+          "zh": "教室里有几十个学生。",
+          "pinyin": "jiào shì lǐ yǒu jǐ shí gè xué sheng。",
+          "vi": "Trong lớp có mấy chục học sinh."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "特殊表达法",
+      "categoryName": "数的表达法",
+      "subcategory": "",
+      "content": "（2）数词+多+量词",
+      "title": "Số ước chừng: số tròn + 多 + lượng từ",
+      "structure": "Số tròn + 多 + Lượng từ + Danh từ",
+      "explanation": "Số tròn (十, 二十, 一百…) + 多 + lượng từ nghĩa là \"hơn …\": 二十多个人 (hơn hai mươi người). 多 đứng ngay sau số tròn.",
+      "examples": [
+        {
+          "zh": "我有二十多本书。",
+          "pinyin": "wǒ yǒu èr shí duō běn shū。",
+          "vi": "Tôi có hơn hai mươi quyển sách."
+        },
+        {
+          "zh": "这个班有三十多个学生。",
+          "pinyin": "zhè ge bān yǒu sān shí duō gè xué sheng。",
+          "vi": "Lớp này có hơn ba mươi học sinh."
+        },
+        {
+          "zh": "他五十多岁了。",
+          "pinyin": "tā wǔ shí duō suì le。",
+          "vi": "Ông ấy hơn năm mươi tuổi rồi."
+        }
+      ],
+      "status": "DRAFT"
+    },
+    {
+      "category": "特殊表达法",
+      "categoryName": "数的表达法",
+      "subcategory": "",
+      "content": "（3）数词+量词+多",
+      "title": "Số ước chừng: số + lượng từ + 多",
+      "structure": "Số + Lượng từ + 多 + Danh từ",
+      "explanation": "Với số không tròn chục, 多 đặt sau lượng từ: 三个多小时 (hơn ba tiếng), 五块多钱 (hơn năm đồng). Dùng khi đơn vị còn chia nhỏ được.",
+      "examples": [
+        {
+          "zh": "我等了他三个多小时。",
+          "pinyin": "wǒ děng le tā sān gè duō xiǎo shí。",
+          "vi": "Tôi đã đợi anh ấy hơn ba tiếng."
+        },
+        {
+          "zh": "这个五块多钱。",
+          "pinyin": "zhè ge wǔ kuài duō qián。",
+          "vi": "Cái này hơn năm đồng."
+        },
+        {
+          "zh": "他喝了两杯多茶。",
+          "pinyin": "tā hē le liǎng bēi duō chá。",
+          "vi": "Anh ấy uống hơn hai cốc trà."
+        }
+      ],
+      "status": "DRAFT"
+    }
+  ]
+}

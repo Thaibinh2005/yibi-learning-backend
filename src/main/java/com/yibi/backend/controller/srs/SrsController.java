@@ -45,6 +45,13 @@ public class SrsController {
         return ResponseEntity.ok(ApiResponse.success(wordDetailsService.study(securityUtils.getCurrentUserId(), vocabularyId)));
     }
 
+    /** The learner's flashcard state of several words at once (ids comma-separated); words with no flashcard are left out. */
+    @GetMapping("/word-status")
+    public ResponseEntity<ApiResponse<List<com.yibi.backend.dto.vocabulary.WordDetailsDtos.WordStatus>>> getWordStatuses(
+            @RequestParam List<Long> ids) {
+        return ResponseEntity.ok(ApiResponse.success(wordDetailsService.studyStatuses(securityUtils.getCurrentUserId(), ids)));
+    }
+
     @GetMapping("/stats")
     public ResponseEntity<ApiResponse<SrsStatsResponse>> getStats() {
         UUID userId = securityUtils.getCurrentUserId();

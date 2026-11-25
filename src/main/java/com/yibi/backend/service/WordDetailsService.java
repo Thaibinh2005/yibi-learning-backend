@@ -1,6 +1,7 @@
 package com.yibi.backend.service;
 
 import com.yibi.backend.dto.vocabulary.LevelMeaningResponse;
+import com.yibi.backend.dto.vocabulary.WordDetailsDtos;
 import com.yibi.backend.dto.vocabulary.WordDetailsDtos.Card;
 import com.yibi.backend.dto.vocabulary.WordDetailsDtos.CharacterInfo;
 import com.yibi.backend.dto.vocabulary.WordDetailsDtos.DeckMembership;
@@ -35,6 +36,7 @@ public class WordDetailsService {
     static final int MAX_EXAMPLES = 8;
     static final int MAX_RELATED_PER_CHARACTER = 8;
     private static final int MAX_MEANING_LENGTH = 60;
+    private static final int MAX_STATUS_IDS = 100;
     private static final String CJK = "[一-鿿]";
 
     private final JdbcTemplate jdbc;
@@ -187,6 +189,34 @@ public class WordDetailsService {
     }
 
     // ── The learner's state of a word ──────────────────────────
+
+    /** The flashcard state of several words at once, matched by the word as in {@link #study}; words without a card are left out. */
+    @Transactional(readOnly = true)
+    public List<WordDetailsDtos.WordStatus> studyStatuses(UUID userId, List<Long> vocabularyIds) {
+        List<Long> ids = vocabularyIds.stream().distinct().limit(MAX_STATUS_IDS).toList();
+        if (ids.isEmpty()) {
+            return List.of();
+        }
+        LocalDate today = LocalDate.now();
+        List<Object> args = new ArrayList<>();
+        args.add(userId);
+        args.addAll(ids);
+        return jdbc.query("""
+                SELECT v.raw_record_id, c.repetitions, c.last_reviewed, c.due_date
+                FROM hsk_vocabulary_records v
+                JOIN LATERAL (
+                    SELECT sc.repetitions, sc.last_reviewed, sc.due_date
+                    FROM srs_cards sc JOIN hsk_vocabulary_records cv ON cv.raw_record_id = sc.hsk_vocabulary_record_id
+                    WHERE sc.user_id = ? AND cv.simplified = v.simplified
+                    ORDER BY (sc.hsk_vocabulary_record_id = v.raw_record_id) DESC, sc.id
+                    LIMIT 1
+                ) c ON TRUE
+                WHERE v.raw_record_id IN (""" + String.join(",", java.util.Collections.nCopies(ids.size(), "?")) + ")", (rs, n) -> {
+            String status = rs.getTimestamp("last_reviewed") == null ? "NEW"
+                    : rs.getInt("repetitions") >= VocabDeckService.MASTERED_REPETITIONS ? "MASTERED" : "LEARNING";
+            return new WordDetailsDtos.WordStatus(rs.getLong(1), status, !rs.getDate("due_date").toLocalDate().isAfter(today));
+        }, args.toArray());
+    }
 
     @Transactional(readOnly = true)
     public WordStudyResponse study(UUID userId, long vocabularyId) {
