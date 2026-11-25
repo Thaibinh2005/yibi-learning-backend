@@ -1,0 +1,1464 @@
+{
+ "id": "hsk3-1110",
+ "level": 3,
+ "parts": [
+  {
+   "skill": "listening",
+   "minutes": 23,
+   "questionCount": 30
+  },
+  {
+   "skill": "reading",
+   "minutes": 30,
+   "questionCount": 30
+  },
+  {
+   "skill": "writing",
+   "minutes": 20,
+   "questionCount": 10
+  }
+ ],
+ "stage": "Sơ cấp",
+ "title": "HSK 3",
+ "source": "Đề mẫu HSK 3.0 chính thức (中外语言交流合作中心)",
+ "sections": [
+  {
+   "part": 1,
+   "range": [
+    1,
+    10
+   ],
+   "skill": "listening",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      1,
+      5
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk3-1110/img/5f15c6dd-1c81-41ad-a7c6-394f439b5c29.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk3-1110/img/33a50895-5c11-48b9-a080-e06f2855f7b4.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk3-1110/img/3bb260e4-7b29-4bc0-b7cf-922efd8e5258.png"
+      },
+      {
+       "key": "D",
+       "image": "/mocktests/hsk3-1110/img/60d0c04f-c1d9-421d-8b31-331a17bedf73.png"
+      },
+      {
+       "key": "E",
+       "image": "/mocktests/hsk3-1110/img/b2e332b1-88d0-4114-9b57-757d0bd8da90.png"
+      },
+      {
+       "key": "F",
+       "image": "/mocktests/hsk3-1110/img/657159db-eee7-474b-9d9a-cf68ab2c6dca.png"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      6,
+      10
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk3-1110/img/8a2303f3-b63a-4c3b-9953-21d1ad552b4b.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk3-1110/img/8fdab0fe-f56c-4acc-830a-d079d8f01e5b.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk3-1110/img/f8b9a93a-16d1-4209-8747-ec5b859816ae.png"
+      },
+      {
+       "key": "D",
+       "image": "/mocktests/hsk3-1110/img/ffcd7f13-ce9d-48c8-8b95-a76082f2bd0a.png"
+      },
+      {
+       "key": "E",
+       "image": "/mocktests/hsk3-1110/img/7b447132-23f4-4e65-8ec9-6aa53b8f83ec.png"
+      }
+     ]
+    }
+   ],
+   "layout": "shared_images",
+   "example": {
+    "group": "g1",
+    "answer": "D",
+    "question": "男：喂，请问张经理在吗？女：他正在开会，您半个小时以后再打，好吗？",
+    "optionsFrom": "shared"
+   },
+   "questions": [
+    {
+     "no": 1,
+     "audio": {
+      "end": 121.7,
+      "file": "/mocktests/hsk3-1110/audio/4c50f848-ed27-45bc-b106-e051723db6d1.mp3",
+      "start": 103
+     },
+     "group": "g1",
+     "answer": "B",
+     "transcript": "你这次买的西瓜真甜。 冰箱里还有,你爱吃就多吃几块。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 2,
+     "audio": {
+      "end": 142.9,
+      "file": "/mocktests/hsk3-1110/audio/5b350639-6804-490b-8237-8aae60cf609f.mp3",
+      "start": 127
+     },
+     "group": "g1",
+     "answer": "C",
+     "transcript": "姐姐,这是你的心耳机吗? 对,我买来听音乐的。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 3,
+     "audio": {
+      "end": 166.1,
+      "file": "/mocktests/hsk3-1110/audio/dc9e2181-9bfe-4711-879f-28c1bb99f1ed.mp3",
+      "start": 147.9
+     },
+     "group": "g1",
+     "answer": "A",
+     "transcript": "你觉得这件衬衫怎么样? 你试一下吧,穿上才知道合不合适。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 4,
+     "audio": {
+      "end": 189.7,
+      "file": "/mocktests/hsk3-1110/audio/cd370756-730f-4782-84f7-849fd6aad9b3.mp3",
+      "start": 171.3
+     },
+     "group": "g1",
+     "answer": "E",
+     "transcript": "你今年过年怎么回家? 我坐高铁,上周刚买好车票。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 5,
+     "audio": {
+      "end": 216.25,
+      "file": "/mocktests/hsk3-1110/audio/2c50fc76-c17a-4317-8374-aa18e711b9b3.mp3",
+      "start": 194.3
+     },
+     "group": "g1",
+     "answer": "F",
+     "transcript": "哥哥,下午去看电影吗? 我发烧了,不太舒服,今天应该不能出门了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 6,
+     "audio": {
+      "end": 245.15,
+      "file": "/mocktests/hsk3-1110/audio/e678e0a2-9b4d-4ae5-9afb-cef790b708e3.mp3",
+      "start": 227.4
+     },
+     "group": "g2",
+     "answer": "B",
+     "transcript": "大熊猫在哪儿呢? 你向上看,他在那边的树上休息呢。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 7,
+     "audio": {
+      "end": 271.9,
+      "file": "/mocktests/hsk3-1110/audio/1517d0ad-b7da-453b-b570-a87c4e45311b.mp3",
+      "start": 249.7
+     },
+     "group": "g2",
+     "answer": "A",
+     "transcript": "鱼月下月大了,我没带伞,怎么办? 没关系,我有伞,我送你去公交车站。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 8,
+     "audio": {
+      "end": 299.3,
+      "file": "/mocktests/hsk3-1110/audio/a24f2a43-dea3-4d1a-a5d6-48d990230a52.mp3",
+      "start": 277.2
+     },
+     "group": "g2",
+     "answer": "E",
+     "transcript": "生日快乐,这是我送你的生日礼物。 谢谢爸爸,我早就想换一辆新自行车了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 9,
+     "audio": {
+      "end": 326.35,
+      "file": "/mocktests/hsk3-1110/audio/dfb12043-6d6f-4e82-b695-c69a6ddf9375.mp3",
+      "start": 303.8
+     },
+     "group": "g2",
+     "answer": "C",
+     "transcript": "喂,请问我的外卖什么时候能到? 您好,我已经进小区了,马上给您送过去。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 10,
+     "audio": {
+      "end": 347.05,
+      "file": "/mocktests/hsk3-1110/audio/a39f27eb-3e83-4079-8565-4e038cf82481.mp3",
+      "start": 331.16
+     },
+     "group": "g2",
+     "answer": "D",
+     "transcript": "屋子里有点黑,把沙发旁边的灯打开吧。 好,我去开。",
+     "optionsFrom": "group"
+    }
+   ],
+   "introAudio": {
+    "end": 101.45,
+    "file": "/mocktests/hsk3-1110/audio/4694bd2f-fda8-4de5-a55f-2c31d55e858f.mp3",
+    "start": 58.9
+   }
+  },
+  {
+   "part": 2,
+   "range": [
+    11,
+    20
+   ],
+   "skill": "listening",
+   "layout": "text_choice",
+   "example": {
+    "answer": "B",
+    "options": [
+     {
+      "key": "A",
+      "text": "教室"
+     },
+     {
+      "key": "B",
+      "text": "办公室"
+     },
+     {
+      "key": "C",
+      "text": "体育馆"
+     }
+    ],
+    "question": "女：我需要搬一些椅子到楼上办公室，你能来帮忙吗？男：没问题，我再叫几个人来帮你。问：他们要把椅子搬到哪儿？"
+   },
+   "questions": [
+    {
+     "no": 11,
+     "audio": {
+      "end": 439.3,
+      "file": "/mocktests/hsk3-1110/audio/434a9dfa-c349-478c-83b9-383b54def378.mp3",
+      "start": 413.9
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "跳舞"
+      },
+      {
+       "key": "B",
+       "text": "讲故事"
+      },
+      {
+       "key": "C",
+       "text": "唱中文歌"
+      }
+     ],
+     "transcript": "你准备在晚会上表演什么节目? 我打算讲个故事。 女的要表演什么?"
+    },
+    {
+     "no": 12,
+     "audio": {
+      "end": 479.2,
+      "file": "/mocktests/hsk3-1110/audio/af4b9f88-da55-4d2d-b2ee-34dca5994eaa.mp3",
+      "start": 449.7
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "住院了"
+      },
+      {
+       "key": "B",
+       "text": "变胖了"
+      },
+      {
+       "key": "C",
+       "text": "太累了"
+      }
+     ],
+     "transcript": "你最近在忙什么? 我奶奶住院了,我每天一下班就去医院照顾她。 男的的奶奶怎么了?"
+    },
+    {
+     "no": 13,
+     "audio": {
+      "end": 515.65,
+      "file": "/mocktests/hsk3-1110/audio/e9d34548-6b69-451f-9e7b-5d35c813f8ef.mp3",
+      "start": 489.8
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "9:05"
+      },
+      {
+       "key": "B",
+       "text": "10:15"
+      },
+      {
+       "key": "C",
+       "text": "10:30"
+      }
+     ],
+     "transcript": "十点一刻了,该睡觉了,别打游戏了。 我在玩五分钟就睡。 现在几点了?"
+    },
+    {
+     "no": 14,
+     "audio": {
+      "end": 555.4,
+      "file": "/mocktests/hsk3-1110/audio/bfaf19e9-57fe-47ed-b631-684c898cc69d.mp3",
+      "start": 526
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "手表坏了"
+      },
+      {
+       "key": "B",
+       "text": "书包丢了"
+      },
+      {
+       "key": "C",
+       "text": "电脑不能开机"
+      }
+     ],
+     "transcript": "奇怪,我的笔记本电脑突然不能开机了。 是不是没电了? 女的遇到了什么问题?"
+    },
+    {
+     "no": 15,
+     "audio": {
+      "end": 597.35,
+      "file": "/mocktests/hsk3-1110/audio/c10d1a08-74cb-4b5c-b8d2-567c4775a323.mp3",
+      "start": 565.9
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "宾馆"
+      },
+      {
+       "key": "B",
+       "text": "球场"
+      },
+      {
+       "key": "C",
+       "text": "卫生间"
+      }
+     ],
+     "transcript": "你好,请问东方宾馆怎么走? 就在前面的路口,你往前走几百米就到了。 男的想去哪里?"
+    },
+    {
+     "no": 16,
+     "audio": {
+      "end": 648.25,
+      "file": "/mocktests/hsk3-1110/audio/770c368c-7c93-4a5f-bb4e-aa02f1e74845.mp3",
+      "start": 607.5
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "是电子书"
+      },
+      {
+       "key": "B",
+       "text": "和历史有关"
+      },
+      {
+       "key": "C",
+       "text": "有五千多页"
+      }
+     ],
+     "transcript": "你在读什么书? 上下五千年是介绍中国历史的,很有意思。 能不能借我看看? 那你要等几天,我还没看完呢? 关于那本书,可以知道什么?"
+    },
+    {
+     "no": 17,
+     "audio": {
+      "end": 710.95,
+      "file": "/mocktests/hsk3-1110/audio/de9ebce7-0bee-4e0f-b63c-3dda27290f64.mp3",
+      "start": 658.3
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "今天"
+      },
+      {
+       "key": "B",
+       "text": "周六"
+      },
+      {
+       "key": "C",
+       "text": "星期天"
+      }
+     ],
+     "transcript": "我周末想去银行办一张信用卡。 那你得早点去,银行周末四点半就关门了。 那我星期六上午去,你要和我一起吗? 我那天在外地开会,你自己去吧。 男的决定什么时候去办卡?"
+    },
+    {
+     "no": 18,
+     "audio": {
+      "end": 766.2,
+      "file": "/mocktests/hsk3-1110/audio/b9795689-4a44-4383-b227-7654bc2ed25d.mp3",
+      "start": 721.2
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "太旧了"
+      },
+      {
+       "key": "B",
+       "text": "离药店远"
+      },
+      {
+       "key": "C",
+       "text": "附近环境好"
+      }
+     ],
+     "transcript": "这个房子很干净,附近环境也好, 门口就是地铁站和商场。 是挺好的,但是太贵了。 便宜的房子就没那么方便了。 我在想想吧。 那个房子怎么样?"
+    },
+    {
+     "no": 19,
+     "audio": {
+      "end": 819.85,
+      "file": "/mocktests/hsk3-1110/audio/c454176c-770a-4a29-8693-1d20b129dc65.mp3",
+      "start": 776.3
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "在检票"
+      },
+      {
+       "key": "B",
+       "text": "担心儿子"
+      },
+      {
+       "key": "C",
+       "text": "要出国留学"
+      }
+     ],
+     "transcript": "妈,我得去机场了。 别急,护照和钱包带了没? 放心,都在行李箱里。 好,你一定要注意安全,下飞机了,告诉我一声。 关于女的,可以知道什么?"
+    },
+    {
+     "no": 20,
+     "audio": {
+      "end": 872.5,
+      "file": "/mocktests/hsk3-1110/audio/90fe00c3-6ebc-481e-900c-b2c4bcb8c6db.mp3",
+      "start": 830.1
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "三层的"
+      },
+      {
+       "key": "B",
+       "text": "红色的"
+      },
+      {
+       "key": "C",
+       "text": "水果的"
+      }
+     ],
+     "transcript": "这个水果蛋糕看上去很好吃。 太小了,咱们这次请了不少客人。 那这个三层的大蛋糕呢? 可以,就买它吧。 他们最后选了什么样的蛋糕?"
+    }
+   ],
+   "introAudio": {
+    "end": 412.3,
+    "file": "/mocktests/hsk3-1110/audio/dbc1ea89-1f3f-41a5-9e7b-aa811987b524.mp3",
+    "start": 350.4
+   }
+  },
+  {
+   "part": 3,
+   "range": [
+    21,
+    30
+   ],
+   "skill": "listening",
+   "groups": [
+    {
+     "id": "a29",
+     "audio": {
+      "end": 1413.4,
+      "file": "/mocktests/hsk3-1110/audio/af698ad1-080b-4159-ae8b-623a3f9bc9bc.mp3",
+      "start": 1293.25
+     },
+     "range": [
+      29,
+      30
+     ],
+     "transcript": "过去的一年,我去了中国的几十个城市, 认识了很多可爱的人,遇到了很多新鲜的事。 明年,我想去其他国家旅游,了解一下不同的文化。 如果问我为什么爱好旅游,我会这样回答, 世界这么大,我想去看看。 29 说话人明年要去哪儿旅游? 30 说话人为什么爱好旅游?"
+    }
+   ],
+   "layout": "text_choice",
+   "example": {
+    "answer": "A",
+    "options": [
+     {
+      "key": "A",
+      "text": "很聪明"
+     },
+     {
+      "key": "B",
+      "text": "是留学生"
+     },
+     {
+      "key": "C",
+      "text": "爱踢足球"
+     }
+    ],
+    "question": "那个年轻人刚来公司不久，很有工作热情，人也很聪明。问：关于那个年轻人，可以知道什么？"
+   },
+   "questions": [
+    {
+     "no": 21,
+     "audio": {
+      "end": 970.65,
+      "file": "/mocktests/hsk3-1110/audio/13394692-45d2-4f4c-ac45-66ed7f93f5ee.mp3",
+      "start": 941.3
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "不做难题"
+      },
+      {
+       "key": "B",
+       "text": "复习汉字"
+      },
+      {
+       "key": "C",
+       "text": "看清楚要求"
+      }
+     ],
+     "transcript": "现在开始第21题。 同学们,这个题其实挺简单的。 大家先看清楚要求在做。 说话人,让同学们怎么做?"
+    },
+    {
+     "no": 22,
+     "audio": {
+      "end": 1015.4,
+      "file": "/mocktests/hsk3-1110/audio/45d185e0-3361-4428-a22c-b7cad1784065.mp3",
+      "start": 981.2
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "河边"
+      },
+      {
+       "key": "B",
+       "text": "街上"
+      },
+      {
+       "key": "C",
+       "text": "草地上"
+      }
+     ],
+     "transcript": "我在草地上发现了一只瘦瘦的小猫。 他看上去很饿,我就给他拿了一些吃的。 说话人在什么地方发现的小猫?"
+    },
+    {
+     "no": 23,
+     "audio": {
+      "end": 1053.5,
+      "file": "/mocktests/hsk3-1110/audio/763844ab-1133-49c2-a380-5f5b627f4870.mp3",
+      "start": 1025.9
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "习惯差"
+      },
+      {
+       "key": "B",
+       "text": "每晚扫地"
+      },
+      {
+       "key": "C",
+       "text": "正在洗碗"
+      }
+     ],
+     "transcript": "老李的生活习惯很不好,平时几乎不打扫自己的房间。 关于老李,可以知道什么?"
+    },
+    {
+     "no": 24,
+     "audio": {
+      "end": 1099.85,
+      "file": "/mocktests/hsk3-1110/audio/958b6dcf-cef6-4ce2-b36a-d605e595960b.mp3",
+      "start": 1063.9
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "凉快"
+      },
+      {
+       "key": "B",
+       "text": "刮大风"
+      },
+      {
+       "key": "C",
+       "text": "晴天少"
+      }
+     ],
+     "transcript": "这里的夏天没那么热,春天和秋天很凉快, 冬天也不太冷,一年四季都很舒服。 那里秋季的天气怎么样?"
+    },
+    {
+     "no": 25,
+     "audio": {
+      "end": 1151,
+      "file": "/mocktests/hsk3-1110/audio/05f87370-ce4b-4200-bb3d-6a7f2f08edd4.mp3",
+      "start": 1110.2
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "经常哭"
+      },
+      {
+       "key": "B",
+       "text": "总是吃糖"
+      },
+      {
+       "key": "C",
+       "text": "刷牙时间短"
+      }
+     ],
+     "transcript": "弟弟,你每次刷牙的时间太短了,得刷两分钟以上才行。 一直不好好刷牙的话,以后会牙疼的。 说话人认为,弟弟哪儿做的不对?"
+    },
+    {
+     "no": 26,
+     "audio": {
+      "end": 1193.32,
+      "file": "/mocktests/hsk3-1110/audio/d2a5523e-edf8-456f-ab38-4c39b18b1549.mp3",
+      "start": 1161.4
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "出院了"
+      },
+      {
+       "key": "B",
+       "text": "要来做客"
+      },
+      {
+       "key": "C",
+       "text": "已经搬家了"
+      }
+     ],
+     "transcript": "黄阿姨是我以前的邻居,和我们一家关系很好。 虽然她已经搬家了,但我们还是会经常打电话。 关于黄阿姨,可以知道什么?"
+    },
+    {
+     "no": 27,
+     "audio": {
+      "end": 1240.05,
+      "file": "/mocktests/hsk3-1110/audio/9a526cf4-afa5-4cb2-b716-b8777a74600e.mp3",
+      "start": 1209.2
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "害怕水"
+      },
+      {
+       "key": "B",
+       "text": "没人教她"
+      },
+      {
+       "key": "C",
+       "text": "练习不认真"
+      }
+     ],
+     "transcript": "小雪从小就害怕水,所以直到今天,她也没学会游泳。 小雪为什么没学会游泳?"
+    },
+    {
+     "no": 28,
+     "audio": {
+      "end": 1283.8,
+      "file": "/mocktests/hsk3-1110/audio/deef918a-f07a-437e-8712-2be95816f6ac.mp3",
+      "start": 1250.4
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "叔叔"
+      },
+      {
+       "key": "B",
+       "text": "名人"
+      },
+      {
+       "key": "C",
+       "text": "女朋友"
+      }
+     ],
+     "transcript": "我的叔叔是中学校长,受到他的影响, 我长大后也想去学校工作,做一名老师。 说话人被谁影响了?"
+    },
+    {
+     "no": 29,
+     "group": "a29",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "北京市"
+      },
+      {
+       "key": "B",
+       "text": "中国东北"
+      },
+      {
+       "key": "C",
+       "text": "其他国家"
+      }
+     ]
+    },
+    {
+     "no": 30,
+     "group": "a29",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "假期长"
+      },
+      {
+       "key": "B",
+       "text": "想看世界"
+      },
+      {
+       "key": "C",
+       "text": "能学外语"
+      }
+     ]
+    }
+   ],
+   "introAudio": {
+    "end": 924.85,
+    "file": "/mocktests/hsk3-1110/audio/2cfc47d4-b8c7-48cc-a881-5ff7fe0eea7d.mp3",
+    "start": 882.7
+   }
+  },
+  {
+   "part": 1,
+   "range": [
+    31,
+    40
+   ],
+   "skill": "reading",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      31,
+      35
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "那我们还是买别的衣服吧。"
+      },
+      {
+       "key": "B",
+       "text": "您刚才坐几号桌？我让服务员找一下。"
+      },
+      {
+       "key": "C",
+       "text": "我会在里面加菜和肉，其实挺健康的。"
+      },
+      {
+       "key": "D",
+       "text": "小矮马，它们个子比较小，可爱极了。"
+      },
+      {
+       "key": "E",
+       "text": "当然。我们先坐公交车，然后换地铁。"
+      },
+      {
+       "key": "F",
+       "text": "我水平不高，怕影响大家。"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      36,
+      40
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "您好！我是李冰，是您妻子的同事。"
+      },
+      {
+       "key": "B",
+       "text": "八元五角。要不要来点儿？"
+      },
+      {
+       "key": "C",
+       "text": "经理怎么不在办公室？"
+      },
+      {
+       "key": "D",
+       "text": "你到哪儿了？表演快开始了。"
+      },
+      {
+       "key": "E",
+       "text": "我上节数学课没来，能看看你的笔记吗？明天还你。"
+      }
+     ]
+    }
+   ],
+   "layout": "shared_text",
+   "example": {
+    "group": "g1",
+    "answer": "E",
+    "question": "你知道怎么去国家图书馆吗？",
+    "optionsFrom": "shared"
+   },
+   "questions": [
+    {
+     "no": 31,
+     "group": "g1",
+     "answer": "A",
+     "question": "这条裙子很漂亮，但是我有一条几乎一样的。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 32,
+     "group": "g1",
+     "answer": "F",
+     "question": "你为什么不参加后天的篮球比赛？",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 33,
+     "group": "g1",
+     "answer": "B",
+     "question": "我把一个本子忘在这儿了，是黑色的，大概这么大。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 34,
+     "group": "g1",
+     "answer": "C",
+     "question": "你不能每天只吃方便面，会生病的。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 35,
+     "group": "g1",
+     "answer": "D",
+     "question": "你喜欢动物园里的哪种动物？",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 36,
+     "group": "g2",
+     "answer": "E",
+     "question": "没问题，有不明白的问我就行。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 37,
+     "group": "g2",
+     "answer": "A",
+     "question": "这位是我爱人张南，他在图书馆上班。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 38,
+     "group": "g2",
+     "answer": "C",
+     "question": "他休假了，你有事可以给他发邮件。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 39,
+     "group": "g2",
+     "answer": "D",
+     "question": "别急，我已经上电梯了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 40,
+     "group": "g2",
+     "answer": "B",
+     "question": "请问香蕉多少钱一公斤？",
+     "optionsFrom": "group"
+    }
+   ]
+  },
+  {
+   "part": 2,
+   "range": [
+    41,
+    50
+   ],
+   "skill": "reading",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      41,
+      45
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "地方"
+      },
+      {
+       "key": "B",
+       "text": "迟到"
+      },
+      {
+       "key": "C",
+       "text": "封"
+      },
+      {
+       "key": "D",
+       "text": "学期"
+      },
+      {
+       "key": "E",
+       "text": "鞋"
+      },
+      {
+       "key": "F",
+       "text": "终于"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      46,
+      50
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "或者"
+      },
+      {
+       "key": "B",
+       "text": "一块儿"
+      },
+      {
+       "key": "C",
+       "text": "以上"
+      },
+      {
+       "key": "D",
+       "text": "护照"
+      },
+      {
+       "key": "E",
+       "text": "马路"
+      },
+      {
+       "key": "F",
+       "text": "感冒"
+      }
+     ]
+    }
+   ],
+   "layout": "word_bank",
+   "example": {
+    "group": "g1",
+    "answer": "E",
+    "question": "中间那双（　）是谁的？",
+    "optionsFrom": "shared"
+   },
+   "questions": [
+    {
+     "no": 41,
+     "group": "g1",
+     "answer": "D",
+     "question": "女儿下（　）要上初中三年级了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 42,
+     "group": "g1",
+     "answer": "B",
+     "question": "那个男孩儿这个月一共（　）七回了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 43,
+     "group": "g1",
+     "answer": "C",
+     "question": "这儿有一（　）信，好像是给你的。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 44,
+     "group": "g1",
+     "answer": "A",
+     "question": "洗手间（　）小，放不下那么大的洗衣机。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 45,
+     "group": "g1",
+     "answer": "F",
+     "question": "在大人的帮助下，妹妹（　）学会了用筷子吃饭。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 46,
+     "group": "g2",
+     "answer": "F",
+     "question": "A：你的声音怎么变成这样了？B：我昨天开了一晚上空调，早上起来就（　）了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 47,
+     "group": "g2",
+     "answer": "A",
+     "question": "A：您口渴了吧？要不要喝杯茶（　）咖啡？B：不用了，我喝矿泉水就行。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 48,
+     "group": "g2",
+     "answer": "E",
+     "question": "A：别一边过（　），一边玩手机，小心路上的车！B：对不起，我以后不这样了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 49,
+     "group": "g2",
+     "answer": "B",
+     "question": "A：等我一下，我去洗个澡，然后跟你们（　）聊天儿。B：好，快去吧。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 50,
+     "group": "g2",
+     "answer": "C",
+     "question": "A：你网球为什么打得这么好？B：因为我去年一半（　）的时间都在练习打球。",
+     "optionsFrom": "group"
+    }
+   ]
+  },
+  {
+   "part": 3,
+   "range": [
+    51,
+    60
+   ],
+   "skill": "reading",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      51,
+      56
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      57,
+      58
+     ],
+     "passage": "兴趣是最好的老师。如果对一件事情很感兴趣，人们一般会花更多时间学习，也更容易坚持。比如我对照相很感兴趣，为了提高自己的水平，我常常去外边拍照，还会在网上学习不同的拍照方法。"
+    },
+    {
+     "id": "g3",
+     "range": [
+      59,
+      60
+     ],
+     "passage": "我过去一直不快乐，因为我总是在努力让别人满意，以为这样才能得到大家的关注和喜爱。后来我慢慢懂得了：让自己满意才是最重要的。我开始学会对别人说“不”，开始认真地关心和照顾自己。这不但让我感到快乐，而且也让我和家人、朋友的关系越来越近了。"
+    }
+   ],
+   "layout": "passage_choice",
+   "example": {
+    "group": "g1",
+    "answer": "C",
+    "options": [
+     {
+      "key": "A",
+      "text": "8:00"
+     },
+     {
+      "key": "B",
+      "text": "8:30"
+     },
+     {
+      "key": "C",
+      "text": "9:00"
+     }
+    ],
+    "passage": "您是来参加今天会议的吗？您来早了一点儿，现在才八点半。您先进来坐吧。",
+    "question": "会议最可能几点开始？"
+   },
+   "questions": [
+    {
+     "no": 51,
+     "group": "g1",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "是游客"
+      },
+      {
+       "key": "B",
+       "text": "打算请客"
+      },
+      {
+       "key": "C",
+       "text": "来中国不久"
+      }
+     ],
+     "passage": "小海刚来中国生活，除了我以外，没什么认识的人。快要到春节了，我想请他来咱们家过节，一起包饺子、看电视。",
+     "question": "小海："
+    },
+    {
+     "no": 52,
+     "group": "g1",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "笑一笑"
+      },
+      {
+       "key": "B",
+       "text": "锻炼身体"
+      },
+      {
+       "key": "C",
+       "text": "喝几瓶饮料"
+      }
+     ],
+     "passage": "难过的时候，我会选择做一些运动，比如出去跑跑步、骑会儿车。每次不需要锻炼太久，只要让身体动起来，我心里就会觉得舒服很多。",
+     "question": "他难过时会怎么做？"
+    },
+    {
+     "no": 53,
+     "group": "g1",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "在山上"
+      },
+      {
+       "key": "B",
+       "text": "花特别多"
+      },
+      {
+       "key": "C",
+       "text": "可以坐船"
+      }
+     ],
+     "passage": "那个公园非常有名，它有个好听的名字，叫“城市花园”，因为里面到处都开着漂亮的花。",
+     "question": "那个公园："
+    },
+    {
+     "no": 54,
+     "group": "g1",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "没有菜单"
+      },
+      {
+       "key": "B",
+       "text": "在校园里"
+      },
+      {
+       "key": "C",
+       "text": "受小学生欢迎"
+      }
+     ],
+     "passage": "爷爷在一个小学旁边开了家饭店，只卖面条儿、鸡腿和羊肉包子，孩子们放学后都会去那儿买吃的。",
+     "question": "关于那家饭店，可以知道什么？"
+    },
+    {
+     "no": 55,
+     "group": "g1",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "电话号码"
+      },
+      {
+       "key": "B",
+       "text": "上衣大小"
+      },
+      {
+       "key": "C",
+       "text": "银行卡号"
+      }
+     ],
+     "passage": "我把名单发给大家了，请再检查一下自己的姓名、电话、邮箱，如果有问题，请在星期日中午前找我。",
+     "question": "他让大家检查："
+    },
+    {
+     "no": 56,
+     "group": "g1",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "绿色"
+      },
+      {
+       "key": "B",
+       "text": "蓝色"
+      },
+      {
+       "key": "C",
+       "text": "黄色"
+      }
+     ],
+     "passage": "为了让班里的学生看得更清楚，我会用不同颜色的笔在黑板上写字：黄色的是常用的字词和句子，白色的是课文，蓝色的是作业。",
+     "question": "他用什么颜色的笔写常用字词？"
+    },
+    {
+     "no": 57,
+     "group": "g2",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "不难坚持"
+      },
+      {
+       "key": "B",
+       "text": "可能变化"
+      },
+      {
+       "key": "C",
+       "text": "必须是有用的"
+      }
+     ],
+     "question": "根据这段话，感兴趣的事情："
+    },
+    {
+     "no": 58,
+     "group": "g2",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "去大学上课"
+      },
+      {
+       "key": "B",
+       "text": "常出门拍照"
+      },
+      {
+       "key": "C",
+       "text": "买不同的相机"
+      }
+     ],
+     "question": "为了提高拍照水平，他："
+    },
+    {
+     "no": 59,
+     "group": "g3",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "非常爱生气"
+      },
+      {
+       "key": "B",
+       "text": "希望别人满意"
+      },
+      {
+       "key": "C",
+       "text": "不相信身边的人"
+      }
+     ],
+     "question": "他过去："
+    },
+    {
+     "no": 60,
+     "group": "g3",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "关心自己"
+      },
+      {
+       "key": "B",
+       "text": "照顾老人"
+      },
+      {
+       "key": "C",
+       "text": "怎样养小孩儿"
+      }
+     ],
+     "question": "他现在学会了："
+    }
+   ]
+  },
+  {
+   "part": 1,
+   "range": [
+    61,
+    65
+   ],
+   "skill": "writing",
+   "layout": "fill_char",
+   "example": {
+    "type": "fill",
+    "answer": "打",
+    "question": "咱们一会儿（　）车回家吧。",
+    "blankPinyin": "dǎ"
+   },
+   "questions": [
+    {
+     "no": 61,
+     "type": "fill",
+     "answer": "方",
+     "question": "听说这些鸟是从北（　）飞过来的。",
+     "blankPinyin": "fāng"
+    },
+    {
+     "no": 62,
+     "type": "fill",
+     "answer": "该",
+     "question": "没有经过我的同意，你不（　）动我的东西。",
+     "blankPinyin": "gāi"
+    },
+    {
+     "no": 63,
+     "type": "fill",
+     "answer": "毛",
+     "question": "这里一个鸡蛋只要八（　）钱。",
+     "blankPinyin": "máo"
+    },
+    {
+     "no": 64,
+     "type": "fill",
+     "answer": "成",
+     "question": "小东这次中文考试考了第一，（　）绩比上次高十分。",
+     "blankPinyin": "chéng"
+    },
+    {
+     "no": 65,
+     "type": "fill",
+     "answer": "法",
+     "question": "牛先生认为这个办（　）不能解决问题。",
+     "blankPinyin": "fǎ"
+    }
+   ]
+  },
+  {
+   "part": 2,
+   "range": [
+    66,
+    70
+   ],
+   "skill": "writing",
+   "layout": "picture_word",
+   "example": {
+    "type": "write",
+    "word": "开心",
+    "image": "/mocktests/hsk3-1110/img/881851ea-b240-47cd-8b4b-bd3375782542.png",
+    "reference": "他开心得跳起来了。"
+   },
+   "questions": [
+    {
+     "no": 66,
+     "type": "write",
+     "word": "羽毛球",
+     "image": "/mocktests/hsk3-1110/img/63d8b954-ff01-474f-bddf-91e3e64f402b.png",
+     "answer": null,
+     "reference": "姐姐羽毛球打得很好。"
+    },
+    {
+     "no": 67,
+     "type": "write",
+     "word": "饱",
+     "image": "/mocktests/hsk3-1110/img/87afe364-8a39-439f-ae20-6f9824f44c41.png",
+     "answer": null,
+     "reference": "我已经饱了，不吃了。"
+    },
+    {
+     "no": 68,
+     "type": "write",
+     "word": "爬",
+     "image": "/mocktests/hsk3-1110/img/e041242c-a7ac-4eeb-b5f1-bea591f9ae68.png",
+     "answer": null,
+     "reference": "我周末常常去爬山。"
+    },
+    {
+     "no": 69,
+     "type": "write",
+     "word": "结婚",
+     "image": "/mocktests/hsk3-1110/img/c37fdac5-da02-43de-bb96-f708e0975eb3.png",
+     "answer": null,
+     "reference": "他们两个今天结婚了。"
+    },
+    {
+     "no": 70,
+     "type": "write",
+     "word": "地图",
+     "image": "/mocktests/hsk3-1110/img/45560557-5b97-4ca9-9faf-1e3fcf941f3b.png",
+     "answer": null,
+     "reference": "根据地图，我们应该向那边走。"
+    }
+   ]
+  }
+ ],
+ "questionCount": 70,
+ "durationMinutes": 83
+}

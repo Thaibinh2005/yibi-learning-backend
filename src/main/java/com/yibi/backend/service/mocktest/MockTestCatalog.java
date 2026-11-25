@@ -27,7 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Where sample papers live: the mock_tests table, one row per paper, and mock_test_versions, every published version
  * (an attempt is always shown and scored with the version it started on).
  *
- * <p>Papers bundled as data/mocktests/*.json (made by mocktest_publish.py, shared with every contributor) are loaded
+ * <p>Papers bundled as data/mocktests/*.json (made by mocktest_publish.py from a script output folder, or by
+ * mocktest_export_bundle.py from a paper published in the app; shared with every contributor) are loaded
  * at startup: a new file becomes a published paper, a changed file a new version — unless an admin has since edited
  * that paper in the app (origin EDITED), whose edits then win.
  */

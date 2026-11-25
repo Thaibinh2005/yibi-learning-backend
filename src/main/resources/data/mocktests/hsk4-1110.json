@@ -1,0 +1,1711 @@
+{
+ "id": "hsk4-1110",
+ "level": 4,
+ "parts": [
+  {
+   "skill": "listening",
+   "minutes": 20,
+   "questionCount": 32
+  },
+  {
+   "skill": "reading",
+   "minutes": 30,
+   "questionCount": 32
+  },
+  {
+   "skill": "writing",
+   "minutes": 25,
+   "questionCount": 6
+  }
+ ],
+ "stage": "Trung cấp",
+ "title": "HSK 4",
+ "source": "Đề mẫu HSK 3.0 chính thức (中外语言交流合作中心)",
+ "sections": [
+  {
+   "part": 1,
+   "range": [
+    1,
+    14
+   ],
+   "skill": "listening",
+   "layout": "text_choice",
+   "questions": [
+    {
+     "no": 1,
+     "audio": {
+      "end": 91.5,
+      "file": "/mocktests/hsk4-1110/audio/976122cb-8272-4aad-baba-b71cfcea7cef.mp3",
+      "start": 75.4
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "地点"
+      },
+      {
+       "key": "B",
+       "text": "方式"
+      },
+      {
+       "key": "C",
+       "text": "时间"
+      },
+      {
+       "key": "D",
+       "text": "人员"
+      }
+     ],
+     "transcript": "大家注意 明早九点的会改到了四楼的大会议室举行。 好的 我们一定准时参加。 会议的哪项安排发生了变化。"
+    },
+    {
+     "no": 2,
+     "audio": {
+      "end": 123.7,
+      "file": "/mocktests/hsk4-1110/audio/640958ab-80a2-455b-bece-325ae17ff601.mp3",
+      "start": 107
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "做生意"
+      },
+      {
+       "key": "B",
+       "text": "弹钢琴"
+      },
+      {
+       "key": "C",
+       "text": "演话剧"
+      },
+      {
+       "key": "D",
+       "text": "写文章"
+      }
+     ],
+     "transcript": "听说你最近开始学弹钢琴了 在哪儿学的? 我没找老师 我是看网站上的教学视频自学的。 难的最近在学什么?"
+    },
+    {
+     "no": 3,
+     "audio": {
+      "end": 155.9,
+      "file": "/mocktests/hsk4-1110/audio/9b11f055-c57b-4733-87f7-1381aa19a571.mp3",
+      "start": 139.3
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "推迟了"
+      },
+      {
+       "key": "B",
+       "text": "任务复杂"
+      },
+      {
+       "key": "C",
+       "text": "没订旅馆"
+      },
+      {
+       "key": "D",
+       "text": "由小周负责"
+      }
+     ],
+     "transcript": "经理 这趟出差只有我一个人去吗? 这次的任务有些复杂 小周会和你一起去。 关于那趟出差 可以知道什么?"
+    },
+    {
+     "no": 4,
+     "audio": {
+      "end": 189.1,
+      "file": "/mocktests/hsk4-1110/audio/9e8b8561-aad7-4344-8c5b-8d3996b42b82.mp3",
+      "start": 171
+     },
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "讲笑话"
+      },
+      {
+       "key": "B",
+       "text": "擦窗户"
+      },
+      {
+       "key": "C",
+       "text": "买白酒"
+      },
+      {
+       "key": "D",
+       "text": "选沙发"
+      }
+     ],
+     "transcript": "你看这个白色的沙发怎么样 适合放在咱家客厅吗? 样子挺好看的 大小也合适 就是白色太容易脏了。 他们在干什么?"
+    },
+    {
+     "no": 5,
+     "audio": {
+      "end": 222.1,
+      "file": "/mocktests/hsk4-1110/audio/1891ecbb-164b-449a-b2a6-41a004a30f70.mp3",
+      "start": 204.4
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "还没有想法"
+      },
+      {
+       "key": "B",
+       "text": "准备回老家"
+      },
+      {
+       "key": "C",
+       "text": "计划去北京"
+      },
+      {
+       "key": "D",
+       "text": "后悔留校了"
+      }
+     ],
+     "transcript": "马上就要放暑假了 你有什么打算? 我计划去北京旅游 不过还没跟父母商量 不知道他们同不同意呢。 女的是什么意思?"
+    },
+    {
+     "no": 6,
+     "audio": {
+      "end": 254.1,
+      "file": "/mocktests/hsk4-1110/audio/f4038419-ecac-43fc-b7a8-24667e947be9.mp3",
+      "start": 237.5
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "放松一下"
+      },
+      {
+       "key": "B",
+       "text": "批评儿子"
+      },
+      {
+       "key": "C",
+       "text": "祝贺小方"
+      },
+      {
+       "key": "D",
+       "text": "转发消息"
+      }
+     ],
+     "transcript": "快看 这学期获得奖学金的名单出来了 小方是第一。 小方真厉害 我们赶快去祝贺她吧。 他们准备做什么?"
+    },
+    {
+     "no": 7,
+     "audio": {
+      "end": 289.5,
+      "file": "/mocktests/hsk4-1110/audio/169209b0-2883-4baf-9c8b-9365722381a9.mp3",
+      "start": 269.5
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "性格好"
+      },
+      {
+       "key": "B",
+       "text": "很细心"
+      },
+      {
+       "key": "C",
+       "text": "有点儿懒"
+      },
+      {
+       "key": "D",
+       "text": "非常骄傲"
+      }
+     ],
+     "transcript": "妹妹旁边的那个男生 是他男朋友吗? 对 我们之前见过一次 他长得帅 性格也好 而且很懂礼貌。 女的觉得 妹妹的男朋友怎么样?"
+    },
+    {
+     "no": 8,
+     "audio": {
+      "end": 326.2,
+      "file": "/mocktests/hsk4-1110/audio/281daa03-0af2-4944-a0db-89520a8b7b3c.mp3",
+      "start": 304.8
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "半小时内"
+      },
+      {
+       "key": "B",
+       "text": "大概一小时"
+      },
+      {
+       "key": "C",
+       "text": "两小时左右"
+      },
+      {
+       "key": "D",
+       "text": "至少三小时"
+      }
+     ],
+     "transcript": "请问 礼法需要等多久? 您前面还有四五位客人 大概要等两个小时。 这么久啊? 不好意思 周末顾客较多 您可以先坐椅子上休息一下。 现在礼法要等多久?"
+    },
+    {
+     "no": 9,
+     "audio": {
+      "end": 367.3,
+      "file": "/mocktests/hsk4-1110/audio/58e3a41e-ec6f-4f33-a69d-1fe822f4e4c1.mp3",
+      "start": 341.2
+     },
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "袜子破了"
+      },
+      {
+       "key": "B",
+       "text": "特别吃惊"
+      },
+      {
+       "key": "C",
+       "text": "误会女的了"
+      },
+      {
+       "key": "D",
+       "text": "忘带钥匙了"
+      }
+     ],
+     "transcript": "久。 喂 你在家吗? 我忘带单位钥匙了 你能不能帮我送过来? 没问题 我正好要出去 你把他放哪儿了? 估计放桌子上了 如果没有 就在我那个黑色的背包里。 行 我找到了 就给你送过去。 男的怎么了?"
+    },
+    {
+     "no": 10,
+     "audio": {
+      "end": 405.3,
+      "file": "/mocktests/hsk4-1110/audio/895f4533-5c2d-4738-b12e-fb5ac6a6780d.mp3",
+      "start": 382.3
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "厕所对面"
+      },
+      {
+       "key": "B",
+       "text": "院子里面"
+      },
+      {
+       "key": "C",
+       "text": "大厅旁边"
+      },
+      {
+       "key": "D",
+       "text": "餐厅后面"
+      }
+     ],
+     "transcript": "时。 抱歉 先生 这里禁止吸烟。 对不起 我马上离开 这附近哪里能吸烟? 吸烟室在洗手间对面 从这里走到头 左转就能看见。 好的 谢谢。 吸烟室在哪儿?"
+    },
+    {
+     "no": 11,
+     "audio": {
+      "end": 441.7,
+      "file": "/mocktests/hsk4-1110/audio/1a1f845d-7400-4adb-954b-17e377e180b4.mp3",
+      "start": 419.8
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "学费"
+      },
+      {
+       "key": "B",
+       "text": "车牌号"
+      },
+      {
+       "key": "C",
+       "text": "门的密码"
+      },
+      {
+       "key": "D",
+       "text": "租车的价格"
+      }
+     ],
+     "transcript": "时。 门已经装好了 你想个密码吧 四位数字。 就用门牌号吧 1502 这样太简单了 很容易被人猜到 那就用你的出生日期吧 1124 他们在讨论什么?"
+    },
+    {
+     "no": 12,
+     "audio": {
+      "end": 483.9,
+      "file": "/mocktests/hsk4-1110/audio/d0b0bcba-748d-4ad5-a429-aa669d047906.mp3",
+      "start": 456.6
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "他的孙子"
+      },
+      {
+       "key": "B",
+       "text": "他的同事"
+      },
+      {
+       "key": "C",
+       "text": "他的兄弟"
+      },
+      {
+       "key": "D",
+       "text": "他的爱人"
+      }
+     ],
+     "transcript": "时。 你还记得以前的邻居黄叔叔吗? 记得啊 但从他搬走后 好像就再也没见过了 怎么了? 我今天在公园遇见他了 当时他正陪孙子玩儿呢 没想到黄叔叔都当爷爷了 时间过得真快呀 当时黄叔叔在陪谁玩?"
+    },
+    {
+     "no": 13,
+     "audio": {
+      "end": 517.8,
+      "file": "/mocktests/hsk4-1110/audio/941ec6b0-1fac-4a3b-b7dd-cafa4de5366e.mp3",
+      "start": 499.1
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "工厂"
+      },
+      {
+       "key": "B",
+       "text": "食堂"
+      },
+      {
+       "key": "C",
+       "text": "加油站"
+      },
+      {
+       "key": "D",
+       "text": "健身房"
+      }
+     ],
+     "transcript": "你好 你们这里加油打折吗? 现在满200-20 再送一包纸巾 麻烦帮我把油加满 谢谢。 不客气 对话最可能发生在哪儿?"
+    },
+    {
+     "no": 14,
+     "audio": {
+      "end": 560.6,
+      "file": "/mocktests/hsk4-1110/audio/2dea2474-1c17-4fc8-b8ea-1464e939ddfb.mp3",
+      "start": 532.8
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "堵车了"
+      },
+      {
+       "key": "B",
+       "text": "雨太大了"
+      },
+      {
+       "key": "C",
+       "text": "错过了公交"
+      },
+      {
+       "key": "D",
+       "text": "身份证丢了"
+      }
+     ],
+     "transcript": "你怎么来得这么晚 差点没赶上高铁 今天是中秋假期第一天 路上太堵了 节假日堵车肯定严重 你没早点出门吗? 我提前一个小时就出发了 结果时间还是不太够用 难的为什么差点没赶上高铁?"
+    }
+   ],
+   "introAudio": {
+    "end": 76.24,
+    "file": "/mocktests/hsk4-1110/audio/e5ecd9fb-49e6-4b7f-a801-485b3dc2b7eb.mp3",
+    "start": 58.8
+   },
+   "instructionZh": "请选出正确答案。"
+  },
+  {
+   "part": 2,
+   "range": [
+    15,
+    32
+   ],
+   "skill": "listening",
+   "groups": [
+    {
+     "id": "a20",
+     "audio": {
+      "end": 843.75,
+      "file": "/mocktests/hsk4-1110/audio/994d2abc-b594-4481-80dd-038ef45558ec.mp3",
+      "start": 786.98
+     },
+     "range": [
+      20,
+      21
+     ],
+     "transcript": "是妈妈是女儿这首歌我听过很多遍 每次都会让我非常感动 特别是自己做了母亲以后 我才真正理解了歌里唱的内容 明白了妈妈的辛苦与不容易 也终于懂得了她那份深深的爱 20 说话人觉得那首歌怎么样? 21 通过听那首歌说话人明白了什么?"
+    },
+    {
+     "id": "a22",
+     "audio": {
+      "end": 914.9,
+      "file": "/mocktests/hsk4-1110/audio/5867b588-1dad-4859-b2b1-1acbcc694dce.mp3",
+      "start": 857.18
+     },
+     "range": [
+      22,
+      23
+     ],
+     "transcript": "昨晚我在办公室打印资料时 打印机突然坏了无法打印 我先试着自己修了一下 但发现怎么都弄不好 于是我只好联系技术部 专门修理打印机的李师傅 想问问他该怎样修 没想到他很快就来到公司 把打印机修好了 22 打印机怎么了? 23 打印机是谁修好的?"
+    },
+    {
+     "id": "a24",
+     "audio": {
+      "end": 980.6,
+      "file": "/mocktests/hsk4-1110/audio/d3ba9394-5098-4f4f-9430-15a416e805e8.mp3",
+      "start": 928.2
+     },
+     "range": [
+      24,
+      25
+     ],
+     "transcript": "你要是去成都可以尝尝甜水面 这是成都人很喜欢的一种小吃 这种面像筷子一样粗 吃起来又辣又甜又酸 特别香 保证你吃过之后还想吃 24 甜水面是哪里的美食? 25 甜水面的味道怎么样?"
+    },
+    {
+     "id": "a26",
+     "audio": {
+      "end": 1049.9,
+      "file": "/mocktests/hsk4-1110/audio/b09e6438-3202-4091-a106-3c1d35eee583.mp3",
+      "start": 993.88
+     },
+     "range": [
+      26,
+      27
+     ],
+     "transcript": "姐姐的理想是成为一名律师 但他的高考成绩不太好 没有考上法学院 可是姐姐并没有放弃自己的梦想 努力学习法律知识 大四时成功考上了法律专业的研究生 说是毕业后终于当上了律师 26 姐姐的理想是什么? 27 关于姐姐 下例哪项正确?"
+    },
+    {
+     "id": "a28",
+     "audio": {
+      "end": 1122.05,
+      "file": "/mocktests/hsk4-1110/audio/4b3c9cd3-4828-4bd5-a353-3df2663489d7.mp3",
+      "start": 1063.32
+     },
+     "range": [
+      28,
+      29
+     ],
+     "transcript": "东北湖主要生活在亚洲的东北部 是世界上最大的老虎之一 东北湖体重可以达到200多千克 体长约2米 力气非常大 跑得也很快 他们经常出现在森林或者深山里 习惯白天休息 晚上再出来活动 28 东北湖有什么特点? 29 东北湖经常出现在哪里?"
+    },
+    {
+     "id": "a30",
+     "audio": {
+      "end": 1231.25,
+      "file": "/mocktests/hsk4-1110/audio/6d8e4110-74a6-44d4-af93-dc66da63a93a.mp3",
+      "start": 1135.6
+     },
+     "range": [
+      30,
+      32
+     ],
+     "transcript": "由于工作原因 小马这段时间不得不去外地上班 只有周末才能回家和爱人见面 因此俩人成了一对周末夫妻 虽然平时剧少离多 但两个人的感情特别好 不管每天有多忙 都会打电话互相聊聊一天里发生的事情 无论是工作上的还是生活中的 都会让另一半知道 尽管夫妻俩不能每天都待在一起 但仍能感受到对方的关心 这对他们来说就是最幸福的 30 下列哪项是他们成为周末夫妻的原因? 31 他们是通过什么方式进行交流的? 32 关于小马夫妻俩 可以知道什么?"
+    }
+   ],
+   "layout": "text_choice",
+   "questions": [
+    {
+     "no": 15,
+     "audio": {
+      "end": 615.3,
+      "file": "/mocktests/hsk4-1110/audio/61f5ede0-853a-4c13-af0a-571ad0254c1a.mp3",
+      "start": 593.3
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "洗毛衣"
+      },
+      {
+       "key": "B",
+       "text": "点外卖"
+      },
+      {
+       "key": "C",
+       "text": "寄快递"
+      },
+      {
+       "key": "D",
+       "text": "买酸奶"
+      }
+     ],
+     "transcript": "弟弟 我今天要给爷爷寄点茶叶 已经跟快递员约好了上门取剑 不过一会儿我要出去一趟 要是快递员来了 你直接把东西给他就行 说话人让弟弟帮忙做什么?"
+    },
+    {
+     "no": 16,
+     "audio": {
+      "end": 653.2,
+      "file": "/mocktests/hsk4-1110/audio/f3b829f0-4558-441a-8b02-d80f552f03ee.mp3",
+      "start": 630.5
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "休假一天"
+      },
+      {
+       "key": "B",
+       "text": "举办活动"
+      },
+      {
+       "key": "C",
+       "text": "安排参观"
+      },
+      {
+       "key": "D",
+       "text": "请客庆祝"
+      }
+     ],
+     "transcript": "世界势力日 是每年10月的第二个星期四 这一天 全球很多国家都会举办各种活动 目的是提醒人们重视保护眼睛 在世界势力日那天 一些国家会怎么做?"
+    },
+    {
+     "no": 17,
+     "audio": {
+      "end": 695.1,
+      "file": "/mocktests/hsk4-1110/audio/e4eeb5f3-e753-4cd0-bafe-ef0ffb905795.mp3",
+      "start": 668.6
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "十分精彩"
+      },
+      {
+       "key": "B",
+       "text": "绿队赢了"
+      },
+      {
+       "key": "C",
+       "text": "有球员受伤"
+      },
+      {
+       "key": "D",
+       "text": "是网球比赛"
+      }
+     ],
+     "transcript": "这场排球赛实在太精彩了 目前还剩最后三分钟 绿队和黄队只差了2分 接下来两队运动员的表现非常关键 每一次发球接球 都将直接决定整场比赛的输赢 关于那场比赛 下列哪项正确?"
+    },
+    {
+     "no": 18,
+     "audio": {
+      "end": 732.5,
+      "file": "/mocktests/hsk4-1110/audio/e46b5cc3-b58e-4404-9f6b-ef0b7a673824.mp3",
+      "start": 710.1
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "咳嗽"
+      },
+      {
+       "key": "B",
+       "text": "胳膊痛"
+      },
+      {
+       "key": "C",
+       "text": "流鼻血"
+      },
+      {
+       "key": "D",
+       "text": "体温过高"
+      }
+     ],
+     "transcript": "我今早醒了之后就一直咳嗽 于是赶紧去了医院 大夫给我做了详细的检查 说我的咳嗽是由流行性感冒引起的 需要打一针 说话人今天为什么去医院?"
+    },
+    {
+     "no": 19,
+     "audio": {
+      "end": 773.1,
+      "file": "/mocktests/hsk4-1110/audio/48411723-f6ac-456c-93cc-0254ea009d1c.mp3",
+      "start": 747.7
+     },
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "打开手机"
+      },
+      {
+       "key": "B",
+       "text": "放好行李"
+      },
+      {
+       "key": "C",
+       "text": "收拾垃圾"
+      },
+      {
+       "key": "D",
+       "text": "不能用耳机"
+      }
+     ],
+     "transcript": "在飞机起飞和降落前 工作人员一般会提醒乘客将耳机取下 这是为了保证每位乘客都能及时听到广播通知 尤其在遇到危险情况的时候 在飞机起飞和降落前 工作人员会提醒什么?"
+    },
+    {
+     "no": 20,
+     "group": "a20",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "很感人"
+      },
+      {
+       "key": "B",
+       "text": "很流行"
+      },
+      {
+       "key": "C",
+       "text": "非常难听"
+      },
+      {
+       "key": "D",
+       "text": "缺点很多"
+      }
+     ]
+    },
+    {
+     "no": 21,
+     "group": "a20",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "赚钱不容易"
+      },
+      {
+       "key": "B",
+       "text": "家庭的重要"
+      },
+      {
+       "key": "C",
+       "text": "母亲很辛苦"
+      },
+      {
+       "key": "D",
+       "text": "怎样照顾儿童"
+      }
+     ]
+    },
+    {
+     "no": 22,
+     "group": "a22",
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "进水了"
+      },
+      {
+       "key": "B",
+       "text": "太旧了"
+      },
+      {
+       "key": "C",
+       "text": "不停地响"
+      },
+      {
+       "key": "D",
+       "text": "无法打印"
+      }
+     ]
+    },
+    {
+     "no": 23,
+     "group": "a22",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "李师傅"
+      },
+      {
+       "key": "B",
+       "text": "刘队长"
+      },
+      {
+       "key": "C",
+       "text": "王教授"
+      },
+      {
+       "key": "D",
+       "text": "赵教练"
+      }
+     ]
+    },
+    {
+     "no": 24,
+     "group": "a24",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "成都"
+      },
+      {
+       "key": "B",
+       "text": "长春"
+      },
+      {
+       "key": "C",
+       "text": "南京"
+      },
+      {
+       "key": "D",
+       "text": "上海"
+      }
+     ]
+    },
+    {
+     "no": 25,
+     "group": "a24",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "很香"
+      },
+      {
+       "key": "B",
+       "text": "特别咸"
+      },
+      {
+       "key": "C",
+       "text": "有些苦"
+      },
+      {
+       "key": "D",
+       "text": "一点儿也不辣"
+      }
+     ]
+    },
+    {
+     "no": 26,
+     "group": "a26",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "开演唱会"
+      },
+      {
+       "key": "B",
+       "text": "考上博士"
+      },
+      {
+       "key": "C",
+       "text": "成为律师"
+      },
+      {
+       "key": "D",
+       "text": "当一名警察"
+      }
+     ]
+    },
+    {
+     "no": 27,
+     "group": "a26",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "明年入学"
+      },
+      {
+       "key": "B",
+       "text": "硕士毕业"
+      },
+      {
+       "key": "C",
+       "text": "在广东打工"
+      },
+      {
+       "key": "D",
+       "text": "普通话标准"
+      }
+     ]
+    },
+    {
+     "no": 28,
+     "group": "a28",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "力气很大"
+      },
+      {
+       "key": "B",
+       "text": "喜欢热闹"
+      },
+      {
+       "key": "C",
+       "text": "听力极好"
+      },
+      {
+       "key": "D",
+       "text": "速度较慢"
+      }
+     ]
+    },
+    {
+     "no": 29,
+     "group": "a28",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "江边"
+      },
+      {
+       "key": "B",
+       "text": "森林里"
+      },
+      {
+       "key": "C",
+       "text": "中国南方"
+      },
+      {
+       "key": "D",
+       "text": "亚洲西部"
+      }
+     ]
+    },
+    {
+     "no": 30,
+     "group": "a30",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "留学"
+      },
+      {
+       "key": "B",
+       "text": "工作"
+      },
+      {
+       "key": "C",
+       "text": "经济困难"
+      },
+      {
+       "key": "D",
+       "text": "给孩子看病"
+      }
+     ]
+    },
+    {
+     "no": 31,
+     "group": "a30",
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "写信"
+      },
+      {
+       "key": "B",
+       "text": "发邮件"
+      },
+      {
+       "key": "C",
+       "text": "发短信"
+      },
+      {
+       "key": "D",
+       "text": "打电话"
+      }
+     ]
+    },
+    {
+     "no": 32,
+     "group": "a30",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "兴趣相同"
+      },
+      {
+       "key": "B",
+       "text": "感情很好"
+      },
+      {
+       "key": "C",
+       "text": "每天都散步"
+      },
+      {
+       "key": "D",
+       "text": "结婚十年了"
+      }
+     ]
+    }
+   ],
+   "introAudio": {
+    "end": 591.0,
+    "file": "/mocktests/hsk4-1110/audio/7f2d6e80-3482-4fa8-abca-9e2c6519b74e.mp3",
+    "start": 576.0
+   },
+   "instructionZh": "请选出正确答案。"
+  },
+  {
+   "part": 1,
+   "range": [
+    33,
+    42
+   ],
+   "skill": "reading",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      33,
+      37
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "之间"
+      },
+      {
+       "key": "B",
+       "text": "打扰"
+      },
+      {
+       "key": "C",
+       "text": "免费"
+      },
+      {
+       "key": "D",
+       "text": "也许"
+      },
+      {
+       "key": "E",
+       "text": "实在"
+      },
+      {
+       "key": "F",
+       "text": "街道"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      38,
+      42
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "自信"
+      },
+      {
+       "key": "B",
+       "text": "心情"
+      },
+      {
+       "key": "C",
+       "text": "修理"
+      },
+      {
+       "key": "D",
+       "text": "到底"
+      },
+      {
+       "key": "E",
+       "text": "可惜"
+      },
+      {
+       "key": "F",
+       "text": "倒"
+      }
+     ]
+    }
+   ],
+   "layout": "word_bank",
+   "questions": [
+    {
+     "no": 33,
+     "group": "g1",
+     "answer": "B",
+     "question": "（　）一下，同学，请不要在自习室里大声讨论。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 34,
+     "group": "g1",
+     "answer": "C",
+     "question": "从1月1日起，我市60岁以上的老年人可以（　）乘坐公共汽车。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 35,
+     "group": "g1",
+     "answer": "A",
+     "question": "我父母都很幽默，爱开玩笑，他们（　）的对话总是十分有趣。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 36,
+     "group": "g1",
+     "answer": "D",
+     "question": "如果你当时没那么粗心，（　）结果会完全不一样。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 37,
+     "group": "g1",
+     "answer": "E",
+     "question": "最近几周天天加班，（　）辛苦，等到年底我给大家放几天假。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 38,
+     "group": "g2",
+     "answer": "F",
+     "question": "A：冰箱里还有我上午做的葡萄汁，给你（　）一杯？B：不用了，我肚子有点儿难受，喝不了凉的。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 39,
+     "group": "g2",
+     "answer": "D",
+     "question": "A：我都睡一觉了，你怎么还在看小说？B：就剩几页了，我想知道最后（　）怎么样了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 40,
+     "group": "g2",
+     "answer": "A",
+     "question": "A：明天就要面试了，我感觉自己还没准备好。B：别担心，表现得（　）点儿，你肯定能行。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 41,
+     "group": "g2",
+     "answer": "E",
+     "question": "A：昨晚的京剧演出邀请了许多有名的演员，特别好看。B：早知道我就和你一起去了，真是太（　）了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 42,
+     "group": "g2",
+     "answer": "B",
+     "question": "A：你的小猫脾气真好，可以随便让人抱。B：可能是因为它刚吃饱，（　）比较好，平时才不这样呢。",
+     "optionsFrom": "group"
+    }
+   ],
+   "instructionZh": "选词填空。请注意：其中一个选项为干扰项，需排除。"
+  },
+  {
+   "part": 2,
+   "range": [
+    43,
+    57
+   ],
+   "skill": "reading",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      43,
+      50
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      51,
+      52
+     ],
+     "passage": "小谢，我了解了一下你目前的情况。考虑到你刚进我们公司，缺少这方面的经验，所以我打算让你去市场部，从基础学起，慢慢积累经验。明天上午，张经理会向你详细介绍市场部的工作内容，你有任何问题都可以问他。"
+    },
+    {
+     "id": "g3",
+     "range": [
+      53,
+      54
+     ],
+     "passage": "申请签证时，首先需要在线上填写申请表，接着通过签证申请服务网站选择线下办理时间，然后按时去使馆交护照、照片等材料，并支付费用。同时，在办理签证的过程中，可以通过网站查看办理的情况。申请通过后，使馆会通知申请人的。"
+    },
+    {
+     "id": "g4",
+     "range": [
+      55,
+      57
+     ],
+     "passage": "海菜花是一种中国才有的，在水中生活的植物。它喜欢阳光多又暖和的地方，并且对水的要求非常严格，稍微有一点儿污染都会受到影响。所以环保部门往往通过海菜花来判断水是否受到了污染，因此它也被叫作“环保菜”。在过去几十年里，受水、气候条件等影响，海菜花的数量一直在减少，不过近几年，由于云南大理加强环境保护，海菜花的数量不断增加。现在，每年5月到10月，洱海北部20公里全部开满了海菜花，十分美丽。"
+    }
+   ],
+   "layout": "passage_choice",
+   "questions": [
+    {
+     "no": 43,
+     "group": "g1",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "多云"
+      },
+      {
+       "key": "B",
+       "text": "常常下雪"
+      },
+      {
+       "key": "C",
+       "text": "气温变化大"
+      },
+      {
+       "key": "D",
+       "text": "夜晚降温了"
+      }
+     ],
+     "passage": "最近气温变得太快了！昨天最高温度才10℃，我穿着厚外套都觉得冷，今天最高温竟然达到了25℃，虽然我只穿了一件衬衫，但还是热得直出汗。",
+     "question": "最近："
+    },
+    {
+     "no": 44,
+     "group": "g1",
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "翻译准确"
+      },
+      {
+       "key": "B",
+       "text": "每部300元"
+      },
+      {
+       "key": "C",
+       "text": "仅售票员有"
+      },
+      {
+       "key": "D",
+       "text": "支持多种语言"
+      }
+     ],
+     "passage": "北京大兴国际机场的地铁站内，所有工作人员都有一部外语翻译机。这种翻译机支持34种语言翻译，方便与国际旅客交流，提供有效服务。",
+     "question": "那种翻译机："
+    },
+    {
+     "no": 45,
+     "group": "g1",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "改变主意"
+      },
+      {
+       "key": "B",
+       "text": "接受道歉"
+      },
+      {
+       "key": "C",
+       "text": "坚持到底"
+      },
+      {
+       "key": "D",
+       "text": "要有目标"
+      }
+     ],
+     "passage": "老张，放弃很简单，难的是面对压力还能坚持到底。即使别人都怀疑你、反对你，你也要记住，我会永远在你身边陪着你、鼓励你。",
+     "question": "他认为老张该怎样做？"
+    },
+    {
+     "no": 46,
+     "group": "g1",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "练习汉字"
+      },
+      {
+       "key": "B",
+       "text": "加强理解"
+      },
+      {
+       "key": "C",
+       "text": "便于预习"
+      },
+      {
+       "key": "D",
+       "text": "能发现错误"
+      }
+     ],
+     "passage": "记课堂笔记有很多好处，它不仅可以加强我们对知识内容的理解，还可以帮我们快速弄清学习的重点，便于期末复习。",
+     "question": "记课堂笔记的好处是："
+    },
+    {
+     "no": 47,
+     "group": "g1",
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "零钱"
+      },
+      {
+       "key": "B",
+       "text": "早餐"
+      },
+      {
+       "key": "C",
+       "text": "毛巾"
+      },
+      {
+       "key": "D",
+       "text": "矿泉水"
+      }
+     ],
+     "passage": "同学们，明天秋游，大家最好带瓶矿泉水，可以顺便再拿些小零食，比如饼干、巧克力什么的。但是不用带太多东西，学校为每个人都准备了午餐。",
+     "question": "同学们明天最好带上："
+    },
+    {
+     "no": 48,
+     "group": "g1",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "有很多树"
+      },
+      {
+       "key": "B",
+       "text": "路非常难走"
+      },
+      {
+       "key": "C",
+       "text": "带给他美好回忆"
+      },
+      {
+       "key": "D",
+       "text": "现在是著名景点"
+      }
+     ],
+     "passage": "我的家乡有一座山，小时候我经常和朋友们一起去山上，躺在草地上看风景，特别开心。长大后，尽管我去过很多地方，看了很多美景，但那座山的景色一直都是我心中最美好的回忆。",
+     "question": "那座山："
+    },
+    {
+     "no": 49,
+     "group": "g1",
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "聚会"
+      },
+      {
+       "key": "B",
+       "text": "考试"
+      },
+      {
+       "key": "C",
+       "text": "打招呼"
+      },
+      {
+       "key": "D",
+       "text": "拒绝别人"
+      }
+     ],
+     "passage": "遇见认识的人时，打个招呼很正常，但有些人对此却非常紧张。为了不打招呼，他们甚至在看见熟悉的人之后，故意低着头走。如果你遇到了这样的朋友，请不要感到不满，可能他只是比较容易害羞，不敢开口。",
+     "question": "有的人会对什么感到紧张？"
+    },
+    {
+     "no": 50,
+     "group": "g1",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "入睡快"
+      },
+      {
+       "key": "B",
+       "text": "收入高"
+      },
+      {
+       "key": "C",
+       "text": "没有烦恼"
+      },
+      {
+       "key": "D",
+       "text": "浪漫的爱情"
+      }
+     ],
+     "passage": "根据调查，人们从关上灯到睡着一般需要10到20分钟。如果经常超过30分钟还没睡着，就是入睡困难了。但也有人一躺下就能睡着，能够“秒睡”，这是一件让很多人羡慕的事情。",
+     "question": "根据这段话，什么让人羡慕？"
+    },
+    {
+     "no": 51,
+     "group": "g2",
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "市场部"
+      },
+      {
+       "key": "B",
+       "text": "管理部"
+      },
+      {
+       "key": "C",
+       "text": "信息部"
+      },
+      {
+       "key": "D",
+       "text": "广告部"
+      }
+     ],
+     "question": "小谢将去："
+    },
+    {
+     "no": 52,
+     "group": "g2",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "整理文件"
+      },
+      {
+       "key": "B",
+       "text": "积累经验"
+      },
+      {
+       "key": "C",
+       "text": "招聘新人"
+      },
+      {
+       "key": "D",
+       "text": "证明自己"
+      }
+     ],
+     "question": "说话人让小谢去那个部门，是为了让他："
+    },
+    {
+     "no": 53,
+     "group": "g3",
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "体检"
+      },
+      {
+       "key": "B",
+       "text": "答题"
+      },
+      {
+       "key": "C",
+       "text": "交费"
+      },
+      {
+       "key": "D",
+       "text": "填写申请表"
+      }
+     ],
+     "question": "申请签证的第一步是："
+    },
+    {
+     "no": 54,
+     "group": "g3",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "读报纸"
+      },
+      {
+       "key": "B",
+       "text": "查看网站"
+      },
+      {
+       "key": "C",
+       "text": "联系使馆"
+      },
+      {
+       "key": "D",
+       "text": "查找资料"
+      }
+     ],
+     "question": "根据这段话，办理签证时，可以通过什么方式了解情况？"
+    },
+    {
+     "no": 55,
+     "group": "g4",
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "树上"
+      },
+      {
+       "key": "B",
+       "text": "山脚下"
+      },
+      {
+       "key": "C",
+       "text": "深海区"
+      },
+      {
+       "key": "D",
+       "text": "暖和的水中"
+      }
+     ],
+     "question": "海菜花长在："
+    },
+    {
+     "no": 56,
+     "group": "g4",
+     "answer": "D",
+     "options": [
+      {
+       "key": "A",
+       "text": "叶子很大"
+      },
+      {
+       "key": "B",
+       "text": "晚上开花"
+      },
+      {
+       "key": "C",
+       "text": "又叫“富菜”"
+      },
+      {
+       "key": "D",
+       "text": "对生活环境要求严格"
+      }
+     ],
+     "question": "关于海菜花，可以知道："
+    },
+    {
+     "no": 57,
+     "group": "g4",
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "《足球少年》"
+      },
+      {
+       "key": "B",
+       "text": "《植物研究》"
+      },
+      {
+       "key": "C",
+       "text": "《科技中国》"
+      },
+      {
+       "key": "D",
+       "text": "《艺术人生》"
+      }
+     ],
+     "question": "这段话最可能出现在下列哪本杂志中？"
+    }
+   ],
+   "instructionZh": "请选出正确答案。"
+  },
+  {
+   "part": 3,
+   "range": [
+    58,
+    64
+   ],
+   "skill": "reading",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      58,
+      60
+     ],
+     "passage": "一位作家花了四个月的时间，（58），去了41个城市的56家动物园，然后根据这段经历，写了一本与动物园有关的书。有人问这位作家为什么专门去逛动物园，（59），一直想把全中国的动物园都逛一遍。他认为只有了解动物，（60），才能使我们成为更好的人。",
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "他说自己从小就很喜欢动物园"
+      },
+      {
+       "key": "B",
+       "text": "尊重生命"
+      },
+      {
+       "key": "C",
+       "text": "走遍了中国几乎所有的省"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      61,
+      64
+     ],
+     "passage": "2023年7月，一些喜爱音乐的人在贵阳举行了一场路边音乐会。（61），还有不少来自各个职业的普通人。这场音乐会无需门票，人人都能参加，（62），同时也引起了许多网友关注，很快就在互联网上火了起来，想要参加的人也越来越多，（63）。于是，这样的音乐会开始慢慢从路边走进了大学城、商场前、城市路口……到2025年5月，（64），参加的总人数超过300万。路边音乐会不但丰富了人们的夜生活，也为有音乐梦想的人提供了一定机会。",
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "因此吸引了不少热情的观众"
+      },
+      {
+       "key": "B",
+       "text": "演出的歌手除了专业人员外"
+      },
+      {
+       "key": "C",
+       "text": "贵阳市一共举行了400多场路边音乐会"
+      },
+      {
+       "key": "D",
+       "text": "一场音乐会远远不够"
+      }
+     ]
+    }
+   ],
+   "layout": "cloze_shared",
+   "questions": [
+    {
+     "no": 58,
+     "group": "g1",
+     "answer": "C",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 59,
+     "group": "g1",
+     "answer": "A",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 60,
+     "group": "g1",
+     "answer": "B",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 61,
+     "group": "g2",
+     "answer": "B",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 62,
+     "group": "g2",
+     "answer": "A",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 63,
+     "group": "g2",
+     "answer": "D",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 64,
+     "group": "g2",
+     "answer": "C",
+     "optionsFrom": "group"
+    }
+   ],
+   "instructionZh": "选句填空。"
+  },
+  {
+   "part": 1,
+   "range": [
+    65,
+    69
+   ],
+   "skill": "writing",
+   "layout": "picture_word",
+   "questions": [
+    {
+     "no": 65,
+     "type": "write",
+     "word": "结账",
+     "image": "/mocktests/hsk4-1110/img/af8e4267-85cc-4d9a-96c2-859e8609136d.png",
+     "answer": null,
+     "reference": "您好，请问能用信用卡结账吗？"
+    },
+    {
+     "no": 66,
+     "type": "write",
+     "word": "幅",
+     "image": "/mocktests/hsk4-1110/img/4effa50a-24ce-4466-8b51-81ff2f2b203e.png",
+     "answer": null,
+     "reference": "他画了一幅美丽的风景画。"
+    },
+    {
+     "no": 67,
+     "type": "write",
+     "word": "文件",
+     "image": "/mocktests/hsk4-1110/img/448f2086-4ca4-40f9-85be-3bfebe3bf190.png",
+     "answer": null,
+     "reference": "小张，去把这些文件复印一下。"
+    },
+    {
+     "no": 68,
+     "type": "write",
+     "word": "活泼",
+     "image": "/mocktests/hsk4-1110/img/0fd61d7a-1366-41aa-b443-532fe5ccb7cb.png",
+     "answer": null,
+     "reference": "我的妹妹是一个活泼可爱的小姑娘。"
+    },
+    {
+     "no": 69,
+     "type": "write",
+     "word": "正式",
+     "image": "/mocktests/hsk4-1110/img/2660d7a2-f696-4794-bd85-2429193b014f.png",
+     "answer": null,
+     "reference": "她今天要拍工作照，所以穿得很正式。"
+    }
+   ],
+   "instructionZh": "看图，用词造句。"
+  },
+  {
+   "part": 2,
+   "range": [
+    70,
+    70
+   ],
+   "skill": "writing",
+   "layout": "essay",
+   "questions": [
+    {
+     "no": 70,
+     "type": "write",
+     "answer": null,
+     "prompt": "请写一篇不少于80字的短文，介绍一下你最难忘的一次旅行。",
+     "minChars": 80
+    }
+   ],
+   "instructionZh": "写短文。"
+  }
+ ],
+ "questionCount": 70,
+ "durationMinutes": 85
+}

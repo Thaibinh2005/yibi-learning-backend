@@ -1,0 +1,1321 @@
+{
+ "id": "hsk2-1110",
+ "level": 2,
+ "parts": [
+  {
+   "skill": "listening",
+   "minutes": 17,
+   "questionCount": 25
+  },
+  {
+   "skill": "reading",
+   "minutes": 25,
+   "questionCount": 25
+  },
+  {
+   "skill": "writing",
+   "minutes": 10,
+   "questionCount": 10
+  }
+ ],
+ "stage": "Sơ cấp",
+ "title": "HSK 2",
+ "source": "Đề mẫu HSK 3.0 chính thức (中外语言交流合作中心)",
+ "sections": [
+  {
+   "part": 1,
+   "range": [
+    1,
+    5
+   ],
+   "skill": "listening",
+   "layout": "image_choice",
+   "example": {
+    "answer": "A",
+    "options": [
+     {
+      "key": "A",
+      "image": "/mocktests/hsk2-1110/img/9b43a8e0-2c82-4e08-b940-c475ddfc1ee8.png"
+     },
+     {
+      "key": "B",
+      "image": "/mocktests/hsk2-1110/img/4dbf49ac-f6fa-4cce-bbef-e2be90f5c04d.png"
+     },
+     {
+      "key": "C",
+      "image": "/mocktests/hsk2-1110/img/632b98c6-a5f8-484b-86bf-b731c66097b7.png"
+     }
+    ]
+   },
+   "questions": [
+    {
+     "no": 1,
+     "audio": {
+      "end": 106.8,
+      "file": "/mocktests/hsk2-1110/audio/b1a2845a-8aa8-40f1-b8dc-feb119bcdfed.mp3",
+      "start": 97.3
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk2-1110/img/64412d03-b543-426e-9b51-7ba8acddc74c.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk2-1110/img/4de5a17f-a283-40b8-8735-8064d3d3258b.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk2-1110/img/4d15c183-c87a-4d08-929e-4503cc7680e8.png"
+      }
+     ],
+     "transcript": "现在开始第一题, 一 他们正在打篮球呢。"
+    },
+    {
+     "no": 2,
+     "audio": {
+      "end": 126,
+      "file": "/mocktests/hsk2-1110/audio/30795c3b-09ca-42e1-85dd-af87e58bd8dc.mp3",
+      "start": 114.4
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk2-1110/img/6559ab9c-78cd-4b24-ade2-a3b01760b1f5.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk2-1110/img/bffbe9cf-cf40-4843-bdd6-fe841f44f688.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk2-1110/img/9f75d62c-9755-4777-9893-987fa913a71f.png"
+      }
+     ],
+     "transcript": "十点了,别睡了,快起床。"
+    },
+    {
+     "no": 3,
+     "audio": {
+      "end": 146.1,
+      "file": "/mocktests/hsk2-1110/audio/e0ab3938-6919-4b2b-84e2-9a6084717b5f.mp3",
+      "start": 133.8
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk2-1110/img/c905a4d5-6885-428d-91e7-4f7aeca4d47f.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk2-1110/img/a74b626b-23ae-4487-9fb1-b4fdb0a90507.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk2-1110/img/944c9b59-e6ca-4ff9-bb5f-44348520d1b0.png"
+      }
+     ],
+     "transcript": "弟弟的个子比去年高了不少。"
+    },
+    {
+     "no": 4,
+     "audio": {
+      "end": 164.8,
+      "file": "/mocktests/hsk2-1110/audio/7c86a394-8662-4c4c-94e5-da22cee15c5b.mp3",
+      "start": 153.6
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk2-1110/img/868969b5-2f45-4e40-94a2-3d685025cd7e.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk2-1110/img/60717049-6354-4ee4-a81e-a62273ddb8ec.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk2-1110/img/afceae3c-f1a9-4cfd-bd14-e7334505f420.png"
+      }
+     ],
+     "transcript": "奶奶中午包了很多饺子。"
+    },
+    {
+     "no": 5,
+     "audio": {
+      "end": 182.6,
+      "file": "/mocktests/hsk2-1110/audio/64b6b759-6322-494e-877f-d8cf8ebd6cf8.mp3",
+      "start": 172.4
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk2-1110/img/88326fe6-d2fe-48af-8aea-691f1e97e696.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk2-1110/img/a6c8da78-8c2f-4ceb-ba64-2bbbb0546040.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk2-1110/img/812eb634-1d71-47f4-8382-1e79c431b62e.png"
+      }
+     ],
+     "transcript": "这是您的东西,请拿好。"
+    }
+   ],
+   "introAudio": {
+    "end": 83.6,
+    "file": "/mocktests/hsk2-1110/audio/a4033063-8a0f-4eb9-ad1a-3dbb33a97c88.mp3",
+    "start": 71.5
+   }
+  },
+  {
+   "part": 2,
+   "range": [
+    6,
+    15
+   ],
+   "skill": "listening",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      6,
+      10
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk2-1110/img/67bf9876-e0f8-4e19-93eb-379478309bfa.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk2-1110/img/89664353-0dd8-4f04-ac5b-27b566d0f3e1.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk2-1110/img/23954c5d-a266-4498-b681-e2bc93d30f7a.png"
+      },
+      {
+       "key": "D",
+       "image": "/mocktests/hsk2-1110/img/85f90a36-22eb-4819-8efa-c62c033e1149.png"
+      },
+      {
+       "key": "E",
+       "image": "/mocktests/hsk2-1110/img/f2e9a169-da97-4e28-a67f-6b6f27573f0c.png"
+      },
+      {
+       "key": "F",
+       "image": "/mocktests/hsk2-1110/img/075061bb-58f4-4cba-8d12-a5d158436bef.png"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      11,
+      15
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk2-1110/img/b2d4847d-283a-43b5-a986-eeda96cbd6c7.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk2-1110/img/a7edf52a-9b29-46ab-9902-f664682d2a4d.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk2-1110/img/2d7424d4-9a7d-4e7b-9868-4d4e3e4e0116.png"
+      },
+      {
+       "key": "D",
+       "image": "/mocktests/hsk2-1110/img/5e46bc07-8b48-4911-a449-e7c568e7e151.png"
+      },
+      {
+       "key": "E",
+       "image": "/mocktests/hsk2-1110/img/816af9dc-8414-400f-bada-9d0cf1baf8bf.png"
+      }
+     ]
+    }
+   ],
+   "layout": "shared_images",
+   "example": {
+    "group": "g1",
+    "answer": "D",
+    "question": "男：你喜欢什么运动？女：我最喜欢踢足球。",
+    "optionsFrom": "shared",
+    "questionPinyin": "Nǐ xǐhuan shénme yùndòng Wǒ zuì xǐhuan tī zúqiú"
+   },
+   "questions": [
+    {
+     "no": 6,
+     "audio": {
+      "end": 251.3,
+      "file": "/mocktests/hsk2-1110/audio/ba79401c-a16d-4d14-bd8b-36df572476ce.mp3",
+      "start": 235.1
+     },
+     "group": "g1",
+     "answer": "E",
+     "transcript": "你在笑什么呢? 电视上的这个人太有意思了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 7,
+     "audio": {
+      "end": 278.4,
+      "file": "/mocktests/hsk2-1110/audio/031f6b99-e943-4057-b642-668936b92f00.mp3",
+      "start": 262.6
+     },
+     "group": "g1",
+     "answer": "A",
+     "transcript": "给你水,要我帮你打开吗? 谢谢,我自己来吧。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 8,
+     "audio": {
+      "end": 304,
+      "file": "/mocktests/hsk2-1110/audio/bcab9741-82a3-41ab-bd71-92c1c394defd.mp3",
+      "start": 289.7
+     },
+     "group": "g1",
+     "answer": "C",
+     "transcript": "我走了,再见。 下次见,开车慢点。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 9,
+     "audio": {
+      "end": 331.6,
+      "file": "/mocktests/hsk2-1110/audio/d1ce56f3-a1d1-4357-ae32-d2e2ca2f1d0e.mp3",
+      "start": 315.7
+     },
+     "group": "g1",
+     "answer": "B",
+     "transcript": "头还疼吗?去看医生吧。 没事,我休息一会。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 10,
+     "audio": {
+      "end": 361.8,
+      "file": "/mocktests/hsk2-1110/audio/c2be60d5-d778-4c59-9874-666de97e9e18.mp3",
+      "start": 342.8
+     },
+     "group": "g1",
+     "answer": "F",
+     "transcript": "你怎么拿了这么多书,给我几本吧? 那你拿一下上面这三本。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 11,
+     "audio": {
+      "end": 397.6,
+      "file": "/mocktests/hsk2-1110/audio/b9ae7a0f-c074-418d-b0b1-d1910d8aa401.mp3",
+      "start": 380.2
+     },
+     "group": "g2",
+     "answer": "C",
+     "transcript": "这些花送给你,希望你喜欢。 你真好,我很喜欢。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 12,
+     "audio": {
+      "end": 427.1,
+      "file": "/mocktests/hsk2-1110/audio/65e63ed4-c645-40a1-a00f-044f162682d2.mp3",
+      "start": 408.9
+     },
+     "group": "g2",
+     "answer": "D",
+     "transcript": "要不要喝杯咖啡? 我早上已经喝过了,现在不喝了。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 13,
+     "audio": {
+      "end": 457.7,
+      "file": "/mocktests/hsk2-1110/audio/5d2e47e4-92f5-43ae-9e01-0aef73996b88.mp3",
+      "start": 438.6
+     },
+     "group": "g2",
+     "answer": "B",
+     "transcript": "妈妈,我不想穿这么多衣服。 今天外面很冷,要多穿点。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 14,
+     "audio": {
+      "end": 486,
+      "file": "/mocktests/hsk2-1110/audio/00a73e16-eb7e-4dd9-adea-0e3a87b82b5e.mp3",
+      "start": 469
+     },
+     "group": "g2",
+     "answer": "E",
+     "transcript": "还要再往左吗? 往右边一点吧,对,就是这里。",
+     "optionsFrom": "group"
+    },
+    {
+     "no": 15,
+     "audio": {
+      "end": 513,
+      "file": "/mocktests/hsk2-1110/audio/d688ff1d-17a2-46c3-8292-ac1535cd15dd.mp3",
+      "start": 497.3
+     },
+     "group": "g2",
+     "answer": "A",
+     "transcript": "你在本子上画了什么? 我画了一只小鸟。",
+     "optionsFrom": "group"
+    }
+   ],
+   "introAudio": {
+    "end": 233.5,
+    "file": "/mocktests/hsk2-1110/audio/a162f238-b2af-4e69-aa91-b3cbbbaf5b9e.mp3",
+    "start": 189.37
+   }
+  },
+  {
+   "part": 3,
+   "range": [
+    16,
+    25
+   ],
+   "skill": "listening",
+   "layout": "text_choice",
+   "example": {
+    "answer": "A",
+    "options": [
+     {
+      "key": "A",
+      "text": "姓名",
+      "pinyin": "xìngmíng"
+     },
+     {
+      "key": "B",
+      "text": "时间",
+      "pinyin": "shíjiān"
+     },
+     {
+      "key": "C",
+      "text": "问题",
+      "pinyin": "wèntí"
+     }
+    ],
+    "question": "男：给您笔，请在这儿写一下您的姓名。女：好的，是这儿吗？问：女的要写什么？",
+    "questionPinyin": "Gěi nín bǐ qǐng zài zhèr xiě yíxià nín de xìngmíng Hǎo de shì zhèr ma Nǚ de yào xiě shénme"
+   },
+   "questions": [
+    {
+     "no": 16,
+     "audio": {
+      "end": 611.95,
+      "file": "/mocktests/hsk2-1110/audio/41213acf-3c7d-408b-a0ee-c6eba7da28e5.mp3",
+      "start": 582.7
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "坐地铁",
+       "pinyin": "zuò dìtiě"
+      },
+      {
+       "key": "B",
+       "text": "坐火车",
+       "pinyin": "zuò huǒchē"
+      },
+      {
+       "key": "C",
+       "text": "坐公交车",
+       "pinyin": "zuò gōngjiāochē"
+      }
+     ],
+     "transcript": "坐公交车去机场,怎么样? 还是坐地铁吧,比公交车快? 男的准备怎么去机场?"
+    },
+    {
+     "no": 17,
+     "audio": {
+      "end": 653.2,
+      "file": "/mocktests/hsk2-1110/audio/7564b646-dcd7-4470-8d00-e03f23a5266f.mp3",
+      "start": 625.3
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "医院旁边",
+       "pinyin": "yīyuàn pángbiān"
+      },
+      {
+       "key": "B",
+       "text": "酒店外面",
+       "pinyin": "jiǔdiàn wàimiàn"
+      },
+      {
+       "key": "C",
+       "text": "商场里面",
+       "pinyin": "shāngchǎng lǐmiàn"
+      }
+     ],
+     "transcript": "您好,请问最近的洗手间在哪里? 前面那个商场里就有。 洗手间在哪儿?"
+    },
+    {
+     "no": 18,
+     "audio": {
+      "end": 691.4,
+      "file": "/mocktests/hsk2-1110/audio/65a2cc36-79a3-41ab-a230-5c5db30c2501.mp3",
+      "start": 666.6
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "下雪了",
+       "pinyin": "xià xuě le"
+      },
+      {
+       "key": "B",
+       "text": "下雨了",
+       "pinyin": "xià yǔ le"
+      },
+      {
+       "key": "C",
+       "text": "阴天了",
+       "pinyin": "yīn tiān le"
+      }
+     ],
+     "transcript": "阴天冷,可能要下雨。 那我们快回家吧。 现在天气怎么样?"
+    },
+    {
+     "no": 19,
+     "audio": {
+      "end": 729.6,
+      "file": "/mocktests/hsk2-1110/audio/0b529603-39d7-4d4e-b045-8e3938b27889.mp3",
+      "start": 704.8
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "裤子长",
+       "pinyin": "kùzi cháng"
+      },
+      {
+       "key": "B",
+       "text": "太贵了",
+       "pinyin": "tài guì le"
+      },
+      {
+       "key": "C",
+       "text": "不好听",
+       "pinyin": "bù hǎotīng"
+      }
+     ],
+     "transcript": "这条裤子真好看。 还不错,就是有点长。 女的是什么意思?"
+    },
+    {
+     "no": 20,
+     "audio": {
+      "end": 774.1,
+      "file": "/mocktests/hsk2-1110/audio/0fbe4da7-8497-491f-9d59-0a909b2be291.mp3",
+      "start": 742.7
+     },
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "2012年",
+       "pinyin": "nián"
+      },
+      {
+       "key": "B",
+       "text": "2020年",
+       "pinyin": "nián"
+      },
+      {
+       "key": "C",
+       "text": "2024年",
+       "pinyin": "nián"
+      }
+     ],
+     "transcript": "您是哪一年开始工作的? 二零二零年,今年已经是第五年了。 男的是什么时候开始工作的?"
+    },
+    {
+     "no": 21,
+     "audio": {
+      "end": 821.05,
+      "file": "/mocktests/hsk2-1110/audio/d8c3450e-e06d-45e5-9484-342ec3328974.mp3",
+      "start": 787.2
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "开飞机",
+       "pinyin": "kāi fēijī"
+      },
+      {
+       "key": "B",
+       "text": "吃面包",
+       "pinyin": "chī miànbāo"
+      },
+      {
+       "key": "C",
+       "text": "买书包",
+       "pinyin": "mǎi shūbāo"
+      }
+     ],
+     "transcript": "您好,我要买一个书包。 书包在这边。 有黑色的吗?要大一点的? 您等一下,我找找。 男的在做什么?"
+    },
+    {
+     "no": 22,
+     "audio": {
+      "end": 878.35,
+      "file": "/mocktests/hsk2-1110/audio/54b17a7e-610d-4b61-957f-b40e238d0103.mp3",
+      "start": 834
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "妻子",
+       "pinyin": "qīzi"
+      },
+      {
+       "key": "B",
+       "text": "同学",
+       "pinyin": "tóngxué"
+      },
+      {
+       "key": "C",
+       "text": "李女士",
+       "pinyin": "Lǐ nǚshì"
+      }
+     ],
+     "transcript": "张先生,您好,好长时间没见了。 您好,上次见还是一年前呢? 是啊,请问您旁边这位是? 忘了给你介绍了,这是我妻子。 男的在介绍谁?"
+    },
+    {
+     "no": 23,
+     "audio": {
+      "end": 923.2,
+      "file": "/mocktests/hsk2-1110/audio/d1b92569-45c8-48a2-8e37-4fc17d1fafe6.mp3",
+      "start": 891.4
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "没吃早饭",
+       "pinyin": "méi chī zǎofàn"
+      },
+      {
+       "key": "B",
+       "text": "不想学习",
+       "pinyin": "bù xiǎng xuéxí"
+      },
+      {
+       "key": "C",
+       "text": "眼睛不舒服",
+       "pinyin": "yǎnjing bù shūfu"
+      }
+     ],
+     "transcript": "你怎么了?眼睛不舒服? 有东西飞进我眼睛里了。 别动,我看看。 女的怎么了? 你怎么了?眼睛不舒服? 有东西飞进我眼睛里了。 别动,我看看。 是什么呀? 女的怎么了?"
+    },
+    {
+     "no": 24,
+     "audio": {
+      "end": 971.05,
+      "file": "/mocktests/hsk2-1110/audio/a1f6e20a-e4af-402d-99ad-56fea0c354de.mp3",
+      "start": 936.4
+     },
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "喜欢的歌",
+       "pinyin": "xǐhuan de gē"
+      },
+      {
+       "key": "B",
+       "text": "超市在哪儿",
+       "pinyin": "chāoshì zài nǎr"
+      },
+      {
+       "key": "C",
+       "text": "最好的朋友",
+       "pinyin": "zuì hǎo de péngyou"
+      }
+     ],
+     "transcript": "你最喜欢听的歌是什么? 情天,不知道你听没听过。 听过,我小时候经常听。 我也是。 他们在说什么?"
+    },
+    {
+     "no": 25,
+     "audio": {
+      "end": 1030.4,
+      "file": "/mocktests/hsk2-1110/audio/06e9ea48-f4cc-4dff-bfd2-1129ad05f028.mp3",
+      "start": 984.1
+     },
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "机场",
+       "pinyin": "jīchǎng"
+      },
+      {
+       "key": "B",
+       "text": "车站",
+       "pinyin": "chēzhàn"
+      },
+      {
+       "key": "C",
+       "text": "电影院",
+       "pinyin": "diànyǐngyuàn"
+      }
+     ],
+     "transcript": "商场里新开了一家电影院, 你想出来看电影吗? 今天我有事,星期天怎么样? 可以,那我来买票。 好,他们星期天要去哪儿?"
+    }
+   ],
+   "introAudio": {
+    "end": 581.15,
+    "file": "/mocktests/hsk2-1110/audio/f58a9de9-2dee-498b-b295-c9eedc7c7cb5.mp3",
+    "start": 523.68
+   }
+  },
+  {
+   "part": 1,
+   "range": [
+    26,
+    30
+   ],
+   "skill": "reading",
+   "layout": "shared_images",
+   "example": {
+    "answer": "D",
+    "question": "每个星期六，我都去打篮球。",
+    "optionsFrom": "shared",
+    "questionPinyin": "Měi gè xīngqīliù wǒ dōu qù dǎ lánqiú"
+   },
+   "questions": [
+    {
+     "no": 26,
+     "answer": "B",
+     "question": "喂，电脑出问题了，不能上网了。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Wèi diànnǎo chū wèntí le bù néng shàngwǎng le"
+    },
+    {
+     "no": 27,
+     "answer": "E",
+     "question": "可以和我一起跳个舞吗？",
+     "optionsFrom": "shared",
+     "questionPinyin": "Kěyǐ hé wǒ yìqǐ tiào gè wǔ ma"
+    },
+    {
+     "no": 28,
+     "answer": "A",
+     "question": "这只小猫的眼睛是绿色的。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Zhè zhī xiǎo māo de yǎnjing shì lǜsè de"
+    },
+    {
+     "no": 29,
+     "answer": "C",
+     "question": "这个药一天吃三次。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Zhège yào yì tiān chī sān cì"
+    },
+    {
+     "no": 30,
+     "answer": "F",
+     "question": "那里不能游泳，不要过去！",
+     "optionsFrom": "shared",
+     "questionPinyin": "Nàlǐ bù néng yóuyǒng búyào guòqù"
+    }
+   ],
+   "sharedOptions": [
+    {
+     "key": "A",
+     "image": "/mocktests/hsk2-1110/img/fe0ae855-40f2-442b-b155-522c349155e8.png"
+    },
+    {
+     "key": "B",
+     "image": "/mocktests/hsk2-1110/img/60ad1d94-1ac4-41ab-a8a0-5954d3daab7f.png"
+    },
+    {
+     "key": "C",
+     "image": "/mocktests/hsk2-1110/img/0e37f519-63e8-4bba-94d6-5864086e86a5.png"
+    },
+    {
+     "key": "D",
+     "image": "/mocktests/hsk2-1110/img/7cb3b727-faa0-45a7-bc8e-3de7522e2113.png"
+    },
+    {
+     "key": "E",
+     "image": "/mocktests/hsk2-1110/img/f69f7fe6-1f51-4349-84fd-d45797ab3e1d.png"
+    },
+    {
+     "key": "F",
+     "image": "/mocktests/hsk2-1110/img/875f9c4d-1e1f-4ecd-81c1-b0046597d03f.png"
+    }
+   ]
+  },
+  {
+   "part": 2,
+   "range": [
+    31,
+    35
+   ],
+   "skill": "reading",
+   "layout": "word_bank",
+   "example": {
+    "answer": "E",
+    "question": "我来这里已经三年（　）了。",
+    "optionsFrom": "shared",
+    "questionPinyin": "Wǒ lái zhèlǐ yǐjīng sān nián le"
+   },
+   "questions": [
+    {
+     "no": 31,
+     "answer": "C",
+     "question": "他（　）就爱运动。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Tā jiù ài yùndòng"
+    },
+    {
+     "no": 32,
+     "answer": "A",
+     "question": "中国怎么样？快（　）我说说。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Zhōngguó zěnmeyàng Kuài wǒ shuōshuo"
+    },
+    {
+     "no": 33,
+     "answer": "D",
+     "question": "你出来了吗？我到（　）下了。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Nǐ chūláile ma Wǒ dào xià le"
+    },
+    {
+     "no": 34,
+     "answer": "B",
+     "question": "A：你一会儿怎么去商店？B：我（　）去。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Nǐ yíhuìr zěnme qù shāngdiàn Wǒ qù"
+    },
+    {
+     "no": 35,
+     "answer": "F",
+     "question": "A：这个新开的电影院在哪儿？B：离你家不（　），走路十几分钟。",
+     "optionsFrom": "shared",
+     "questionPinyin": "Zhège xīn kāi de diànyǐngyuàn zài nǎr Lí nǐ jiā bù zǒulù shíjǐ fēnzhōng"
+    }
+   ],
+   "sharedOptions": [
+    {
+     "key": "A",
+     "text": "跟",
+     "pinyin": "gēn"
+    },
+    {
+     "key": "B",
+     "text": "打车",
+     "pinyin": "dǎchē"
+    },
+    {
+     "key": "C",
+     "text": "从小",
+     "pinyin": "cóngxiǎo"
+    },
+    {
+     "key": "D",
+     "text": "楼",
+     "pinyin": "lóu"
+    },
+    {
+     "key": "E",
+     "text": "多",
+     "pinyin": "duō"
+    },
+    {
+     "key": "F",
+     "text": "远",
+     "pinyin": "yuǎn"
+    }
+   ]
+  },
+  {
+   "part": 3,
+   "range": [
+    36,
+    45
+   ],
+   "skill": "reading",
+   "groups": [
+    {
+     "id": "g1",
+     "range": [
+      36,
+      40
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "谁在外面？怎么不进来？",
+       "pinyin": "Shéi zài wàimiàn Zěnme bú jìnlái"
+      },
+      {
+       "key": "B",
+       "text": "我姓“高”，我叫“高汉文”。",
+       "pinyin": "Wǒ xìng \" Gāo \" wǒ jiào \" Gāo Hànwén \""
+      },
+      {
+       "key": "C",
+       "text": "所以现在还不能住。",
+       "pinyin": "Suǒyǐ xiànzài hái bù néng zhù"
+      },
+      {
+       "key": "D",
+       "text": "时间还早呢，11点到就可以。",
+       "pinyin": "Shíjiān hái zǎo ne diǎn dào jiù kěyǐ"
+      },
+      {
+       "key": "E",
+       "text": "李老师在哪儿？你看见他了吗？",
+       "pinyin": "Lǐ lǎoshī zài nǎr Nǐ kànjiàn tā le ma"
+      },
+      {
+       "key": "F",
+       "text": "我最大的爱好是唱歌，你呢？",
+       "pinyin": "Wǒ zuì dà de àihào shì chàng gē nǐ ne"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "range": [
+      41,
+      45
+     ],
+     "sharedOptions": [
+      {
+       "key": "A",
+       "text": "我记得是360元。",
+       "pinyin": "Wǒ jìde shì yuán"
+      },
+      {
+       "key": "B",
+       "text": "你的新工作怎么样？",
+       "pinyin": "Nǐ de xīn gōngzuò zěnmeyàng"
+      },
+      {
+       "key": "C",
+       "text": "一年两三次吧。",
+       "pinyin": "Yì nián liǎng-sān cì ba"
+      },
+      {
+       "key": "D",
+       "text": "就是“很高兴”。",
+       "pinyin": "Jiù shì \" hěn gāoxìng \""
+      },
+      {
+       "key": "E",
+       "text": "从手机上看，他已经到了，我打个电话问问。",
+       "pinyin": "Cóng shǒujī shang kàn tā yǐjīng dào le wǒ dǎ gè diànhuà wènwen"
+      }
+     ]
+    }
+   ],
+   "layout": "shared_text",
+   "example": {
+    "group": "g1",
+    "answer": "E",
+    "question": "他出去了，一会儿就回来。",
+    "optionsFrom": "shared",
+    "questionPinyin": "Tā chūqù le yíhuìr jiù huílái"
+   },
+   "questions": [
+    {
+     "no": 36,
+     "group": "g1",
+     "answer": "D",
+     "question": "你慢一点儿，别跑了。",
+     "optionsFrom": "group",
+     "questionPinyin": "Nǐ màn yìdiǎnr bié pǎo le"
+    },
+    {
+     "no": 37,
+     "group": "g1",
+     "answer": "B",
+     "question": "虽然我是外国人，但我有一个中文名字。",
+     "optionsFrom": "group",
+     "questionPinyin": "Suīrán wǒ shì wàiguó rén dàn wǒ yǒu yí gè Zhōngwén míngzi"
+    },
+    {
+     "no": 38,
+     "group": "g1",
+     "answer": "A",
+     "question": "是我，帮我开一下门。",
+     "optionsFrom": "group",
+     "questionPinyin": "Shì wǒ bāng wǒ kāi yíxià mén"
+    },
+    {
+     "no": 39,
+     "group": "g1",
+     "answer": "F",
+     "question": "我喜欢读书，每天都要读半小时。",
+     "optionsFrom": "group",
+     "questionPinyin": "Wǒ xǐhuan dúshū měi tiān dōu yào dú bàn xiǎoshí"
+    },
+    {
+     "no": 40,
+     "group": "g1",
+     "answer": "C",
+     "question": "这个房间里有桌椅，但是没有床。",
+     "optionsFrom": "group",
+     "questionPinyin": "Zhège fángjiān li yǒu zhuō yǐ dànshì méiyǒu chuáng"
+    },
+    {
+     "no": 41,
+     "group": "g2",
+     "answer": "C",
+     "question": "你经常出国旅游吗？",
+     "optionsFrom": "group",
+     "questionPinyin": "Nǐ jīngcháng chūguó lǚyóu ma"
+    },
+    {
+     "no": 42,
+     "group": "g2",
+     "answer": "D",
+     "question": "你告诉老师，“快乐”是什么意思？",
+     "optionsFrom": "group",
+     "questionPinyin": "Nǐ gàosu lǎoshī \" kuàilè \" shì shénme yìsi"
+    },
+    {
+     "no": 43,
+     "group": "g2",
+     "answer": "E",
+     "question": "你叫的出租车怎么还没来？",
+     "optionsFrom": "group",
+     "questionPinyin": "Nǐ jiào de chūzūchē zěnme hái méi lái"
+    },
+    {
+     "no": 44,
+     "group": "g2",
+     "answer": "A",
+     "question": "那个包多少钱？",
+     "optionsFrom": "group",
+     "questionPinyin": "Nàge bāo duōshao qián"
+    },
+    {
+     "no": 45,
+     "group": "g2",
+     "answer": "B",
+     "question": "很累，每天从早忙到晚。",
+     "optionsFrom": "group",
+     "questionPinyin": "Hěn lèi měi tiān cóng zǎo máng dào wǎn"
+    }
+   ]
+  },
+  {
+   "part": 4,
+   "range": [
+    46,
+    50
+   ],
+   "skill": "reading",
+   "layout": "passage_choice",
+   "example": {
+    "answer": "B",
+    "options": [
+     {
+      "key": "A",
+      "text": "跳得好",
+      "pinyin": "tiào de hǎo"
+     },
+     {
+      "key": "B",
+      "text": "喜欢跳舞",
+      "pinyin": "xǐhuan tiàowǔ"
+     },
+     {
+      "key": "C",
+      "text": "是小学生",
+      "pinyin": "shì xiǎoxuéshēng"
+     }
+    ],
+    "passage": "我爱跳舞，但跳得不太好。",
+    "question": "他：",
+    "passagePinyin": "Wǒ ài tiàowǔ dàn tiào de bú tài hǎo",
+    "questionPinyin": "Tā"
+   },
+   "questions": [
+    {
+     "no": 46,
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "不便宜",
+       "pinyin": "bù piányi"
+      },
+      {
+       "key": "B",
+       "text": "不见了",
+       "pinyin": "bú jiàn le"
+      },
+      {
+       "key": "C",
+       "text": "是爸爸送的",
+       "pinyin": "shì bàba sòng de"
+      }
+     ],
+     "passage": "这块手表是爸爸给我买的，虽然便宜，但是很好看。",
+     "question": "那块手表：",
+     "passagePinyin": "Zhè kuài shǒubiǎo shì bàba gěi wǒ mǎi de suīrán piányi dànshì hěn hǎokàn",
+     "questionPinyin": "Nà kuài shǒubiǎo"
+    },
+    {
+     "no": 47,
+     "answer": "A",
+     "options": [
+      {
+       "key": "A",
+       "text": "哥哥",
+       "pinyin": "gēge"
+      },
+      {
+       "key": "B",
+       "text": "爷爷",
+       "pinyin": "yéye"
+      },
+      {
+       "key": "C",
+       "text": "弟弟",
+       "pinyin": "dìdi"
+      }
+     ],
+     "passage": "哥哥考上大学了。家里人都很高兴，最高兴的就是爷爷。",
+     "question": "家里人因为谁高兴？",
+     "passagePinyin": "Gēge kǎoshàng dàxué le Jiā li rén dōu hěn gāoxìng zuì gāoxìng de jiù shì yéye",
+     "questionPinyin": "Jiā li rén yīnwèi shéi gāoxìng"
+    },
+    {
+     "no": 48,
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "头大不大",
+       "pinyin": "tóu dà bu dà"
+      },
+      {
+       "key": "B",
+       "text": "会不会飞",
+       "pinyin": "huì bu huì fēi"
+      },
+      {
+       "key": "C",
+       "text": "游得快不快",
+       "pinyin": "yóu de kuài bu kuài"
+      }
+     ],
+     "passage": "这本书里写了，飞鱼是“鱼”，不是“鸟”，所以它不会飞。",
+     "question": "他们在说飞鱼：",
+     "passagePinyin": "Zhè běn shū li xiě le Fēiyú shì \" yú \" bú shì \" niǎo \" suǒyǐ tā bú huì fēi",
+     "questionPinyin": "Tāmen zài shuō Fēiyú"
+    },
+    {
+     "no": 49,
+     "answer": "B",
+     "options": [
+      {
+       "key": "A",
+       "text": "看病",
+       "pinyin": "kànbìng"
+      },
+      {
+       "key": "B",
+       "text": "过生日",
+       "pinyin": "guò shēngrì"
+      },
+      {
+       "key": "C",
+       "text": "吃水果",
+       "pinyin": "chī shuǐguǒ"
+      }
+     ],
+     "passage": "时间过得真快啊！过了今天，你就18岁了。在我眼里，你还是个小孩儿呢。",
+     "question": "他们最可能在做什么？",
+     "passagePinyin": "Shíjiān guò de zhēn kuài a Guòle jīntiān nǐ jiù suì le Zài wǒ yǎn li nǐ hái shì gè xiǎoháir ne",
+     "questionPinyin": "Tāmen zuì kěnéng zài zuò shénme"
+    },
+    {
+     "no": 50,
+     "answer": "C",
+     "options": [
+      {
+       "key": "A",
+       "text": "踢球",
+       "pinyin": "tī qiú"
+      },
+      {
+       "key": "B",
+       "text": "做饭",
+       "pinyin": "zuò fàn"
+      },
+      {
+       "key": "C",
+       "text": "写汉字",
+       "pinyin": "xiě Hànzì"
+      }
+     ],
+     "passage": "姐姐，我学中文好长时间了，但汉字还是写得不太好，你可以教教我吗？",
+     "question": "说话人让姐姐教他：",
+     "passagePinyin": "Jiějie wǒ xué Zhōngwén hǎo cháng shíjiān le dàn Hànzì háishi xiě de bú tài hǎo nǐ kěyǐ jiāojiao wǒ ma",
+     "questionPinyin": "Shuōhuàrén ràng jiějie jiāo tā"
+    }
+   ]
+  },
+  {
+   "part": 1,
+   "range": [
+    51,
+    55
+   ],
+   "skill": "writing",
+   "layout": "radical_choice",
+   "example": {
+    "image": "/mocktests/hsk2-1110/img/04a2c2d1-49a2-43de-8ac6-c1843f79b14a.png",
+    "answer": "E",
+    "optionsFrom": "shared"
+   },
+   "questions": [
+    {
+     "no": 51,
+     "image": "/mocktests/hsk2-1110/img/ec84db19-a9b7-45c5-926b-f4efbaa332d3.png",
+     "answer": "B",
+     "optionsFrom": "shared"
+    },
+    {
+     "no": 52,
+     "image": "/mocktests/hsk2-1110/img/e6037ebd-2021-4864-8f9b-90a1ac413343.png",
+     "answer": "D",
+     "optionsFrom": "shared"
+    },
+    {
+     "no": 53,
+     "image": "/mocktests/hsk2-1110/img/7ea5795c-4bff-4185-b533-86e2146c8096.png",
+     "answer": "C",
+     "optionsFrom": "shared"
+    },
+    {
+     "no": 54,
+     "image": "/mocktests/hsk2-1110/img/a35a4c7f-b4df-494f-a878-c9fdc2485bf7.png",
+     "answer": "A",
+     "optionsFrom": "shared"
+    },
+    {
+     "no": 55,
+     "image": "/mocktests/hsk2-1110/img/53c04a3b-5366-4d06-a42a-86b827a47f7d.png",
+     "answer": "F",
+     "optionsFrom": "shared"
+    }
+   ],
+   "sharedOptions": [
+    {
+     "key": "A",
+     "text": "寸"
+    },
+    {
+     "key": "B",
+     "text": "子"
+    },
+    {
+     "key": "C",
+     "text": "日"
+    },
+    {
+     "key": "D",
+     "text": "文"
+    },
+    {
+     "key": "E",
+     "text": "十"
+    },
+    {
+     "key": "F",
+     "text": "氵"
+    }
+   ]
+  },
+  {
+   "part": 2,
+   "range": [
+    56,
+    60
+   ],
+   "skill": "writing",
+   "layout": "fill_char",
+   "example": {
+    "type": "fill",
+    "answer": "是",
+    "question": "你想喝茶还（　）喝咖啡？",
+    "blankPinyin": "shi",
+    "questionPinyin": "Nǐ xiǎng hē chá hái hē kāfēi"
+   },
+   "questions": [
+    {
+     "no": 56,
+     "type": "fill",
+     "answer": "的",
+     "question": "我还在路上，我（　）车坏了。",
+     "blankPinyin": "de",
+     "questionPinyin": "Wǒ hái zài lùshang wǒ chē huài le"
+    },
+    {
+     "no": 57,
+     "type": "fill",
+     "answer": "可",
+     "question": "你（　）以在网上买机票。",
+     "blankPinyin": "kě",
+     "questionPinyin": "Nǐ yǐ zài wǎng shang mǎi jīpiào"
+    },
+    {
+     "no": 58,
+     "type": "fill",
+     "answer": "好",
+     "question": "我不（　）意思让朋友帮忙。",
+     "blankPinyin": "hǎo",
+     "questionPinyin": "Wǒ bù yìsi ràng péngyou bāngmáng"
+    },
+    {
+     "no": 59,
+     "type": "fill",
+     "answer": "学",
+     "question": "开（　）后的第一个星期就要考试。",
+     "blankPinyin": "xué",
+     "questionPinyin": "Kāi hòu de dì-yī gè xīngqī jiù yào kǎoshì"
+    },
+    {
+     "no": 60,
+     "type": "fill",
+     "answer": "洗",
+     "question": "儿子，（　）完手再吃苹果吧。",
+     "blankPinyin": "xǐ",
+     "questionPinyin": "Érzi wán shǒu zài chī píngguǒ ba"
+    }
+   ]
+  }
+ ],
+ "questionCount": 60,
+ "durationMinutes": 60
+}
