@@ -35,11 +35,38 @@ public class User {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
+    /** Shown in the app instead of the username; null means "use the username". */
+    @Column(name = "display_name", length = 50)
+    private String displayName;
+
+    /** Profile picture link, taken from Google at each Google sign-in; null shows the initial. */
+    @Column(name = "avatar_url", length = 500)
+    private String avatarUrl;
+
+    /** Media storage key of a picture uploaded on the account page; it is shown instead of {@link #avatarUrl}. */
+    @Column(name = "avatar_key", length = 80)
+    private String avatarKey;
+
+    /** The picture to show: the uploaded one, else the Google one, else null (the initial). */
+    public String shownAvatarUrl() {
+        if (avatarKey != null) {
+            // The version changes with each upload, so a browser never keeps showing the old picture from its cache.
+            String file = avatarKey.substring(avatarKey.lastIndexOf('/') + 1);
+            return "/api/avatars/" + id + "?v=" + file.substring(0, Math.min(8, file.length()));
+        }
+        return avatarUrl;
+    }
+
     /**
      * BCrypt-hashed password. Never expose this in DTOs.
      */
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
+
+    /** False while the password is a random one from Google sign-in, which the learner has never seen. */
+    @Column(name = "password_set", nullable = false)
+    @Builder.Default
+    private boolean passwordSet = true;
 
     /**
      * RBAC role. Stored as VARCHAR in DB (e.g., "ROLE_USER").

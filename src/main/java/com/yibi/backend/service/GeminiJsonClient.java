@@ -29,6 +29,14 @@ import java.util.Map;
 @Component
 public class GeminiJsonClient {
 
+    /** Counts Gemini answers for the admin system page; optional so the class still builds alone. */
+    private GeminiUsageTracker usage;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setUsage(GeminiUsageTracker usage) {
+        this.usage = usage;
+    }
+
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
 
     private final ObjectMapper mapper;
@@ -53,6 +61,14 @@ public class GeminiJsonClient {
 
     public boolean configured() {
         return !apiKeys.isEmpty();
+    }
+
+    public int keyCount() {
+        return apiKeys.size();
+    }
+
+    public List<String> models() {
+        return List.copyOf(models);
     }
 
     /** The parsed JSON answer; throws an AppException when every model and key failed. */
@@ -104,6 +120,7 @@ public class GeminiJsonClient {
                 .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(body), StandardCharsets.UTF_8))
                 .build();
         HttpResponse<String> response = http.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (usage != null) usage.record("listening-translate", model, response.statusCode());
         if (response.statusCode() < 200 || response.statusCode() >= 300) {
             log.warn("Gemini {} answered HTTP {}", model, response.statusCode());
             throw new StatusException(response.statusCode());

@@ -11,6 +11,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 /**
  * The multipart limit is raised for learners' media uploads; every other upload (speaking recordings) keeps the old
@@ -21,14 +22,16 @@ import java.nio.charset.StandardCharsets;
 public class MultipartSizeFilter extends OncePerRequestFilter {
 
     static final long SMALL_LIMIT = 6L * 1024 * 1024;
-    static final String MEDIA_UPLOAD = "/api/listening/videos/upload";
+    /** Learners' videos, and an admin's sample paper (PDF + full recording). */
+    static final Set<String> LARGE_UPLOADS = Set.of("/api/listening/videos/upload", "/api/admin/mock-tests/imports",
+            "/api/admin/mock-tests/inspect");
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         String type = request.getContentType();
         if (type != null && type.toLowerCase().startsWith("multipart/")
-                && !MEDIA_UPLOAD.equals(request.getRequestURI())
+                && !LARGE_UPLOADS.contains(request.getRequestURI())
                 && request.getContentLengthLong() > SMALL_LIMIT) {
             response.setStatus(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
             response.setContentType("application/json");

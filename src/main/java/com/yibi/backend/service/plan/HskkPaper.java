@@ -68,7 +68,7 @@ public final class HskkPaper {
             case PRIMARY -> 1;
             case INTERMEDIATE -> 3;
             case ADVANCED -> 5;
-            default -> throw new IllegalArgumentException("Unknown tier");
+            default -> throw new com.yibi.backend.exception.AppException("Không có hạng HSKK này.", org.springframework.http.HttpStatus.BAD_REQUEST);
         };
     }
 

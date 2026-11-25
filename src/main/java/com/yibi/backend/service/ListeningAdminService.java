@@ -108,10 +108,11 @@ public class ListeningAdminService {
 
     /**
      * Lessons for the library tab. {@code visibility} null lists everything that is not private (private lessons are
-     * the contributors' own business); PENDING_REVIEW first by submission time.
+     * the contributors' own business), except the team's own drafts; {@code editorialOnly} lists the lessons admins
+     * added, drafts included. PENDING_REVIEW first by submission time.
      */
-    public AdminLessonPage lessons(String visibility, Long categoryId, String q, int page) {
-        StringBuilder where = new StringBuilder(" WHERE l.visibility <> 'PRIVATE'");
+    public AdminLessonPage lessons(String visibility, Long categoryId, String q, int page, boolean editorialOnly) {
+        StringBuilder where = new StringBuilder(" WHERE (l.visibility <> 'PRIVATE' OR l.editorial)");
         List<Object> args = new ArrayList<>();
         if (visibility != null && !visibility.isBlank()) {
             Visibility v;
@@ -124,6 +125,7 @@ public class ListeningAdminService {
             where.append(" WHERE l.visibility = ?");
             args.add(v.name());
         }
+        if (editorialOnly) where.append(" AND l.editorial");
         if (categoryId != null) {
             where.append(" AND EXISTS (SELECT 1 FROM lesson_categories lc WHERE lc.lesson_id = l.id AND lc.category_id = ?)");
             args.add(categoryId);
@@ -146,7 +148,7 @@ public class ListeningAdminService {
                 SELECT l.id, l.title, l.source_type, m.external_id, (m.media_path IS NOT NULL) AS has_media, l.visibility,
                        l.status, l.translation_status, l.segment_count, l.translated_count, l.hsk_level, l.est_level,
                        l.duration_seconds, u.username, m.channel_name, l.usage_rights, l.rights_note, l.description,
-                       l.review_note, l.submitted_at, l.published_at, l.practice_count, l.save_count
+                       l.review_note, l.submitted_at, l.published_at, l.practice_count, l.save_count, l.editorial
                 """ + from + where + """
                  ORDER BY CASE WHEN l.visibility = 'PENDING_REVIEW' THEN 0 ELSE 1 END, l.submitted_at ASC NULLS LAST,
                           l.published_at DESC NULLS LAST, l.id DESC
@@ -159,28 +161,34 @@ public class ListeningAdminService {
                     rs.getInt("translated_count"), rs.getString("hsk_level"), rs.getString("est_level"),
                     duration == null ? null : duration.doubleValue(), rs.getString("username"), rs.getString("channel_name"),
                     rs.getString("usage_rights"), rs.getString("rights_note"), rs.getString("description"),
-                    rs.getString("review_note"), List.of(), VocabDeckService.fromUtc(rs.getTimestamp("submitted_at")),
-                    VocabDeckService.fromUtc(rs.getTimestamp("published_at")), rs.getInt("practice_count"),
-                    rs.getInt("save_count"));
+                    rs.getString("review_note"), List.of(), ListeningLessonStore.local(rs.getTimestamp("submitted_at")),
+                    ListeningLessonStore.local(rs.getTimestamp("published_at")), rs.getInt("practice_count"),
+                    rs.getInt("save_count"), rs.getBoolean("editorial"));
         }, args.toArray());
         var categories = store.categoriesOf(rows.stream().map(AdminLessonRow::id).toList());
         List<AdminLessonRow> withCategories = rows.stream().map(r -> new AdminLessonRow(r.id(), r.title(), r.source(),
                 r.videoId(), r.hasMedia(), r.visibility(), r.status(), r.translationStatus(), r.segmentCount(),
-                r.translatedCount(), r.hskLevel(), r.estimatedLevel(), r.durationSeconds(), r.contributorName(),
+                r.translatedCount(), r.hskLevel(), r.estimatedLevel(), r.durationSeconds(),
+                r.editorial() ? ListeningLessonStore.TEAM : r.contributorName(),
                 r.channelName(), r.usageRights(), r.rightsNote(), r.description(), r.reviewNote(),
                 categories.getOrDefault(r.id(), List.of()), r.submittedAt(), r.publishedAt(), r.practiceCount(),
-                r.saveCount())).toList();
+                r.saveCount(), r.editorial())).toList();
         long t = total == null ? 0 : total;
         Integer pending = jdbc.queryForObject("SELECT count(*) FROM listening_lessons WHERE visibility = 'PENDING_REVIEW'", Integer.class);
         return new AdminLessonPage(withCategories, safePage, (int) Math.max(1, (t + PAGE - 1) / PAGE), t, pending == null ? 0 : pending);
     }
 
-    /** Publishes a submitted (or hidden, or rejected) lesson. It must be finished and fully translated. */
+    /**
+     * Publishes a submitted (or hidden, or rejected) lesson, or the team's own draft. It must be finished and fully
+     * translated.
+     */
     @Transactional
     public void approve(UUID adminId, long id, ApproveRequest request) {
         Map<String, Object> lesson = lesson(id);
         Visibility v = Visibility.valueOf((String) lesson.get("visibility"));
-        if (v == Visibility.PRIVATE) throw bad("Bài còn ở chế độ riêng tư; người đóng góp chưa gửi duyệt.");
+        if (v == Visibility.PRIVATE && !Boolean.TRUE.equals(lesson.get("editorial"))) {
+            throw bad("Bài còn ở chế độ riêng tư; người đóng góp chưa gửi duyệt.");
+        }
         if (!"READY".equals(lesson.get("status"))) {
             throw bad("Bài chưa hoàn tất. Hãy mở trình sửa, kiểm tra lời thoại rồi bấm Hoàn tất trước khi duyệt.");
         }
@@ -192,7 +200,7 @@ public class ListeningAdminService {
         store.setCategories(id, request.categoryIds(), true);
         jdbc.update("""
                 UPDATE listening_lessons SET visibility = 'PUBLISHED', reviewed_by = ?, reviewed_at = now(), review_note = ?,
-                       published_at = COALESCE(published_at, now()),
+                       published_at = COALESCE(published_at, now()), submitted_at = COALESCE(submitted_at, now()),
                        title = COALESCE(?, title), description = COALESCE(?, description), hsk_level = ?
                 WHERE id = ?
                 """, adminId, blankToNull(request.note()), blankToNull(request.title()), blankToNull(request.description()),
@@ -226,7 +234,7 @@ public class ListeningAdminService {
 
     private Map<String, Object> lesson(long id) {
         List<Map<String, Object>> rows = jdbc.queryForList(
-                "SELECT visibility, status, segment_count, translated_count FROM listening_lessons WHERE id = ?", id);
+                "SELECT visibility, status, segment_count, translated_count, editorial FROM listening_lessons WHERE id = ?", id);
         if (rows.isEmpty()) throw new AppException("Không tìm thấy bài luyện.", HttpStatus.NOT_FOUND);
         return rows.get(0);
     }

@@ -20,6 +20,17 @@ mvn spring-boot:run
 - At startup the backend also loads the bundled AI example sentences (`hsk_ai_examples.json`) and level
   meanings (`hsk_level_meanings.json`); nothing to run, and no Gemini key is needed for them.
 
+## Running on a server
+
+- Start with `SPRING_PROFILES_ACTIVE=prod`. The backend then refuses to start unless `JWT_SECRET` (at least 32
+  characters), `DB_PASSWORD`, `REDIS_PASSWORD` and `MINIO_ROOT_PASSWORD` are set and differ from the development
+  defaults in `application.yml` (that file is public, so a default JWT secret would let anyone sign tokens).
+- The `prod` profile also logs at INFO, stops logging SQL and the values bound to it, and never sends exception
+  details to the browser.
+- Limits (Redis, per user, per address for guests; admins are exempt): 5 wrong passwords per account or 30 per
+  address in 15 minutes; speech scoring 20 per minute and 400 per day; adding listening material 20 per hour;
+  saving lessons 40 per minute; public reads 240 per minute; JSON bodies up to 4 MB. See `RateLimitFilter`.
+
 ## Dictation & shadowing (Nghe & Nói)
 
 - Start the speech service (`yibi-speech-service` on port 8001, or set `SPEECH_SERVICE_URL`; run

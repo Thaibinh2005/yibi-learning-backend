@@ -33,4 +33,12 @@ class StudyStatsServiceTest {
         assertEquals(100, StudyStatsService.goalPercent(45, 20));
         assertEquals(0, StudyStatsService.goalPercent(10, 0));
     }
+
+    @Test
+    void longestStreakFindsTheLongestRunAnywhere() {
+        assertEquals(0, StudyStatsService.longestStreak(Set.of()));
+        assertEquals(4, StudyStatsService.longestStreak(Set.of(TODAY, TODAY.minusDays(3), TODAY.minusDays(4),
+                TODAY.minusDays(5), TODAY.minusDays(6), TODAY.minusDays(9))));
+        assertEquals(1, StudyStatsService.longestStreak(Set.of(TODAY.minusDays(1), TODAY.minusDays(5))));
+    }
 }

@@ -21,7 +21,7 @@ class ListeningCommunityRulesTest {
     private static LearnerVideoService.Lesson lesson(Visibility visibility, String status) {
         return new LearnerVideoService.Lesson(1, "t", Source.YOUTUBE, CONTRIBUTOR, visibility, status, null, "DONE", null,
                 1L, "YOUTUBE", "abcDEF12345", null, null, "Kênh", null, "an", null, "YOUTUBE_EMBED", null, null, 1, 1,
-                List.of(), null);
+                List.of(), null, false);
     }
 
     @Test

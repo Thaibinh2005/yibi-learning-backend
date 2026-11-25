@@ -72,6 +72,12 @@ public class SecurityConfig {
 
                         // A learner's media file, opened by the player with a signed, expiring link (checked in the service).
                         .requestMatchers(HttpMethod.GET, "/api/listening/media/*").permitAll()
+                        // Uploaded profile pictures: an <img> cannot send the access token.
+                        .requestMatchers(HttpMethod.GET, "/api/avatars/*").permitAll()
+                        // Guests see the sample papers (without their own progress); taking one needs an account.
+                        .requestMatchers(HttpMethod.GET, "/api/mock-tests").permitAll()
+                        // Pictures and clips of sample papers: <img>/<audio> cannot send the access token.
+                        .requestMatchers(HttpMethod.GET, "/api/mock-tests/media/**").permitAll()
                         // The community listening library is browsable by guests; opening a lesson needs an account.
                         .requestMatchers(HttpMethod.GET, "/api/listening/library", "/api/listening/library/**").permitAll()
 

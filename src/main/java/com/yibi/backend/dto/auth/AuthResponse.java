@@ -37,6 +37,10 @@ public class AuthResponse {
     // User info embedded in response (avoids extra /me call on login)
     private UUID userId;
     private String username;
+    /** The name to show; the username when the learner has not chosen one. */
+    private String displayName;
+    /** Profile picture link; null shows the initial. */
+    private String avatarUrl;
     private String email;
     private String role;
     private Integer hskLevel;

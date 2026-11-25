@@ -112,4 +112,15 @@ class LearnerVideoServiceTest {
         assertThat(LearnerVideoService.estimateLevel(List.of(new LearnerSegment("h", null, null, null, null, null, hard, null, null)))).isEqualTo("7-9");
         assertThat(LearnerVideoService.estimateLevel(List.of(b))).isNull();
     }
+
+    @Test
+    void reusesStoredAnalysesOnlyForLinesThatHaveThem() {
+        List<ChinesePinyinService.Token> words = List.of(new ChinesePinyinService.Token("你好", "nǐhǎo", 1L, "1"));
+        LearnerSegment analysed = new LearnerSegment("你好", 0.0, 1.0, "nǐhǎo", null, null, words, List.of("POLYPHONE"), null);
+        LearnerSegment bare = new LearnerSegment("再见", null, null, null, null, null, null, null, null);
+        var known = LearnerVideoService.reusableAnalyses(List.of(analysed, bare));
+        assertThat(known).containsOnlyKeys("你好");
+        assertThat(known.get("你好").pinyin()).isEqualTo("nǐhǎo");
+        assertThat(known.get("你好").flags()).containsExactly("POLYPHONE");
+    }
 }

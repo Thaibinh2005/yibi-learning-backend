@@ -160,7 +160,7 @@ public class LearnerVideoService {
                   String provider, String videoId, String mediaPath, String mediaType, String channelName,
                   String channelUrl, String contributorName, String description, String usageRights, String reviewNote,
                   String hskLevel, int segmentCount, int translatedCount, List<LearnerSegment> segments,
-                  java.time.LocalDateTime updatedAt) {
+                  java.time.LocalDateTime updatedAt, boolean editorial) {
 
         boolean playable() {
             return videoId != null || mediaPath != null;
@@ -171,9 +171,10 @@ public class LearnerVideoService {
         List<Lesson> rows = jdbc.query("""
                 SELECT l.id, l.title, l.source_type, l.contributor_id, l.visibility, l.status, l.status_message,
                        l.translation_status, l.translation_message, l.media_source_id, m.provider, m.external_id,
-                       m.media_path, m.media_type, m.channel_name, m.channel_url, u.username, l.description,
+                       m.media_path, m.media_type, m.channel_name, m.channel_url,
+                       CASE WHEN l.editorial THEN ? ELSE u.username END AS username, l.description,
                        l.usage_rights, l.review_note, COALESCE(l.hsk_level, l.est_level) AS level, l.segment_count,
-                       l.translated_count, l.segments::text AS segments, l.updated_at
+                       l.translated_count, l.segments::text AS segments, l.updated_at, l.editorial
                 FROM listening_lessons l
                 LEFT JOIN media_sources m ON m.id = l.media_source_id
                 LEFT JOIN users u ON u.id = l.contributor_id
@@ -186,7 +187,8 @@ public class LearnerVideoService {
                 rs.getString("channel_name"), rs.getString("channel_url"), rs.getString("username"),
                 rs.getString("description"), rs.getString("usage_rights"), rs.getString("review_note"),
                 rs.getString("level"), rs.getInt("segment_count"), rs.getInt("translated_count"),
-                store.read(rs.getString("segments")), VocabDeckService.fromUtc(rs.getTimestamp("updated_at"))), id);
+                store.read(rs.getString("segments")), ListeningLessonStore.local(rs.getTimestamp("updated_at")),
+                rs.getBoolean("editorial")), ListeningLessonStore.TEAM, id);
         if (rows.isEmpty()) throw notFound();
         return rows.get(0);
     }
@@ -226,16 +228,20 @@ public class LearnerVideoService {
                 l.status(), l.statusMessage(), l.translationStatus(), l.translationMessage(), l.segments(), l.updatedAt(),
                 l.visibility(), viewer.is(l.contributor()), editable(viewer, l), saved, l.channelName(), l.channelUrl(),
                 l.contributorName(), l.description(), l.usageRights(), viewer.is(l.contributor()) || viewer.admin()
-                ? l.reviewNote() : null, l.hskLevel(), store.categoriesOf(l.id()));
+                ? l.reviewNote() : null, l.hskLevel(), store.categoriesOf(l.id()), l.editorial());
     }
 
     // ── Reading ──────────────────────────────────────────────────────────────────────────────────────────────────
 
-    /** "Video của tôi": the lessons the viewer contributed and the published ones they saved. */
+    /**
+     * "Video của tôi": the lessons the viewer contributed and the published ones they saved. Lessons an admin added
+     * for the community belong to the team and are managed in the admin library tab instead.
+     */
     public VideoList list(ListeningViewer viewer) {
         List<VideoSummary> videos = jdbc.query("SELECT " + ListeningLessonStore.SUMMARY_COLUMNS
                         + ListeningLessonStore.SUMMARY_FROM + """
-                        WHERE l.contributor_id = ? OR (sv.user_id IS NOT NULL AND l.visibility = 'PUBLISHED')
+                        WHERE (l.contributor_id = ? AND NOT l.editorial)
+                           OR (sv.user_id IS NOT NULL AND l.visibility = 'PUBLISHED')
                         ORDER BY GREATEST(l.updated_at, COALESCE(sv.saved_at, l.updated_at)) DESC
                         """, store.summaries(viewer), viewer.idOrNobody(), viewer.idOrNobody());
         return new VideoList(videos, usage(viewer.id()));
@@ -283,7 +289,7 @@ public class LearnerVideoService {
         if (blank(title)) title = request.source() == Source.MANUAL ? titleFromText(segments) : "Video YouTube " + videoId;
         String rights = videoId != null ? "YOUTUBE_EMBED" : "OWN";
         long id = insert(viewer.id(), title, request.source(), sourceId, language, generated, "DRAFT", rights,
-                withPinyin(segments));
+                withPinyin(segments), viewer.admin());
         countVideo(viewer);
         return get(viewer, id);
     }
@@ -318,7 +324,8 @@ public class LearnerVideoService {
                     VALUES ('UPLOAD', ?, ?, ?, ?, ?) RETURNING id
                     """, Long.class, title.trim(), key, mediaType(extension), file.getSize(), viewer.id());
             id = insert(viewer.id(), title, typed == null ? Source.UPLOAD : Source.MANUAL, sourceId, "zh-Hans", false,
-                    typed == null ? "PROCESSING" : "DRAFT", "PERSONAL_STUDY", typed == null ? List.of() : withPinyin(typed));
+                    typed == null ? "PROCESSING" : "DRAFT", "PERSONAL_STUDY", typed == null ? List.of() : withPinyin(typed),
+                    viewer.admin());
         } catch (RuntimeException ex) {
             storage.delete(key);
             throw ex;
@@ -339,7 +346,7 @@ public class LearnerVideoService {
             segments.add(new LearnerSegment(s.text(), s.start(), s.end(), null, null, null, null, null, null));
         }
         long id = insert(adminId, title, Source.YOUTUBE, youtubeSource(videoId), language, generated, "DRAFT",
-                "YOUTUBE_EMBED", withPinyin(segments));
+                "YOUTUBE_EMBED", withPinyin(segments), true);
         jdbc.update("UPDATE listening_lessons SET hsk_level = ?, rights_note = ? WHERE id = ?",
                 hskLevel != null && LEVELS.contains(hskLevel) ? hskLevel : null, blank(rightsNote) ? null : rightsNote.trim(), id);
         return id;
@@ -406,7 +413,8 @@ public class LearnerVideoService {
             segments.add(new LearnerSegment(text, start, end, null, vi, vi != null && Boolean.TRUE.equals(s.viStale()),
                     null, null, s.timing()));
         }
-        List<LearnerSegment> analysed = fillFromCache(withPinyin(segments));
+        // Autosave sends every line each time: unchanged lines keep their analysis, only new or edited ones are redone.
+        List<LearnerSegment> analysed = fillFromCache(withPinyin(segments, current.segments()));
         String title = blank(request.title()) ? current.title() : request.title().trim();
         tx.executeWithoutResult(status -> {
             store.writeSegments(id, analysed);
@@ -680,12 +688,28 @@ public class LearnerVideoService {
     }
 
     private List<LearnerSegment> withPinyin(List<LearnerSegment> segments) {
-        Map<String, ChinesePinyinService.Analysis> seen = new HashMap<>();
+        return withPinyin(segments, List.of());
+    }
+
+    /** Pinyin and word links for each line; a text already analysed in {@code known} is reused instead of redone. */
+    private List<LearnerSegment> withPinyin(List<LearnerSegment> segments, List<LearnerSegment> known) {
+        Map<String, ChinesePinyinService.Analysis> seen = reusableAnalyses(known);
         List<LearnerSegment> out = new ArrayList<>(segments.size());
         for (LearnerSegment s : segments) {
             ChinesePinyinService.Analysis a = seen.computeIfAbsent(s.text(), pinyin::analyze);
             out.add(new LearnerSegment(s.text(), s.start(), s.end(), a.pinyin(), s.vi(), s.viStale(), a.words(),
                     a.flags().isEmpty() ? null : List.copyOf(a.flags()), s.timing()));
+        }
+        return out;
+    }
+
+    /** The analyses already stored with lines (pinyin and words present), by text. */
+    static Map<String, ChinesePinyinService.Analysis> reusableAnalyses(List<LearnerSegment> known) {
+        Map<String, ChinesePinyinService.Analysis> out = new HashMap<>();
+        for (LearnerSegment k : known) {
+            if (k.pinyin() == null || k.words() == null) continue;
+            out.putIfAbsent(k.text(), new ChinesePinyinService.Analysis(k.pinyin(), k.words(),
+                    k.flags() == null ? java.util.Set.of() : new java.util.LinkedHashSet<>(k.flags())));
         }
         return out;
     }
@@ -764,16 +788,17 @@ public class LearnerVideoService {
     }
 
     private long insert(UUID contributor, String title, Source source, Long mediaSourceId, String language,
-                        boolean generated, String status, String rights, List<LearnerSegment> segments) {
+                        boolean generated, String status, String rights, List<LearnerSegment> segments,
+                        boolean editorial) {
         ListeningLessonStore.Stats s = ListeningLessonStore.stats(segments);
         return jdbc.queryForObject("""
                 INSERT INTO listening_lessons (title, language_code, is_generated, usage_rights, segments, segment_count,
                         translated_count, est_level, duration_seconds, stats_at, contributor_id, source_type,
-                        media_source_id, status)
-                VALUES (?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, now(), ?, ?, ?, ?)
+                        media_source_id, status, editorial)
+                VALUES (?, ?, ?, ?, ?::jsonb, ?, ?, ?, ?, now(), ?, ?, ?, ?, ?)
                 RETURNING id
                 """, Long.class, title.trim(), language, generated, rights, store.write(segments), s.count(), s.translated(),
-                s.level(), s.duration(), contributor, source.name(), mediaSourceId, status);
+                s.level(), s.duration(), contributor, source.name(), mediaSourceId, status, editorial);
     }
 
     private void checkDailyVideos(ListeningViewer viewer) {

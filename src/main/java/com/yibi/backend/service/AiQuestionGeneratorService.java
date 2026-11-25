@@ -32,6 +32,14 @@ import java.util.*;
 @Service
 public class AiQuestionGeneratorService {
 
+    /** Counts Gemini answers for the admin system page; optional so the class still builds alone. */
+    private GeminiUsageTracker usage;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setUsage(GeminiUsageTracker usage) {
+        this.usage = usage;
+    }
+
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
     private static final int SAMPLE_WORDS = 40;
     private static final List<String> LEVELS = List.of("1", "2", "3", "4", "5", "6", "7-9");
@@ -414,6 +422,7 @@ public class AiQuestionGeneratorService {
                 .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body), StandardCharsets.UTF_8))
                 .build();
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (usage != null) usage.record("question-generator", model, response.statusCode());
         if (response.statusCode() < 200 || response.statusCode() >= 300) {
             log.warn("Gemini {} answered HTTP {}: {}", model, response.statusCode(), abbreviate(response.body()));
             throw new GeminiStatusException(response.statusCode());

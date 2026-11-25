@@ -2,6 +2,7 @@ package com.yibi.backend.controller.auth;
 
 import com.yibi.backend.dto.auth.AuthResponse;
 import com.yibi.backend.dto.common.ApiResponse;
+import com.yibi.backend.security.RefreshCookie;
 import com.yibi.backend.service.GoogleLoginService;
 import com.yibi.backend.service.PasswordResetService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ public class AccountRecoveryController {
 
     private final PasswordResetService passwordReset;
     private final GoogleLoginService googleLogin;
+    private final RefreshCookie refreshCookie;
 
     /** The same answer whether or not the email has an account. */
     @PostMapping("/forgot-password")
@@ -64,7 +66,9 @@ public class AccountRecoveryController {
 
     @PostMapping("/google/exchange")
     public ResponseEntity<ApiResponse<AuthResponse>> googleExchange(@Valid @RequestBody GoogleExchangeRequest request) {
-        return ResponseEntity.ok(ApiResponse.success("Login successful", googleLogin.exchange(request.code())));
+        AuthResponse response = googleLogin.exchange(request.code());
+        String cookie = refreshCookie.issue(response);
+        return ResponseEntity.ok().header(RefreshCookie.header(), cookie).body(ApiResponse.success("Login successful", response));
     }
 
     private static ResponseEntity<Void> redirect(String url) {

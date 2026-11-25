@@ -1,0 +1,1028 @@
+{
+ "id": "hsk1-1110",
+ "title": "HSK 1",
+ "level": 1,
+ "stage": "Sơ cấp",
+ "source": "Đề mẫu HSK 3.0 chính thức (中外语言交流合作中心)",
+ "durationMinutes": 40,
+ "parts": [
+  {
+   "skill": "listening",
+   "questionCount": 20,
+   "minutes": 12
+  },
+  {
+   "skill": "reading",
+   "questionCount": 20,
+   "minutes": 20
+  }
+ ],
+ "questionCount": 40,
+ "sections": [
+  {
+   "skill": "listening",
+   "part": 1,
+   "layout": "image_choice",
+   "range": [
+    1,
+    5
+   ],
+   "example": {
+    "options": [
+     {
+      "key": "A",
+      "image": "/mocktests/hsk1-1110/img/hsk1_L1_example_A.png"
+     },
+     {
+      "key": "B",
+      "image": "/mocktests/hsk1-1110/img/hsk1_L1_example_B.png"
+     },
+     {
+      "key": "C",
+      "image": "/mocktests/hsk1-1110/img/hsk1_L1_example_C.png"
+     }
+    ],
+    "answer": "C"
+   },
+   "questions": [
+    {
+     "no": 1,
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q01_A.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q01_B.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q01_C.png"
+      }
+     ],
+     "answer": "C",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q01.mp3",
+      "start": 97.92,
+      "end": 107.2
+     },
+     "transcript": "坐飞机"
+    },
+    {
+     "no": 2,
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q02_A.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q02_B.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q02_C.png"
+      }
+     ],
+     "answer": "A",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q02.mp3",
+      "start": 114.0,
+      "end": 123.35
+     },
+     "transcript": "不想听"
+    },
+    {
+     "no": 3,
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q03_A.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q03_B.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q03_C.png"
+      }
+     ],
+     "answer": "B",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q03.mp3",
+      "start": 130.37,
+      "end": 140.5
+     },
+     "transcript": "在椅子上"
+    },
+    {
+     "no": 4,
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q04_A.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q04_B.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q04_C.png"
+      }
+     ],
+     "answer": "A",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q04.mp3",
+      "start": 147.5,
+      "end": 156.85
+     },
+     "transcript": "一杯茶"
+    },
+    {
+     "no": 5,
+     "options": [
+      {
+       "key": "A",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q05_A.png"
+      },
+      {
+       "key": "B",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q05_B.png"
+      },
+      {
+       "key": "C",
+       "image": "/mocktests/hsk1-1110/img/hsk1_q05_C.png"
+      }
+     ],
+     "answer": "C",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q05.mp3",
+      "start": 163.58,
+      "end": 173.45
+     },
+     "transcript": "很高兴"
+    }
+   ],
+   "introAudio": {
+    "file": "/mocktests/hsk1-1110/audio/hsk1_L1_intro.mp3",
+    "start": 61.08,
+    "end": 97.3
+   }
+  },
+  {
+   "skill": "listening",
+   "part": 2,
+   "layout": "text_choice",
+   "range": [
+    6,
+    10
+   ],
+   "example": {
+    "question": "今天天气怎么样？",
+    "questionPinyin": "Jīntiān tiānqì zěnmeyàng",
+    "options": [
+     {
+      "key": "A",
+      "text": "在学习",
+      "pinyin": "zài xuéxí"
+     },
+     {
+      "key": "B",
+      "text": "很好听",
+      "pinyin": "hěn hǎotīng"
+     },
+     {
+      "key": "C",
+      "text": "非常热",
+      "pinyin": "fēicháng rè"
+     }
+    ],
+    "answer": "C"
+   },
+   "questions": [
+    {
+     "no": 6,
+     "options": [
+      {
+       "key": "A",
+       "text": "星期四",
+       "pinyin": "xīngqīsì"
+      },
+      {
+       "key": "B",
+       "text": "三块钱",
+       "pinyin": "sān kuài qián"
+      },
+      {
+       "key": "C",
+       "text": "五口人",
+       "pinyin": "wǔ kǒu rén"
+      }
+     ],
+     "answer": "C",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q06.mp3",
+      "start": 221.11,
+      "end": 232.25
+     },
+     "transcript": "你家有几口人?"
+    },
+    {
+     "no": 7,
+     "options": [
+      {
+       "key": "A",
+       "text": "前边",
+       "pinyin": "qiánbian"
+      },
+      {
+       "key": "B",
+       "text": "做饭",
+       "pinyin": "zuò fàn"
+      },
+      {
+       "key": "C",
+       "text": "不客气",
+       "pinyin": "bú kèqi"
+      }
+     ],
+     "answer": "A",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q07.mp3",
+      "start": 244.47,
+      "end": 253.35
+     },
+     "transcript": "你坐哪儿?"
+    },
+    {
+     "no": 8,
+     "options": [
+      {
+       "key": "A",
+       "text": "不会",
+       "pinyin": "bú huì"
+      },
+      {
+       "key": "B",
+       "text": "写字",
+       "pinyin": "xiě zì"
+      },
+      {
+       "key": "C",
+       "text": "昨天晚上",
+       "pinyin": "zuótiān wǎnshang"
+      }
+     ],
+     "answer": "A",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q08.mp3",
+      "start": 265.66,
+      "end": 275.7
+     },
+     "transcript": "你会开车吗?"
+    },
+    {
+     "no": 9,
+     "options": [
+      {
+       "key": "A",
+       "text": "好玩儿",
+       "pinyin": "hǎowánr"
+      },
+      {
+       "key": "B",
+       "text": "玩电脑",
+       "pinyin": "wán diànnǎo"
+      },
+      {
+       "key": "C",
+       "text": "上大学了",
+       "pinyin": "shàng dàxué le"
+      }
+     ],
+     "answer": "B",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q09.mp3",
+      "start": 288.03,
+      "end": 298.75
+     },
+     "transcript": "儿子在做什么呢?"
+    },
+    {
+     "no": 10,
+     "options": [
+      {
+       "key": "A",
+       "text": "汉语课",
+       "pinyin": "Hànyǔ kè"
+      },
+      {
+       "key": "B",
+       "text": "男学生",
+       "pinyin": "nán xuéshēng"
+      },
+      {
+       "key": "C",
+       "text": "我也不认识",
+       "pinyin": "wǒ yě bú rènshi"
+      }
+     ],
+     "answer": "C",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q10.mp3",
+      "start": 311.12,
+      "end": 322.3
+     },
+     "transcript": "这个汉字怎么读?"
+    }
+   ],
+   "introAudio": {
+    "file": "/mocktests/hsk1-1110/audio/hsk1_L2_intro.mp3",
+    "start": 180.32,
+    "end": 220.7
+   }
+  },
+  {
+   "skill": "listening",
+   "part": 3,
+   "layout": "shared_images",
+   "range": [
+    11,
+    15
+   ],
+   "sharedOptions": [
+    {
+     "key": "A",
+     "image": "/mocktests/hsk1-1110/img/hsk1_L3_shared_A.png"
+    },
+    {
+     "key": "B",
+     "image": "/mocktests/hsk1-1110/img/hsk1_L3_shared_B.png"
+    },
+    {
+     "key": "C",
+     "image": "/mocktests/hsk1-1110/img/hsk1_L3_shared_C.png"
+    },
+    {
+     "key": "D",
+     "image": "/mocktests/hsk1-1110/img/hsk1_L3_shared_D.png"
+    },
+    {
+     "key": "E",
+     "image": "/mocktests/hsk1-1110/img/hsk1_L3_shared_E.png"
+    },
+    {
+     "key": "F",
+     "image": "/mocktests/hsk1-1110/img/hsk1_L3_shared_F.png"
+    }
+   ],
+   "example": {
+    "question": "女：你好！男：你好！很高兴认识你。",
+    "questionPinyin": "Nǐ hǎo Nǐ hǎo Hěn gāoxìng rènshi nǐ",
+    "optionsFrom": "shared",
+    "answer": "C"
+   },
+   "questions": [
+    {
+     "no": 11,
+     "optionsFrom": "shared",
+     "answer": "E",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q11.mp3",
+      "start": 380.11,
+      "end": 400.0
+     },
+     "transcript": "这家超市的东西很便宜。 对,东西也很多。"
+    },
+    {
+     "no": 12,
+     "optionsFrom": "shared",
+     "answer": "F",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q12.mp3",
+      "start": 413.08,
+      "end": 434.9
+     },
+     "transcript": "七点了,起床吧。 我还想睡呢,我们今天不上课。"
+    },
+    {
+     "no": 13,
+     "optionsFrom": "shared",
+     "answer": "B",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q13.mp3",
+      "start": 447.34,
+      "end": 461.3
+     },
+     "transcript": "你喜欢吗? 喜欢,谢谢。"
+    },
+    {
+     "no": 14,
+     "optionsFrom": "shared",
+     "answer": "D",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q14.mp3",
+      "start": 473.73,
+      "end": 492.1
+     },
+     "transcript": "看,这里有一只猫。 我看见了,它真小。"
+    },
+    {
+     "no": 15,
+     "optionsFrom": "shared",
+     "answer": "A",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q15.mp3",
+      "start": 504.33,
+      "end": 520.35
+     },
+     "transcript": "老师,我有一个问题。 好的,你请说。"
+    }
+   ],
+   "introAudio": {
+    "file": "/mocktests/hsk1-1110/audio/hsk1_L3_intro.mp3",
+    "start": 334.46,
+    "end": 379.6
+   }
+  },
+  {
+   "skill": "listening",
+   "part": 4,
+   "layout": "text_choice",
+   "range": [
+    16,
+    20
+   ],
+   "example": {
+    "question": "下午我去超市，我想买一些水果。问：说话人下午去哪里？",
+    "questionPinyin": "Xiàwǔ wǒ qù chāoshì wǒ xiǎng mǎi yìxiē shuǐguǒ Shuōhuàrén xiàwǔ qù nǎlǐ",
+    "options": [
+     {
+      "key": "A",
+      "text": "超市",
+      "pinyin": "chāoshì"
+     },
+     {
+      "key": "B",
+      "text": "医院",
+      "pinyin": "yīyuàn"
+     },
+     {
+      "key": "C",
+      "text": "学校",
+      "pinyin": "xuéxiào"
+     }
+    ],
+    "answer": "A"
+   },
+   "questions": [
+    {
+     "no": 16,
+     "options": [
+      {
+       "key": "A",
+       "text": "病了",
+       "pinyin": "bìng le"
+      },
+      {
+       "key": "B",
+       "text": "没来上学",
+       "pinyin": "méi lái shàngxué"
+      },
+      {
+       "key": "C",
+       "text": "不想睡觉",
+       "pinyin": "bù xiǎng shuìjiào"
+      }
+     ],
+     "answer": "A",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q16.mp3",
+      "start": 591.73,
+      "end": 613.85
+     },
+     "transcript": "小张生病了,今天没来公司。 小张怎么了?"
+    },
+    {
+     "no": 17,
+     "options": [
+      {
+       "key": "A",
+       "text": "卖车",
+       "pinyin": "mài chē"
+      },
+      {
+       "key": "B",
+       "text": "打电话",
+       "pinyin": "dǎ diànhuà"
+      },
+      {
+       "key": "C",
+       "text": "找手机",
+       "pinyin": "zhǎo shǒujī"
+      }
+     ],
+     "answer": "B",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q17.mp3",
+      "start": 626.52,
+      "end": 649.8
+     },
+     "transcript": "喂,小张。 您好,是王月女士吗? 说话人正在做什么? 喂,您好,是王月女士吗? 说话人正在做什么?"
+    },
+    {
+     "no": 18,
+     "options": [
+      {
+       "key": "A",
+       "text": "很新",
+       "pinyin": "hěn xīn"
+      },
+      {
+       "key": "B",
+       "text": "太贵了",
+       "pinyin": "tài guì le"
+      },
+      {
+       "key": "C",
+       "text": "不好看",
+       "pinyin": "bù hǎokàn"
+      }
+     ],
+     "answer": "C",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q18.mp3",
+      "start": 662.67,
+      "end": 682.85
+     },
+     "transcript": "这件衣服不好看。 那件衣服怎么样?"
+    },
+    {
+     "no": 19,
+     "options": [
+      {
+       "key": "A",
+       "text": "学校里边",
+       "pinyin": "xuéxiào lǐbian"
+      },
+      {
+       "key": "B",
+       "text": "医院后边",
+       "pinyin": "yīyuàn hòubian"
+      },
+      {
+       "key": "C",
+       "text": "超市后面",
+       "pinyin": "chāoshì hòumiàn"
+      }
+     ],
+     "answer": "A",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q19.mp3",
+      "start": 695.08,
+      "end": 717.5
+     },
+     "transcript": "那家饺子店在学校里边? 那家店在哪儿?"
+    },
+    {
+     "no": 20,
+     "options": [
+      {
+       "key": "A",
+       "text": "一个月",
+       "pinyin": "yí gè yuè"
+      },
+      {
+       "key": "B",
+       "text": "三个月",
+       "pinyin": "sān gè yuè"
+      },
+      {
+       "key": "C",
+       "text": "六个月",
+       "pinyin": "liù gè yuè"
+      }
+     ],
+     "answer": "C",
+     "audio": {
+      "file": "/mocktests/hsk1-1110/audio/hsk1_q20.mp3",
+      "start": 729.91,
+      "end": 757.65
+     },
+     "transcript": "哥哥去中国学习半年了,我很想他。 哥哥去中国几个月了?"
+    }
+   ],
+   "introAudio": {
+    "file": "/mocktests/hsk1-1110/audio/hsk1_L4_intro.mp3",
+    "start": 532.22,
+    "end": 591.15
+   }
+  },
+  {
+   "skill": "reading",
+   "part": 1,
+   "layout": "shared_images",
+   "range": [
+    21,
+    25
+   ],
+   "sharedOptions": [
+    {
+     "key": "A",
+     "image": "/mocktests/hsk1-1110/img/hsk1_R1_shared_A.png"
+    },
+    {
+     "key": "B",
+     "image": "/mocktests/hsk1-1110/img/hsk1_R1_shared_B.png"
+    },
+    {
+     "key": "C",
+     "image": "/mocktests/hsk1-1110/img/hsk1_R1_shared_C.png"
+    },
+    {
+     "key": "D",
+     "image": "/mocktests/hsk1-1110/img/hsk1_R1_shared_D.png"
+    },
+    {
+     "key": "E",
+     "image": "/mocktests/hsk1-1110/img/hsk1_R1_shared_E.png"
+    },
+    {
+     "key": "F",
+     "image": "/mocktests/hsk1-1110/img/hsk1_R1_shared_F.png"
+    }
+   ],
+   "example": {
+    "question": "我很喜欢这本书。",
+    "questionPinyin": "Wǒ hěn xǐhuan zhè běn shū",
+    "optionsFrom": "shared",
+    "answer": "E"
+   },
+   "questions": [
+    {
+     "no": 21,
+     "question": "王先生，再见。",
+     "questionPinyin": "Wáng xiānsheng zàijiàn",
+     "optionsFrom": "shared",
+     "answer": "F"
+    },
+    {
+     "no": 22,
+     "question": "弟弟很爱唱歌。",
+     "questionPinyin": "Dìdi hěn ài chàng gē",
+     "optionsFrom": "shared",
+     "answer": "A"
+    },
+    {
+     "no": 23,
+     "question": "早饭吃鸡蛋和牛奶，怎么样？",
+     "questionPinyin": "Zǎofàn chī jīdàn hé niúnǎi zěnmeyàng",
+     "optionsFrom": "shared",
+     "answer": "D"
+    },
+    {
+     "no": 24,
+     "question": "今天是妹妹上小学的第一天。",
+     "questionPinyin": "Jīntiān shì mèimei shàng xiǎoxué de dì-yī tiān",
+     "optionsFrom": "shared",
+     "answer": "B"
+    },
+    {
+     "no": 25,
+     "question": "早上下雨了，有点儿冷。",
+     "questionPinyin": "Zǎoshang xià yǔ le yǒudiǎnr lěng",
+     "optionsFrom": "shared",
+     "answer": "C"
+    }
+   ]
+  },
+  {
+   "skill": "reading",
+   "part": 2,
+   "layout": "shared_text_right",
+   "range": [
+    26,
+    30
+   ],
+   "sharedOptions": [
+    {
+     "key": "A",
+     "text": "2500元。",
+     "pinyin": "yuán"
+    },
+    {
+     "key": "B",
+     "text": "坐出租车。",
+     "pinyin": "Zuò chūzūchē"
+    },
+    {
+     "key": "C",
+     "text": "十岁了。",
+     "pinyin": "Shí suì le"
+    },
+    {
+     "key": "D",
+     "text": "我女朋友。",
+     "pinyin": "Wǒ nǚpéngyou"
+    },
+    {
+     "key": "E",
+     "text": "没关系。",
+     "pinyin": "Méi guānxi"
+    },
+    {
+     "key": "F",
+     "text": "好的，谢谢！",
+     "pinyin": "Hǎo de xièxie"
+    }
+   ],
+   "example": {
+    "question": "你喝水吗？",
+    "questionPinyin": "Nǐ hē shuǐ ma",
+    "optionsFrom": "shared",
+    "answer": "F"
+   },
+   "questions": [
+    {
+     "no": 26,
+     "question": "她是谁？",
+     "questionPinyin": "Tā shì shéi",
+     "optionsFrom": "shared",
+     "answer": "D"
+    },
+    {
+     "no": 27,
+     "question": "对不起。",
+     "questionPinyin": "Duìbuqǐ",
+     "optionsFrom": "shared",
+     "answer": "E"
+    },
+    {
+     "no": 28,
+     "question": "你女儿多大了？",
+     "questionPinyin": "Nǐ nǚ'ér duō dà le",
+     "optionsFrom": "shared",
+     "answer": "C"
+    },
+    {
+     "no": 29,
+     "question": "你怎么回学校？",
+     "questionPinyin": "Nǐ zěnme huí xuéxiào",
+     "optionsFrom": "shared",
+     "answer": "B"
+    },
+    {
+     "no": 30,
+     "question": "请问，这个电视多少钱？",
+     "questionPinyin": "Qǐngwèn zhège diànshì duōshao qián",
+     "optionsFrom": "shared",
+     "answer": "A"
+    }
+   ]
+  },
+  {
+   "skill": "reading",
+   "part": 3,
+   "layout": "word_bank",
+   "range": [
+    31,
+    35
+   ],
+   "sharedOptions": [
+    {
+     "key": "A",
+     "text": "上午",
+     "pinyin": "shàngwǔ"
+    },
+    {
+     "key": "B",
+     "text": "漂亮",
+     "pinyin": "piàoliang"
+    },
+    {
+     "key": "C",
+     "text": "休息",
+     "pinyin": "xiūxi"
+    },
+    {
+     "key": "D",
+     "text": "叫",
+     "pinyin": "jiào"
+    },
+    {
+     "key": "E",
+     "text": "事",
+     "pinyin": "shì"
+    },
+    {
+     "key": "F",
+     "text": "很",
+     "pinyin": "hěn"
+    }
+   ],
+   "example": {
+    "question": "你（　）什么名字？",
+    "questionPinyin": "Nǐ shénme míngzi",
+    "optionsFrom": "shared",
+    "answer": "D"
+   },
+   "questions": [
+    {
+     "no": 31,
+     "question": "今天书店里有（　）多小朋友。",
+     "questionPinyin": "Jīntiān shūdiàn li yǒu duō xiǎopéngyǒu",
+     "optionsFrom": "shared",
+     "answer": "F"
+    },
+    {
+     "no": 32,
+     "question": "他们（　）学了中文。",
+     "questionPinyin": "Tāmen xuéle Zhōngwén",
+     "optionsFrom": "shared",
+     "answer": "A"
+    },
+    {
+     "no": 33,
+     "question": "我觉得第二个杯子（　），买那个吧。",
+     "questionPinyin": "Wǒ juéde dì-èr gè bēizi mǎi nàge ba",
+     "optionsFrom": "shared",
+     "answer": "B"
+    },
+    {
+     "no": 34,
+     "question": "下课，同学们（　）一下。",
+     "questionPinyin": "Xiàkè tóngxuémen yíxià",
+     "optionsFrom": "shared",
+     "answer": "C"
+    },
+    {
+     "no": 35,
+     "question": "A：你说什么？我没听见。B：我说，我明天白天有（　），不能来了。",
+     "questionPinyin": "Nǐ shuō shénme Wǒ méi tīngjiàn Wǒ shuō wǒ míngtiān báitiān yǒu bù néng lái le",
+     "optionsFrom": "shared",
+     "answer": "E"
+    }
+   ]
+  },
+  {
+   "skill": "reading",
+   "part": 4,
+   "layout": "passage_choice",
+   "range": [
+    36,
+    40
+   ],
+   "example": {
+    "passage": "请问现在几点了？",
+    "passagePinyin": "Qǐngwèn xiànzài jǐ diǎn le",
+    "question": "说话人想知道什么？",
+    "questionPinyin": "Shuōhuàrén xiǎng zhīdào shénme",
+    "options": [
+     {
+      "key": "A",
+      "text": "时间",
+      "pinyin": "shíjiān"
+     },
+     {
+      "key": "B",
+      "text": "名字",
+      "pinyin": "míngzi"
+     },
+     {
+      "key": "C",
+      "text": "房间号",
+      "pinyin": "fángjiān hào"
+     }
+    ],
+    "answer": "A"
+   },
+   "questions": [
+    {
+     "no": 36,
+     "passage": "它叫多多，是我的好朋友，也是我的家人。",
+     "passagePinyin": "Tā jiào Duōduo shì wǒ de hǎopéngyou yě shì wǒ de jiārén",
+     "question": "“多多”是：",
+     "questionPinyin": "\" Duōduo \" shì",
+     "options": [
+      {
+       "key": "A",
+       "text": "小学生",
+       "pinyin": "xiǎoxuéshēng"
+      },
+      {
+       "key": "B",
+       "text": "他的家人",
+       "pinyin": "tā de jiārén"
+      },
+      {
+       "key": "C",
+       "text": "他男朋友",
+       "pinyin": "tā nánpéngyou"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "no": 37,
+     "passage": "我星期天不上班，要和孩子去看电影。",
+     "passagePinyin": "Wǒ xīngqītiān bú shàngbān yào hé háizi qù kàn diànyǐng",
+     "question": "他星期天要：",
+     "questionPinyin": "Tā xīngqītiān yào",
+     "options": [
+      {
+       "key": "A",
+       "text": "上班",
+       "pinyin": "shàngbān"
+      },
+      {
+       "key": "B",
+       "text": "看电影",
+       "pinyin": "kàn diànyǐng"
+      },
+      {
+       "key": "C",
+       "text": "见同学",
+       "pinyin": "jiàn tóngxué"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "no": 38,
+     "passage": "妈妈中午做了面条儿，大家都觉得好吃。",
+     "passagePinyin": "Māma zhōngwǔ zuòle miàntiáor dàjiā dōu juéde hǎochī",
+     "question": "大家觉得什么好吃？",
+     "questionPinyin": "Dàjiā juéde shénme hǎochī",
+     "options": [
+      {
+       "key": "A",
+       "text": "包子",
+       "pinyin": "bāozi"
+      },
+      {
+       "key": "B",
+       "text": "面包",
+       "pinyin": "miànbāo"
+      },
+      {
+       "key": "C",
+       "text": "面条儿",
+       "pinyin": "miàntiáor"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "no": 39,
+     "passage": "八点太早了，我们九点半见吧。",
+     "passagePinyin": "Bā diǎn tài zǎo le wǒmen jiǔ diǎn bàn jiàn ba",
+     "question": "他想几点见？",
+     "questionPinyin": "Tā xiǎng jǐ diǎn jiàn",
+     "options": [
+      {
+       "key": "A",
+       "text": "8:00"
+      },
+      {
+       "key": "B",
+       "text": "9:00"
+      },
+      {
+       "key": "C",
+       "text": "9:30"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "no": 40,
+     "passage": "我姐姐是医生，她工作很忙。",
+     "passagePinyin": "Wǒ jiějie shì yīshēng tā gōngzuò hěn máng",
+     "question": "姐姐：",
+     "questionPinyin": "Jiějie",
+     "options": [
+      {
+       "key": "A",
+       "text": "工作忙",
+       "pinyin": "gōngzuò máng"
+      },
+      {
+       "key": "B",
+       "text": "还在读书",
+       "pinyin": "hái zài dúshū"
+      },
+      {
+       "key": "C",
+       "text": "到国外了",
+       "pinyin": "dào guówài le"
+      }
+     ],
+     "answer": "A"
+    }
+   ]
+  }
+ ]
+}

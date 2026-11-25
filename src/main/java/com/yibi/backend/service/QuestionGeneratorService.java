@@ -836,7 +836,7 @@ public class QuestionGeneratorService {
             case "3", "4" -> 2;
             case "5", "6" -> 3;
             case "7-9"    -> 4;
-            default       -> throw new IllegalArgumentException("Invalid HSK level: " + level);
+            default       -> throw new com.yibi.backend.exception.AppException("Cấp HSK không hợp lệ: " + level, org.springframework.http.HttpStatus.BAD_REQUEST);
         };
     }
 

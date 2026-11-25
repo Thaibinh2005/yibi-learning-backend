@@ -57,17 +57,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // Only authenticate if not already authenticated
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                        // A locked account loses access at once, not when its access token expires:
+                        // the request simply goes on unauthenticated.
+                        if (!userDetails.isEnabled() || !userDetails.isAccountNonLocked()) {
+                            log.debug("Ignoring a token of locked account {}", username);
+                        } else {
+                            UsernamePasswordAuthenticationToken authToken =
+                                    new UsernamePasswordAuthenticationToken(
+                                            userDetails,
+                                            null,
+                                            userDetails.getAuthorities()
+                                    );
+                            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                        UsernamePasswordAuthenticationToken authToken =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails,
-                                        null,
-                                        userDetails.getAuthorities()
-                                );
-                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                        log.debug("Authenticated user: {} with roles: {}", username, userDetails.getAuthorities());
+                            SecurityContextHolder.getContext().setAuthentication(authToken);
+                            log.debug("Authenticated user: {} with roles: {}", username, userDetails.getAuthorities());
+                        }
                     }
                 }
             }

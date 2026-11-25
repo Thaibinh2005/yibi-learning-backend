@@ -11,9 +11,11 @@ import com.yibi.backend.repository.UserRepository;
 import com.yibi.backend.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.yibi.backend.security.ratelimit.LoginAttemptService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final TokenBlacklistService tokenBlacklistService;
     private final JwtProperties jwtProperties;
+    private final LoginAttemptService loginAttempts;
 
     // ── Register ──────────────────────────────────────────────
 
@@ -46,10 +49,10 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         // Check for duplicates
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("Username '" + request.getUsername() + "' is already taken");
+            throw new com.yibi.backend.exception.AppException("Tên đăng nhập '" + request.getUsername() + "' đã có người dùng.", org.springframework.http.HttpStatus.CONFLICT);
         }
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email '" + request.getEmail() + "' is already registered");
+            throw new com.yibi.backend.exception.AppException("Email này đã được đăng ký.", org.springframework.http.HttpStatus.CONFLICT);
         }
 
         // Create user entity
@@ -94,14 +97,23 @@ public class AuthService {
     // ── Login ─────────────────────────────────────────────────
 
     @Transactional
-    public AuthResponse login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request, String clientAddress) {
+        // Too many wrong passwords for this account or from this address: refuse before checking (429).
+        loginAttempts.checkAllowed(request.getUsernameOrEmail(), clientAddress);
         // Spring Security handles credential verification + account lock check
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsernameOrEmail(),
-                        request.getPassword()
-                )
-        );
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsernameOrEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (AuthenticationException ex) {
+            loginAttempts.failed(request.getUsernameOrEmail(), clientAddress);
+            throw ex;
+        }
+        loginAttempts.succeeded(request.getUsernameOrEmail());
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -124,7 +136,7 @@ public class AuthService {
         // Validate refresh token exists in Redis
         String username = tokenBlacklistService.getUsernameFromRefreshToken(refreshToken);
         if (username == null) {
-            throw new IllegalArgumentException("Refresh token is invalid or expired");
+            throw new com.yibi.backend.exception.UnauthorizedException("Phiên đăng nhập đã hết. Hãy đăng nhập lại.");
         }
 
         // Load user
@@ -132,7 +144,7 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
 
         if (!user.isActive()) {
-            throw new IllegalArgumentException("Account is disabled");
+            throw new com.yibi.backend.exception.AppException("Tài khoản này đã bị khoá.", org.springframework.http.HttpStatus.FORBIDDEN);
         }
 
         // Rotate refresh token (delete old, issue new)
@@ -166,7 +178,7 @@ public class AuthService {
     @Transactional
     public AuthResponse issueTokens(User user) {
         if (!user.isActive()) {
-            throw new IllegalArgumentException("Account is disabled");
+            throw new com.yibi.backend.exception.AppException("Tài khoản này đã bị khoá.", org.springframework.http.HttpStatus.FORBIDDEN);
         }
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
@@ -206,6 +218,8 @@ public class AuthService {
                 .expiresIn(jwtTokenProvider.getAccessTokenExpirationSeconds())
                 .userId(user.getId())
                 .username(user.getUsername())
+                .displayName(user.getDisplayName() != null ? user.getDisplayName() : user.getUsername())
+                .avatarUrl(user.shownAvatarUrl())
                 .email(user.getEmail())
                 .role(user.getRole().name())
                 .hskLevel(user.getHskLevel())

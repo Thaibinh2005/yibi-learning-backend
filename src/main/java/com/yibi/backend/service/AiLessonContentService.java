@@ -29,6 +29,14 @@ import java.util.*;
 @Service
 public class AiLessonContentService {
 
+    /** Counts Gemini answers for the admin system page; optional so the class still builds alone. */
+    private GeminiUsageTracker usage;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setUsage(GeminiUsageTracker usage) {
+        this.usage = usage;
+    }
+
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
     private static final String GENERATOR_VERSION = "hsk-mcq-v6-duolingo";
     private static final Set<String> ALLOWED_SKILLS = Set.of("vocabulary", "phonetics", "characters", "grammar");
@@ -165,6 +173,7 @@ public class AiLessonContentService {
                 .POST(HttpRequest.BodyPublishers.ofString(writeJson(body), StandardCharsets.UTF_8))
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (usage != null) usage.record("lesson-content", model, response.statusCode());
         if (response.statusCode() < 200 || response.statusCode() >= 300) {
             throw new GeminiCallException(response.statusCode(), "Gemini request failed");
         }

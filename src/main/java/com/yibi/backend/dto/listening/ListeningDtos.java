@@ -49,13 +49,14 @@ public final class ListeningDtos {
 
     /**
      * A lesson on a card. {@code mine}: the viewer contributed it; {@code saved}: the viewer saved someone else's.
-     * {@code hskLevel} is the admin's level, else the estimate from the words used.
+     * {@code hskLevel} is the admin's level, else the estimate from the words used. {@code editorial}: added by an
+     * admin for the community, credited to the team ({@code contributorName} is then the team's name).
      */
     public record VideoSummary(long id, String title, Source source, String videoId, boolean hasMedia, String status,
                                String statusMessage, String translationStatus, int segmentCount, int translatedCount,
                                LocalDateTime updatedAt, Double durationSeconds, String hskLevel, Visibility visibility,
                                boolean mine, boolean saved, String channelName, String contributorName,
-                               int practiceCount) { }
+                               int practiceCount, boolean editorial) { }
 
     public record VideoList(List<VideoSummary> videos, Usage usage) { }
 
@@ -68,7 +69,7 @@ public final class ListeningDtos {
                               List<LearnerSegment> segments, LocalDateTime updatedAt, Visibility visibility,
                               boolean mine, boolean editable, boolean saved, String channelName, String channelUrl,
                               String contributorName, String description, String usageRights, String reviewNote,
-                              String hskLevel, List<CategoryRef> categories) { }
+                              String hskLevel, List<CategoryRef> categories, boolean editorial) { }
 
     public record MediaUrl(String url, long expiresAt) { }
 
@@ -112,7 +113,8 @@ public final class ListeningDtos {
                                  int translatedCount, String hskLevel, String estimatedLevel, Double durationSeconds,
                                  String contributorName, String channelName, String usageRights, String rightsNote,
                                  String description, String reviewNote, List<CategoryRef> categories,
-                                 LocalDateTime submittedAt, LocalDateTime publishedAt, int practiceCount, int saveCount) { }
+                                 LocalDateTime submittedAt, LocalDateTime publishedAt, int practiceCount, int saveCount,
+                                 boolean editorial) { }
 
     public record AdminLessonPage(List<AdminLessonRow> lessons, int page, int totalPages, long total, int pendingCount) { }
 }

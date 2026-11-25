@@ -32,6 +32,14 @@ import java.util.regex.Pattern;
 @Service
 public class PassageGeneratorService {
 
+    /** Counts Gemini answers for the admin system page; optional so the class still builds alone. */
+    private GeminiUsageTracker usage;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    void setUsage(GeminiUsageTracker usage) {
+        this.usage = usage;
+    }
+
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
     private static final int LESSONS_PER_PASSAGE = 5;
     private static final int WORDS_IN_PROMPT = 40;
@@ -304,6 +312,7 @@ public class PassageGeneratorService {
                 .POST(HttpRequest.BodyPublishers.ofString(objectMapper.writeValueAsString(body), StandardCharsets.UTF_8))
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        if (usage != null) usage.record("passage-generator", model, response.statusCode());
         if (response.statusCode() < 200 || response.statusCode() >= 300) {
             throw new HttpStatusException(response.statusCode(), objectMapper.readTree(response.body()).path("error").path("message").asText(""));
         }

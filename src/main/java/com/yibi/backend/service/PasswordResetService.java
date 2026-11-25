@@ -85,7 +85,7 @@ public class PasswordResetService {
             throw new BadRequestException("Liên kết đặt lại mật khẩu đã hết hạn hoặc đã được dùng. Hãy yêu cầu liên kết mới.");
         }
         UUID userId = (UUID) used.get(0).get("id");
-        jdbc.update("UPDATE users SET password_hash = ?, updated_at = NOW() WHERE id = ?", passwordEncoder.encode(newPassword), userId);
+        jdbc.update("UPDATE users SET password_hash = ?, password_set = TRUE, updated_at = NOW() WHERE id = ?", passwordEncoder.encode(newPassword), userId);
         jdbc.update("UPDATE password_reset_tokens SET used_at = NOW() WHERE user_id = ? AND used_at IS NULL", userId);
         // Whoever knew the old password is signed out on their next token refresh.
         tokens.revokeAllRefreshTokens((String) used.get(0).get("username"));

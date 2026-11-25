@@ -1,0 +1,27 @@
+# ============================================================
+#  Real server: SPRING_PROFILES_ACTIVE=prod
+#  Secrets must come from environment variables (checked at startup by ProductionSecretsCheck):
+#  JWT_SECRET (>= 32 chars), DB_PASSWORD, REDIS_PASSWORD, MINIO_ROOT_PASSWORD.
+# ============================================================
+
+server:
+  error:
+    # Never send exception messages or binding details to the browser.
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+
+app:
+  auth:
+    # The refresh-token cookie is sent over HTTPS only.
+    cookie-secure: true
+
+logging:
+  level:
+    root: INFO
+    com.yibi: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
+    # Logs the values bound to SQL (emails, password hashes): never on a server.
+    org.hibernate.type.descriptor.sql.BasicBinder: OFF
+    org.hibernate.orm.jdbc.bind: OFF

@@ -36,13 +36,17 @@ public class ListeningLessonStore {
 
     private static final TypeReference<List<LearnerSegment>> SEGMENTS = new TypeReference<>() { };
 
+    /** Shown as the contributor of a lesson an admin added for the community. */
+    static final String TEAM = "Đội ngũ Yibi";
+
     /** Card columns; the query that uses them must bind the viewer id first (for {@code saved}). */
     static final String SUMMARY_COLUMNS = """
             l.id, l.title, l.source_type, m.external_id AS video_id, (m.media_path IS NOT NULL) AS has_media, l.status,
             l.status_message, l.translation_status, l.segment_count, l.translated_count, l.updated_at,
             l.duration_seconds, COALESCE(l.hsk_level, l.est_level) AS level, l.visibility, l.contributor_id,
-            m.channel_name, u.username AS contributor_name, l.practice_count, (sv.user_id IS NOT NULL) AS saved
-            """;
+            m.channel_name, CASE WHEN l.editorial THEN '%s' ELSE u.username END AS contributor_name,
+            l.practice_count, (sv.user_id IS NOT NULL) AS saved, l.editorial
+            """.formatted(TEAM);
 
     static final String SUMMARY_FROM = """
             FROM listening_lessons l
@@ -62,6 +66,14 @@ public class ListeningLessonStore {
         this.mapper = mapper;
     }
 
+    /**
+     * A TIMESTAMPTZ column as local wall time. (VocabDeckService.fromUtc is only for the TIMESTAMP columns Hibernate
+     * writes in UTC; used on TIMESTAMPTZ it would add the offset a second time.)
+     */
+    static java.time.LocalDateTime local(java.sql.Timestamp timestamp) {
+        return timestamp == null ? null : timestamp.toLocalDateTime();
+    }
+
     RowMapper<VideoSummary> summaries(ListeningViewer viewer) {
         return (rs, i) -> {
             BigDecimal duration = rs.getBigDecimal("duration_seconds");
@@ -69,10 +81,11 @@ public class ListeningLessonStore {
             return new VideoSummary(rs.getLong("id"), rs.getString("title"), Source.valueOf(rs.getString("source_type")),
                     rs.getString("video_id"), rs.getBoolean("has_media"), rs.getString("status"),
                     rs.getString("status_message"), rs.getString("translation_status"), rs.getInt("segment_count"),
-                    rs.getInt("translated_count"), VocabDeckService.fromUtc(rs.getTimestamp("updated_at")),
+                    rs.getInt("translated_count"), ListeningLessonStore.local(rs.getTimestamp("updated_at")),
                     duration == null ? null : duration.doubleValue(), rs.getString("level"),
                     Visibility.valueOf(rs.getString("visibility")), viewer.is(contributor), rs.getBoolean("saved"),
-                    rs.getString("channel_name"), rs.getString("contributor_name"), rs.getInt("practice_count"));
+                    rs.getString("channel_name"), rs.getString("contributor_name"), rs.getInt("practice_count"),
+                    rs.getBoolean("editorial"));
         };
     }
 

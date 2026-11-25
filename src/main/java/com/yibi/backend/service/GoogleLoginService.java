@@ -49,7 +49,7 @@ public class GoogleLoginService {
     private static final int MAX_USERNAME = 50;
 
     /** The account Google vouches for. */
-    record GoogleIdentity(String subject, String email, String name) {}
+    record GoogleIdentity(String subject, String email, String name, String picture) {}
 
     private final UserRepository users;
     private final AuthService authService;
@@ -104,7 +104,7 @@ public class GoogleLoginService {
         int split = saved.indexOf('|');
         try {
             GoogleIdentity identity = identityFrom(decoder().decode(exchangeForIdToken(code)), saved.substring(0, split));
-            User user = accountFor(identity);
+            User user = withGoogleProfile(accountFor(identity), identity);
             if (!user.isActive()) return loginError("disabled");
             String loginCode = randomToken();
             redis.opsForValue().set(codeKey(loginCode), user.getId().toString(), CODE_LIFETIME);
@@ -171,7 +171,27 @@ public class GoogleLoginService {
         if (email == null || !(Boolean.TRUE.equals(verified) || "true".equals(String.valueOf(verified)))) {
             throw new UnverifiedEmailException();
         }
-        return new GoogleIdentity(token.getSubject(), email.trim().toLowerCase(Locale.ROOT), token.getClaimAsString("name"));
+        return new GoogleIdentity(token.getSubject(), email.trim().toLowerCase(Locale.ROOT), token.getClaimAsString("name"),
+                token.getClaimAsString("picture"));
+    }
+
+    /**
+     * Keeps the picture in step with Google (it changes when the learner changes it there), and gives a name to an
+     * account that has none yet. A name the learner chose on the account page is never overwritten.
+     */
+    private User withGoogleProfile(User user, GoogleIdentity identity) {
+        boolean changed = false;
+        String picture = identity.picture();
+        if (picture != null && picture.startsWith("https://") && picture.length() <= 500 && !picture.equals(user.getAvatarUrl())) {
+            user.setAvatarUrl(picture);
+            changed = true;
+        }
+        String name = identity.name() == null ? "" : identity.name().trim().replaceAll("\\s+", " ");
+        if (user.getDisplayName() == null && !name.isEmpty()) {
+            user.setDisplayName(name.length() > 50 ? name.substring(0, 50) : name);
+            changed = true;
+        }
+        return changed ? users.save(user) : user;
     }
 
     private User accountFor(GoogleIdentity identity) {
@@ -185,6 +205,7 @@ public class GoogleLoginService {
             // Sign-up does not verify email, so someone else may have registered this address first. The old password
             // stops working and old sessions end; the real owner can set a new password through "Quên mật khẩu".
             user.setPasswordHash(passwordEncoder.encode(randomToken()));
+            user.setPasswordSet(false);
             tokens.revokeAllRefreshTokens(user.getUsername());
             log.info("Linked Google sign-in to existing account {}", user.getId());
             return users.save(user);
@@ -194,6 +215,7 @@ public class GoogleLoginService {
                 .username(uniqueUsername(identity.email()))
                 .email(identity.email())
                 .passwordHash(passwordEncoder.encode(randomToken()))
+                .passwordSet(false)
                 .googleSub(identity.subject())
                 .role(Role.ROLE_USER)
                 .isActive(true)

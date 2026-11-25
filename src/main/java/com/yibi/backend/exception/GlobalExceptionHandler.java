@@ -20,7 +20,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<ApiResponse<Void>> handleAppException(AppException ex) {
-        log.error("Application error: status={}, message={}", ex.getStatus(), ex.getMessage());
+        // A refused request (locked lesson, wrong answer format…) is normal use, not a server fault: keep ERROR for 5xx.
+        if (ex.getStatus().is5xxServerError()) log.error("Application error: status={}, message={}", ex.getStatus(), ex.getMessage());
+        else log.warn("Request refused: status={}, message={}", ex.getStatus(), ex.getMessage());
         return ResponseEntity
                 .status(ex.getStatus())
                 .body(ApiResponse.error(ex.getMessage()));
@@ -58,11 +60,53 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error("Access denied: You do not have permission to perform this action"));
     }
 
+    /** A disabled or locked account (Spring checks it while authenticating). */
+    @ExceptionHandler({org.springframework.security.authentication.DisabledException.class,
+            org.springframework.security.authentication.LockedException.class})
+    public ResponseEntity<ApiResponse<Void>> handleDisabledAccount(org.springframework.security.core.AuthenticationException ex) {
+        log.warn("Login refused: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.error("Tài khoản này đã bị khoá."));
+    }
+
+    @ExceptionHandler(org.springframework.security.core.AuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAuthentication(org.springframework.security.core.AuthenticationException ex) {
+        log.warn("Authentication failed: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponse.error("Invalid username/email or password"));
+    }
+
+    /** An address no controller serves: 404, not a server error. */
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNoResource(org.springframework.web.servlet.resource.NoResourceFoundException ex) {
+        log.warn("Not found: {} {}", ex.getHttpMethod(), ex.getResourcePath());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error("Không tìm thấy đường dẫn này."));
+    }
+
+    @ExceptionHandler(org.springframework.web.HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMethod(org.springframework.web.HttpRequestMethodNotSupportedException ex) {
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ApiResponse.error("Phương thức không được hỗ trợ."));
+    }
+
+    /** Unreadable JSON, a missing or mistyped parameter: the request is wrong, not the server. */
+    @ExceptionHandler({org.springframework.http.converter.HttpMessageNotReadableException.class,
+            org.springframework.web.bind.MissingServletRequestParameterException.class,
+            org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class,
+            org.springframework.web.multipart.support.MissingServletRequestPartException.class})
+    public ResponseEntity<ApiResponse<Void>> handleBadRequest(Exception ex) {
+        log.warn("Bad request: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error("Dữ liệu gửi lên không hợp lệ."));
+    }
+
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse<Void>> handleTooLarge(org.springframework.web.multipart.MaxUploadSizeExceededException ex) {
+        return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(ApiResponse.error("File gửi lên quá lớn."));
+    }
+
+    /** Anything unexpected: the details go to the log only, never to the browser (they can show SQL and class names). */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleAllUncaughtException(Exception ex) {
         log.error("Internal server error: ", ex);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("Internal server error: " + ex.getMessage()));
+                .body(ApiResponse.error("Máy chủ gặp lỗi. Hãy thử lại sau."));
     }
 }

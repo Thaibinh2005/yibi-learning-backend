@@ -9,6 +9,7 @@ import com.yibi.backend.exception.BadRequestException;
 import com.yibi.backend.service.AuthService;
 import com.yibi.backend.service.MailService;
 import com.yibi.backend.service.RegistrationOtpService;
+import com.yibi.backend.security.RefreshCookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -44,6 +45,13 @@ public class AuthController {
     private final AuthService authService;
     private final RegistrationOtpService registrationOtp;
     private final MailService mailService;
+    private final RefreshCookie refreshCookie;
+
+    /** A sign-in answer: the refresh token goes into the HttpOnly cookie, the rest into the body. */
+    private ResponseEntity<ApiResponse<AuthResponse>> signedIn(HttpStatus status, String message, AuthResponse response) {
+        String cookie = refreshCookie.issue(response);
+        return ResponseEntity.status(status).header(RefreshCookie.header(), cookie).body(ApiResponse.success(message, response));
+    }
 
     public record ResendOtpRequest(@NotBlank(message = "Vui lòng nhập email") @Email(message = "Email không hợp lệ") String email) {}
 
@@ -68,7 +76,7 @@ public class AuthController {
     @PostMapping("/register/verify")
     public ResponseEntity<ApiResponse<AuthResponse>> verifyRegisterOtp(@Valid @RequestBody VerifyOtpRequest request) {
         AuthResponse response = registrationOtp.verify(request.email(), request.code());
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("Đăng ký thành công! Chào mừng bạn đến với Yibi", response));
+        return signedIn(HttpStatus.CREATED, "Đăng ký thành công! Chào mừng bạn đến với Yibi", response);
     }
 
     /**
@@ -87,9 +95,7 @@ public class AuthController {
             throw new BadRequestException("Hãy xác thực email bằng mã OTP để đăng ký.");
         }
         AuthResponse response = authService.register(request);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success("Registration successful! Welcome to Yibi 🇨🇳", response));
+        return signedIn(HttpStatus.CREATED, "Registration successful! Welcome to Yibi 🇨🇳", response);
     }
 
     /**
@@ -101,10 +107,10 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(
-            @Valid @RequestBody LoginRequest request) {
+            @Valid @RequestBody LoginRequest request, HttpServletRequest http) {
 
-        AuthResponse response = authService.login(request);
-        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
+        AuthResponse response = authService.login(request, http.getRemoteAddr());
+        return signedIn(HttpStatus.OK, "Login successful", response);
     }
 
     /**
@@ -117,10 +123,14 @@ public class AuthController {
      */
     @PostMapping("/refresh")
     public ResponseEntity<ApiResponse<AuthResponse>> refresh(
-            @Valid @RequestBody RefreshTokenRequest request) {
+            @RequestBody(required = false) RefreshTokenRequest request, HttpServletRequest http) {
 
-        AuthResponse response = authService.refreshToken(request.getRefreshToken());
-        return ResponseEntity.ok(ApiResponse.success("Token refreshed", response));
+        // The cookie normally; a token in the body only for a browser still holding one from before the cookie.
+        String token = refreshCookie.read(http);
+        if (token == null && request != null && StringUtils.hasText(request.getRefreshToken())) token = request.getRefreshToken();
+        if (token == null) throw new com.yibi.backend.exception.UnauthorizedException("Phiên đăng nhập đã hết. Hãy đăng nhập lại.");
+        AuthResponse response = authService.refreshToken(token);
+        return signedIn(HttpStatus.OK, "Token refreshed", response);
     }
 
     /**
@@ -134,16 +144,18 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @RequestHeader(value = "Authorization", required = false) String authHeader,
-            @RequestBody(required = false) RefreshTokenRequest request) {
+            @RequestBody(required = false) RefreshTokenRequest request, HttpServletRequest http) {
 
         String accessToken = null;
         if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
             accessToken = authHeader.substring(7);
         }
 
-        String refreshToken = (request != null) ? request.getRefreshToken() : null;
+        String refreshToken = refreshCookie.read(http);
+        if (refreshToken == null && request != null) refreshToken = request.getRefreshToken();
         authService.logout(accessToken, refreshToken);
 
-        return ResponseEntity.ok(ApiResponse.success("Logged out successfully", null));
+        return ResponseEntity.ok().header(RefreshCookie.header(), refreshCookie.clear())
+                .body(ApiResponse.success("Logged out successfully", null));
     }
 }
